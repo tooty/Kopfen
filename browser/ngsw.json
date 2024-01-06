@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1704554067243,
+  "timestamp": 1704554295804,
   "index": "/kopfen/browser/index.html",
   "assetGroups": [
     {
@@ -53,7 +53,7 @@
     "/kopfen/browser/assets/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
     "/kopfen/browser/assets/output.css": "9314985d3629c0ec7b341df4a11fd65d8ea8bd60",
     "/kopfen/browser/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "/kopfen/browser/index.html": "646525460a32d874464ba75f819f086032defc5d",
+    "/kopfen/browser/index.html": "31acd108076ebdc2c7a3c1d39f8ee4cdebf04b94",
     "/kopfen/browser/main-LFT57ZRG.js": "d9f9db8d851235ac598d976f1c7e8fc293028aca",
     "/kopfen/browser/manifest.webmanifest": "8c8684af7c866da373bb18c46f80648d351570cb",
     "/kopfen/browser/polyfills-LZBJRJJE.js": "fda1c82c5c620f1fa442f687b3df45a037f6fcc9",
