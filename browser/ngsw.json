@@ -1,7 +1,7 @@
 {
   "configVersion": 1,
-  "timestamp": 1704553221575,
-  "index": "/Kopfen/browser/index.html",
+  "timestamp": 1704553729353,
+  "index": "/kopfen/browser/index.html",
   "assetGroups": [
     {
       "name": "app",
@@ -11,12 +11,12 @@
         "ignoreVary": true
       },
       "urls": [
-        "/Kopfen/browser/favicon.ico",
-        "/Kopfen/browser/index.html",
-        "/Kopfen/browser/main-LFT57ZRG.js",
-        "/Kopfen/browser/manifest.webmanifest",
-        "/Kopfen/browser/polyfills-LZBJRJJE.js",
-        "/Kopfen/browser/styles-5INURTSO.css"
+        "/kopfen/browser/favicon.ico",
+        "/kopfen/browser/index.html",
+        "/kopfen/browser/main-LFT57ZRG.js",
+        "/kopfen/browser/manifest.webmanifest",
+        "/kopfen/browser/polyfills-LZBJRJJE.js",
+        "/kopfen/browser/styles-5INURTSO.css"
       ],
       "patterns": []
     },
@@ -28,36 +28,36 @@
         "ignoreVary": true
       },
       "urls": [
-        "/Kopfen/browser/assets/icons/icon-128x128.png",
-        "/Kopfen/browser/assets/icons/icon-144x144.png",
-        "/Kopfen/browser/assets/icons/icon-152x152.png",
-        "/Kopfen/browser/assets/icons/icon-192x192.png",
-        "/Kopfen/browser/assets/icons/icon-384x384.png",
-        "/Kopfen/browser/assets/icons/icon-512x512.png",
-        "/Kopfen/browser/assets/icons/icon-72x72.png",
-        "/Kopfen/browser/assets/icons/icon-96x96.png",
-        "/Kopfen/browser/assets/output.css"
+        "/kopfen/browser/assets/icons/icon-128x128.png",
+        "/kopfen/browser/assets/icons/icon-144x144.png",
+        "/kopfen/browser/assets/icons/icon-152x152.png",
+        "/kopfen/browser/assets/icons/icon-192x192.png",
+        "/kopfen/browser/assets/icons/icon-384x384.png",
+        "/kopfen/browser/assets/icons/icon-512x512.png",
+        "/kopfen/browser/assets/icons/icon-72x72.png",
+        "/kopfen/browser/assets/icons/icon-96x96.png",
+        "/kopfen/browser/assets/output.css"
       ],
       "patterns": []
     }
   ],
   "dataGroups": [],
   "hashTable": {
-    "/Kopfen/browser/assets/icons/icon-128x128.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
-    "/Kopfen/browser/assets/icons/icon-144x144.png": "b155fd5f2fd5d2ea7760721063003c4cd95fd783",
-    "/Kopfen/browser/assets/icons/icon-152x152.png": "eae6e0f0c8afb8aaae339e2a569b43e9238e5e6c",
-    "/Kopfen/browser/assets/icons/icon-192x192.png": "15c4180454633880d98674aa7394656196c91584",
-    "/Kopfen/browser/assets/icons/icon-384x384.png": "94a915751ef6c9282df9aea405ad679230631814",
-    "/Kopfen/browser/assets/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
-    "/Kopfen/browser/assets/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
-    "/Kopfen/browser/assets/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
-    "/Kopfen/browser/assets/output.css": "9314985d3629c0ec7b341df4a11fd65d8ea8bd60",
-    "/Kopfen/browser/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "/Kopfen/browser/index.html": "dfe5af361d6b20600727a1ad86ad7d28e6cf89b5",
-    "/Kopfen/browser/main-LFT57ZRG.js": "d9f9db8d851235ac598d976f1c7e8fc293028aca",
-    "/Kopfen/browser/manifest.webmanifest": "8c8684af7c866da373bb18c46f80648d351570cb",
-    "/Kopfen/browser/polyfills-LZBJRJJE.js": "fda1c82c5c620f1fa442f687b3df45a037f6fcc9",
-    "/Kopfen/browser/styles-5INURTSO.css": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+    "/kopfen/browser/assets/icons/icon-128x128.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
+    "/kopfen/browser/assets/icons/icon-144x144.png": "b155fd5f2fd5d2ea7760721063003c4cd95fd783",
+    "/kopfen/browser/assets/icons/icon-152x152.png": "eae6e0f0c8afb8aaae339e2a569b43e9238e5e6c",
+    "/kopfen/browser/assets/icons/icon-192x192.png": "15c4180454633880d98674aa7394656196c91584",
+    "/kopfen/browser/assets/icons/icon-384x384.png": "94a915751ef6c9282df9aea405ad679230631814",
+    "/kopfen/browser/assets/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
+    "/kopfen/browser/assets/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
+    "/kopfen/browser/assets/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
+    "/kopfen/browser/assets/output.css": "9314985d3629c0ec7b341df4a11fd65d8ea8bd60",
+    "/kopfen/browser/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "/kopfen/browser/index.html": "646525460a32d874464ba75f819f086032defc5d",
+    "/kopfen/browser/main-LFT57ZRG.js": "d9f9db8d851235ac598d976f1c7e8fc293028aca",
+    "/kopfen/browser/manifest.webmanifest": "8c8684af7c866da373bb18c46f80648d351570cb",
+    "/kopfen/browser/polyfills-LZBJRJJE.js": "fda1c82c5c620f1fa442f687b3df45a037f6fcc9",
+    "/kopfen/browser/styles-5INURTSO.css": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
   },
   "navigationUrls": [
     {
