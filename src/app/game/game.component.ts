@@ -5,12 +5,12 @@ import { Game,ActivePlayer } from '../game';
 import { StateService } from '../state.service';
 import {CommonModule} from '@angular/common';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, DragDropModule, ReactiveFormsModule],
+  imports: [RouterModule, CommonModule, DragDropModule, ReactiveFormsModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
