@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1704809370584,
+  "timestamp": 1704829839052,
   "index": "/Kopfen/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/Kopfen/favicon.ico",
         "/Kopfen/index.html",
-        "/Kopfen/main-SYXBH7NO.js",
+        "/Kopfen/main-XVJ76MZL.js",
         "/Kopfen/manifest.webmanifest",
         "/Kopfen/polyfills-LZBJRJJE.js",
         "/Kopfen/styles-5INURTSO.css"
@@ -51,11 +51,11 @@
     "/Kopfen/assets/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
     "/Kopfen/assets/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
     "/Kopfen/assets/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
-    "/Kopfen/assets/output.css": "6535cac55cd51af2b5c8c7b204698d8df2065004",
+    "/Kopfen/assets/output.css": "c424b2e643204ec137e5657df010919a7f715cc7",
     "/Kopfen/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "/Kopfen/index.html": "9c0f19db360770cd1f0ee5f007debd6a8ca6c066",
-    "/Kopfen/main-SYXBH7NO.js": "3716f5533ff6e1709c90e31f83d1e6accb5afde9",
-    "/Kopfen/manifest.webmanifest": "f06a961e19ec1830af4d68584cae8ad243924574",
+    "/Kopfen/index.html": "9f6f5441d36ca2e775a6e1153557a33ff5179e8f",
+    "/Kopfen/main-XVJ76MZL.js": "5925de0314f05eb48a34b5ec4e989acba515124a",
+    "/Kopfen/manifest.webmanifest": "30a0223faad2cc82105e25fbc9ee7feb9b7bcedf",
     "/Kopfen/polyfills-LZBJRJJE.js": "fda1c82c5c620f1fa442f687b3df45a037f6fcc9",
     "/Kopfen/styles-5INURTSO.css": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
   },
