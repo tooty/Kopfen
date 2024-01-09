@@ -1,8 +1,8 @@
 {
   "name": "scharfkopf",
   "short_name": "scharfkopf",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "theme_color": "#98383E",
+  "background_color": "#98383E",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
