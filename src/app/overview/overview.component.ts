@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import { Component } from '@angular/core';
+import {  Component } from '@angular/core';
 import { Player } from '../player';
 import { Game } from '../game';
 import { StateService } from '../state.service';
@@ -17,16 +17,15 @@ export class OverviewComponent {
   games: Game[] = []
   sum: {p: Player, sum: number[]}[] = []
 
-
   constructor(
     private stateService: StateService,
-    private router: Router
+    private router: Router,
   ) {
     this.stateService.players$.subscribe((data) => {
       this.playersOver = JSON.parse(JSON.stringify(data))
     })
     this.stateService.games$.subscribe((data) => {
-      this.games = data
+      this.games = data.sort((a,b)=> b.time-a.time)
       this.sum = stateService.gameSum()
     })
   }

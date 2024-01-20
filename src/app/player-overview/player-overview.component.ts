@@ -27,4 +27,8 @@ export class PlayerOverviewComponent {
   addPlayer(name: String){
     this.stateService.addPlayer({name: name, id: Math.random()})
   }
+
+  reset(){
+    this.stateService.reset()
+  }
 }

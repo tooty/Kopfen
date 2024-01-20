@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import {StateService} from './state.service';
+import { Player } from './player';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +13,16 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'scharfkopf';
+  players: Player[] = []
+
+  constructor(
+    private stateService: StateService,
+    private router: Router
+  ){
+    this.stateService.players$.subscribe(d=> {
+      if (d.length < 4) {
+        this.router.navigate(["players"])
+      }
+    })
+  }
 }

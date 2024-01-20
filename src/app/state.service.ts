@@ -12,8 +12,18 @@ export class StateService {
   players$ = this.players.asObservable()
   games$ = this.games.asObservable()
 
+  reset(){
+    window.localStorage.clear()
+    this.games.next([])
+    this.players.next([])
+  }
+
   addPlayer (newPlayer: Player){
     let buff = this.players.getValue()
+    if (newPlayer.name.length < 1) {
+      console.error("Name to short")
+      return
+    }
     if (buff.filter(p => p.name == newPlayer.name).length != 0) {
       console.error("Name already used")
       return
@@ -41,7 +51,6 @@ export class StateService {
       let accumulate = costs.map(n => a+=n)
       ret.push({p: p, sum: accumulate})
     })
-    console.log(JSON.stringify(ret))
     return ret
   }
 

@@ -1,17 +1,34 @@
-<button (click)="addGame()">Neue Runde</button>
-<button (click)="addPlayer()">Neuer Spieler</button>
-
-<table class="table-fixed min-w-full border border-gray-300 divide-y divide-gray-300">
-  <thead class="bg-blue-100">
-    <th >Runde</th>
-    <th class="px-6" *ngFor="let player of playersOver ">{{player.name}}</th>
+<div class="fixed flex w-full bottom-4">
+  <button class="flex-2 w-24 border rounded-l p-1 mt-1 mb-1 bg-gray-300" (click)="addPlayer()">👤</button>
+  <button *ngIf="playersOver.length >= 4" class="flex-1 border rounded-r p-1 mt-1 mb-1 bg-background-600 text-xl" (click)="addGame()">+</button>
+</div>
+<div  class="flex bg-white dark:bg-black dark:text-white" >
+<table *ngIf="playersOver.length >= 4" class=" min-w-full ">
+  <thead class="sticky top-0 bg-gray-600">
+    <th class="w-2">Runde</th>
+    <th class="" *ngFor="let player of playersOver ">{{player.name}}</th>
+    <tr class="text-center bg-gray-400">
+      <td>
+        ∑
+      </td>
+      <td *ngFor="let p of sum"
+        class="text-xl"
+        >
+        <p *ngIf="p.sum[p.sum.length - 1] < 0" class="text-red-500">
+          {{p.sum[p.sum.length - 1]}}
+        </p>
+        <p *ngIf="p.sum[p.sum.length - 1] >= 0">
+        {{p.sum[p.sum.length - 1]}}
+        </p>
+      </td>
+    </tr>
   </thead>
-  <tbody>
+  <tbody class="overflow-auto">
   <tr *ngFor="let game of games; let i = index" class="text-center">
-    <p class="bg-gray-50" >{{i+1}}</p>
+    <td class="bg-gray-500 bg-background-300" >{{games.length - i }}</td>
     <td *ngFor="let player of playersOver">
       <p *ngIf="relationById(player,game) < 0"
-      class="text-red-500">
+      class="text-red-300">
         {{relationById(player,game)}}
       </p>
       <p *ngIf="relationById(player,game) > 0">
@@ -19,11 +36,8 @@
       </p>
     </td>
   </tr>
-  <tr class="text-center bg-gray-200">
-    <td>∑</td>
-    <td *ngFor="let p of sum">
-      {{p.sum.splice(-1)}}
-    </td>
-  </tr>
   </tbody>
 </table>
+</div>
+
+

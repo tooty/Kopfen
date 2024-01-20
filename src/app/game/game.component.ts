@@ -4,13 +4,13 @@ import { Player } from '../player';
 import { Game,ActivePlayer } from '../game';
 import { StateService } from '../state.service';
 import {CommonModule} from '@angular/common';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, FormsModule} from '@angular/forms';
 import {Router, RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [RouterModule, CommonModule, DragDropModule, ReactiveFormsModule],
+  imports: [RouterModule, CommonModule, DragDropModule, FormsModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
@@ -20,7 +20,7 @@ export class GameComponent {
   loosers: Player[] = []
   winners: Player[] = []
   games: Game[] = []
-  amount = new FormControl(10)
+  amount = 10
 
   constructor(
     private stateService: StateService,
@@ -47,6 +47,14 @@ export class GameComponent {
     }
   }
 
+  double(){
+    this.amount= 2 * this.amount
+  }
+
+  addAmount(x: number){
+    this.amount += x
+  }
+
   addGame(){
     if (this.winners.length + this.loosers.length != 4
       || this.winners.length == 0
@@ -55,12 +63,12 @@ export class GameComponent {
       return
     }
 
-    if (this.amount.value == null  ) {
+    if (this.amount <= 0  ) {
       console.error("no amount")
       return
     }
 
-    if (this.amount.value%10 != 0) {
+    if (this.amount %10 != 0) {
       console.error("bad amount")
       return
     }
@@ -69,26 +77,26 @@ export class GameComponent {
 
     if (this.winners.length == 3) {
       this.winners.forEach(p => {
-        let amount = this.amount.value!
+        let amount = this.amount
         partitipants.push({id: p.id, cost: amount})
       })
       this.loosers.forEach(p => {
-        let amount = -this.amount.value! * 3
+        let amount = -this.amount * 3
         partitipants.push({id: p.id, cost: amount})
       })
     } else {
       this.winners.forEach(p => {
-        let amount = (this.amount.value! * this.loosers.length) / this.winners.length
+        let amount = (this.amount * this.loosers.length) / this.winners.length
         partitipants.push({id: p.id, cost: amount})
       })
       this.loosers.forEach(p => {
-        let amount = -this.amount.value!
+        let amount = -this.amount
         partitipants.push({id: p.id, cost: amount})
       })
     }
 
     let newGame: Game = {
-      cost: this.amount.value,
+      cost: this.amount,
       time: Date.now(),
       players: partitipants
     }
@@ -100,7 +108,6 @@ export class GameComponent {
 
     this.stateService.addGame(newGame)
     this.router.navigate([""])
-    console.log(console.log(newGame))
   }
 }
 
