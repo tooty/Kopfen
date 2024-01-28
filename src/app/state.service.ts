@@ -12,6 +12,20 @@ export class StateService {
   players$ = this.players.asObservable()
   games$ = this.games.asObservable()
 
+  constructor() {
+    let storagePlayers = window.localStorage.getItem("players")
+    let storageGames = window.localStorage.getItem("games")
+    if (storagePlayers != null) {
+      let players: Player[] = JSON.parse(storagePlayers)
+      players.forEach(p => this.addPlayer(p))
+    }
+
+    if (storageGames != null) {
+      let games: Game[] = JSON.parse(storageGames)
+      games.forEach(g => this.addGame(g))
+    }
+  }
+
   reset(){
     window.localStorage.clear()
     this.games.next([])
@@ -54,17 +68,4 @@ export class StateService {
     return ret
   }
 
-  constructor() {
-    let storagePlayers = window.localStorage.getItem("players")
-    let storageGames = window.localStorage.getItem("games")
-    if (storagePlayers != null) {
-      let players: Player[] = JSON.parse(storagePlayers)
-      players.forEach(p => this.addPlayer(p))
-    }
-
-    if (storageGames != null) {
-      let games: Game[] = JSON.parse(storageGames)
-      games.forEach(g => this.addGame(g))
-    }
-  }
 }
