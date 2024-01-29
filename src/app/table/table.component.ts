@@ -4,11 +4,12 @@ import { Player } from '../player';
 import { Game } from '../game';
 import { StateService } from '../state.service';
 import {Router} from '@angular/router';
+import {GraphComponent} from '../graph/graph.component';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,GraphComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })
