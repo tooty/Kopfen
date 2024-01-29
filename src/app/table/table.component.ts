@@ -1,44 +1,41 @@
 import {CommonModule} from '@angular/common';
-import { Component } from '@angular/core';
+import {  Component } from '@angular/core';
 import { Player } from '../player';
 import { Game } from '../game';
 import { StateService } from '../state.service';
 import {Router} from '@angular/router';
+import {GraphComponent} from '../graph/graph.component';
 
 @Component({
-  selector: 'app-overview',
+  selector: 'app-table',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './overview.component.html',
-  styleUrl: './overview.component.css'
+  imports: [CommonModule,GraphComponent],
+  templateUrl: './table.component.html',
+  styleUrl: './table.component.css'
 })
-export class OverviewComponent {
+export class TableComponent {
   playersOver: Player[] = []
   games: Game[] = []
   sum: {p: Player, sum: number[]}[] = []
 
-
   constructor(
     private stateService: StateService,
-    private router: Router
+    private router: Router,
   ) {
     this.stateService.players$.subscribe((data) => {
       this.playersOver = JSON.parse(JSON.stringify(data))
     })
     this.stateService.games$.subscribe((data) => {
-      this.games = data
+      this.games = data.sort((a,b)=> b.time-a.time)
       this.sum = stateService.gameSum()
     })
   }
 
-  addGame(){
-    this.router.navigate(["game"])
-  }
-  addPlayer(){
-    this.router.navigate(["players"])
+  navigate(route: String){
+    this.router.navigate([route])
   }
 
-  relationById(player: Player, game: Game): number {
+  metchAmount(player: Player, game: Game): number {
     let match = game.players.find(p => player.id == p.id)
     if (match != null){
       return match.cost

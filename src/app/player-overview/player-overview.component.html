@@ -1,8 +1,0 @@
-<div *ngFor="let player of players">{{player.name}}</div>
-<div class="max-w-md mx-auto bg-white p-8 border rounded-md shadow-md">
-  <input #newPlayer placeholder="new Player" type="text" class="border rounded-md w-full px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
-  <button (click)="addPlayer(newPlayer.value)" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">Add</button>
-  <button [routerLink]="'/'"
-    class="mt-4 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300"
-    >Cancle</button>
-</div>

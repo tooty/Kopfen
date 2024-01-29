@@ -4,37 +4,33 @@ import { Player } from '../player';
 import { Game,ActivePlayer } from '../game';
 import { StateService } from '../state.service';
 import {CommonModule} from '@angular/common';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, FormsModule} from '@angular/forms';
 import {Router, RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [RouterModule, CommonModule, DragDropModule, ReactiveFormsModule],
+  imports: [RouterModule, CommonModule, DragDropModule, FormsModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
 
 export class GameComponent {
-  players: Player[] = []
-  loosers: Player[] = []
-  winners: Player[] = []
-  games: Game[] = []
-  amount = new FormControl(10)
+  players: {p: Player,c: number}[] = []
+  loosers: {p: Player,c: number}[] = []
+  winners: {p: Player,c: number}[] = []
+  amount = 10
 
   constructor(
     private stateService: StateService,
     private router: Router
   ) {
     this.stateService.players$.subscribe((data) => {
-      this.players = JSON.parse(JSON.stringify(data))
-    })
-    this.stateService.games$.subscribe((data) => {
-      this.games = data
+      this.players = data.map(p =>{return {p: p, c: 0}})
     })
   }
 
-  drop(event: CdkDragDrop<Player[]>){
+  drop(event: CdkDragDrop<{p: Player,c: number}[]>){
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -45,52 +41,70 @@ export class GameComponent {
         event.currentIndex,
       );
     }
+    this.updateCost()
   }
 
-  addGame(){
+  doubleAmount(){
+    this.amount= 2 * this.amount
+    this.updateCost()
+  }
+
+  addAmount(x: number){
+    this.amount += x
+    this.updateCost()
+  }
+
+  updateCost(): boolean{
     if (this.winners.length + this.loosers.length != 4
       || this.winners.length == 0
       || this.loosers.length == 0) {
       console.error("player distribution")
-      return
+      return false
     }
 
-    if (this.amount.value == null  ) {
+    if (this.amount <= 0  ) {
       console.error("no amount")
-      return
+      return false
     }
 
-    if (this.amount.value%10 != 0) {
+    if (this.amount %10 != 0) {
       console.error("bad amount")
-      return
+      return false
     }
-
-    let partitipants: ActivePlayer[] = []
 
     if (this.winners.length == 3) {
       this.winners.forEach(p => {
-        let amount = this.amount.value!
-        partitipants.push({id: p.id, cost: amount})
+        let amount = this.amount
+        p.c = amount
       })
       this.loosers.forEach(p => {
-        let amount = -this.amount.value! * 3
-        partitipants.push({id: p.id, cost: amount})
+        let amount = -this.amount * 3
+        p.c = amount
       })
     } else {
       this.winners.forEach(p => {
-        let amount = (this.amount.value! * this.loosers.length) / this.winners.length
-        partitipants.push({id: p.id, cost: amount})
+        let amount = (this.amount * this.loosers.length) / this.winners.length
+        p.c = amount
       })
       this.loosers.forEach(p => {
-        let amount = -this.amount.value!
-        partitipants.push({id: p.id, cost: amount})
+        let amount = -this.amount
+        p.c = amount
       })
     }
+    return true
+  }
+
+  addGame(){
+    if (!this.updateCost()) {return}
+    let players: ActivePlayer[] = []
+
+    this.winners.forEach(p => players.push({id: p.p.id, cost: p.c}))
+    this.loosers.forEach(p => players.push({id: p.p.id, cost: p.c}))
 
     let newGame: Game = {
-      cost: this.amount.value,
+      cost: this.amount,
       time: Date.now(),
-      players: partitipants
+      players: players
     }
 
     if (newGame.players.reduce((summ, p) => p.cost + summ, 0) != 0){
@@ -100,7 +114,6 @@ export class GameComponent {
 
     this.stateService.addGame(newGame)
     this.router.navigate([""])
-    console.log(console.log(newGame))
   }
 }
 

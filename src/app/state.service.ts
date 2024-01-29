@@ -12,8 +12,32 @@ export class StateService {
   players$ = this.players.asObservable()
   games$ = this.games.asObservable()
 
+  constructor() {
+    let storagePlayers = window.localStorage.getItem("players")
+    let storageGames = window.localStorage.getItem("games")
+    if (storagePlayers != null) {
+      let players: Player[] = JSON.parse(storagePlayers)
+      players.forEach(p => this.addPlayer(p))
+    }
+
+    if (storageGames != null) {
+      let games: Game[] = JSON.parse(storageGames)
+      games.forEach(g => this.addGame(g))
+    }
+  }
+
+  reset(){
+    window.localStorage.clear()
+    this.games.next([])
+    this.players.next([])
+  }
+
   addPlayer (newPlayer: Player){
     let buff = this.players.getValue()
+    if (newPlayer.name.length < 1) {
+      console.error("Name to short")
+      return
+    }
     if (buff.filter(p => p.name == newPlayer.name).length != 0) {
       console.error("Name already used")
       return
@@ -41,21 +65,7 @@ export class StateService {
       let accumulate = costs.map(n => a+=n)
       ret.push({p: p, sum: accumulate})
     })
-    console.log(JSON.stringify(ret))
     return ret
   }
 
-  constructor() {
-    let storagePlayers = window.localStorage.getItem("players")
-    let storageGames = window.localStorage.getItem("games")
-    if (storagePlayers != null) {
-      let players: Player[] = JSON.parse(storagePlayers)
-      players.forEach(p => this.addPlayer(p))
-    }
-
-    if (storageGames != null) {
-      let games: Game[] = JSON.parse(storageGames)
-      games.forEach(g => this.addGame(g))
-    }
-  }
 }

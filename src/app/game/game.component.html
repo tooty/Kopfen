@@ -1,55 +1,89 @@
-<div cdkDropListGroup>
+<div cdkDropListGroup class="mx-2 text-sky-200">
   <div
-    class="flex-1 bg-orange-300 m-2 p-4"
+    class="flex-1 rounded-t bg-orange-800 p-4"
     cdkDropList
     [cdkDropListData]="players"
-    (cdkDropListDropped)="drop($event)" #all="cdkDropList">
-    <h1 class="text-1xl font-bold"> All </h1>
+    (cdkDropListDropped)="drop($event)"
+    #all="cdkDropList"
+  >
+    <h1 class="text-1xl font-bold">All</h1>
     @for (item of players; track $index) {
-      <div class="rounded-lg shadow-md p-2 m-1 bg-white" cdkDrag>{{item.name}}</div>
+    <div class="justify-between flex rounded-lg shadow-md p-2 m-1 bg-orange-700" cdkDrag>
+      <p>{{ item.p.name }}</p>
+      <p class="text-red-300 text-xs" *ngIf="item.c != 0">{{ item.c }}</p>
+    </div>
     }
   </div>
   <div
-    class="flex-1 bg-red-300 m-2 p-4"
+    class="flex-1 bg-red-800 p-4"
     cdkDropList
     [cdkDropListData]="loosers"
-    (cdkDropListDropped)="drop($event)" #looser="cdkDropList"
-    >
-    <h1 class="text-1xl font-bold"> Looser </h1>
+    (cdkDropListDropped)="drop($event)"
+    #looser="cdkDropList"
+  >
+    <h1 class="text-1xl font-bold">Looser</h1>
     @for (item of loosers; track $index) {
-      <div class="rounded-lg shadow-md p-2 m-1 bg-white" cdkDrag>{{item.name}}</div>
+    <div class="justify-between flex rounded-lg shadow-md p-2 m-1 bg-red-700" cdkDrag>
+      <p>{{ item.p.name }}</p>
+      <p class="text-red-300 text-xs" *ngIf="item.c != 0">{{ item.c }}¢</p>
+    </div>
     }
   </div>
   <div
-    class="flex-1 bg-green-300 m-2 p-4"
+    class="flex-1 rounded-b-lg bg-green-800 mb-4 p-4"
     cdkDropList
     [cdkDropListData]="winners"
-    (cdkDropListDropped)="drop($event) "#winner="cdkDropList">
-    <h1 class="text-1xl font-bold"> Winner </h1>
+    (cdkDropListDropped)="drop($event)"
+    #winner="cdkDropList"
+  >
+    <h1 class="text-1xl font-bold">Winner</h1>
     @for (item of winners; track $index) {
-      <div class="rounded-lg shadow-md p-2 m-1 bg-white" cdkDrag>{{item.name}}</div>
+    <div class="justify-between flex rounded-lg shadow-md p-2 m-1 bg-green-700" cdkDrag>
+      <p>{{ item.p.name }}</p>
+      <p class="text-green-300 text-xs" *ngIf="item.c != 0">+{{ item.c }}¢</p>
+    </div>
     }
   </div>
 </div>
 
-<div class="flex items-center w-full p-2">
-  <label class="flex-1 bg-gray-200  px-4 py-2 rounded-l-md">
-    Eurocents
-  </label>
+<div class="shadow mx-2 rounded my-4 bg-indigo-950 text-sky-200">
+  <div class="flex [&>*]:w-1/2 items-center w-full">
+    <button
+      class="rounded-tl-md py-2 active:bg-indigo-800 active:outline-none"
+      (click)="doubleAmount()"
+    >
+      x2
+    </button>
+    <button
+      (click)="addAmount(10)"
+      class="py-2 rounded-tr-md active:bg-indigo-800 active:outline-none"
+    >
+      +10
+    </button>
+  </div>
+  <div class="flex items-center w-full rounded-b-md">
+    <label class="flex-1 py-2 rounded-bl-md p-3"> Eurocents: </label>
 
-  <input
-    [formControl]="amount"
-    type="number"
-    class="px-30 py-2 text-center border-t border-b rounded-r-md border-r border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
-  />
+    <input
+      [(ngModel)]="amount"
+      (ngModelChange)="updateCost()"
+      type="number"
+      inputmode="numeric"
+      class="p-1 text-center text-xl bg-gray-700 focus:outline-none focus:ring focus:border-blue-300"
+    />
+  </div>
 </div>
 <div class="flex items-center w-full px-2">
-  <button class="flex-1 bg-green-500 text-white rounded-l-md px-6  py-2 hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300"
+  <button
+    class="flex-1 bg-green-600 text-white rounded-l-md px-6 py-2 hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300"
     (click)="addGame()"
-    >
-    Submit
+  >
+    Hinzufügen
   </button>
-  <button [routerLink]="'/'"
-      class="flex-1 bg-red-500 text-white py-2 rounded-r-md hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300"
-    >Cancle</button>
+  <button
+    [routerLink]="'/'"
+    class="w-1/4 bg-red-600 text-white py-2 rounded-r-md hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300"
+  >
+    Abbrechen
+  </button>
 </div>

@@ -1,0 +1,48 @@
+<div class="h-full overflow-y-auto pb-20">
+  <table *ngIf="playersOver.length >= 4" class="table-auto min-w-full">
+    <thead class="sticky top-0 bg-black text-sky-600">
+      <th class="w-2 pt-6">Runde</th>
+      <th class="" *ngFor="let player of playersOver">{{ player.name }}</th>
+      <tr class="text-center bg-slate-700 pt-2">
+        <td>∑</td>
+        <td *ngFor="let p of sum" class="text-xl p-1">
+          <p
+          [ngClass]="{'text-sky-300': (p.sum[p.sum.length - 1] >= 0),
+          'text-red-500': (p.sum[p.sum.length - 1] < 0)}">
+            {{ p.sum[p.sum.length - 1] }}
+          </p>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let game of games; let i = index" class="text-center"
+        [ngClass]="{'bg-slate-950': (i%2 == 1), 'bg-black': (i%2 != 1)}">
+        <td class="bg-slate-900 text-sky-800">{{ games.length - i }}</td>
+        <td *ngFor="let player of playersOver">
+          <p
+          [ngClass]="{'text-sky-800': (metchAmount(player, game) > 0),
+          'text-red-800': (metchAmount(player, game) < 0),
+          'hidden': (metchAmount(player, game) == 0)}">
+            {{ metchAmount(player, game) }}
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="fixed flex w-full bottom-0 pb-4  bg-indigo-950 text-sky-200">
+  <button
+    class="flex-2 w-1/5 ml-4 border shadow-lg border-indigo-800 rounded-l-lg my-2  p-2"
+    (click)="navigate('players')"
+  >
+    Spieler
+  </button>
+  <button
+    *ngIf="playersOver.length >= 4"
+    class="flex-1 p-2 mr-4 border shadow-lg rounded-r-lg my-2 border-indigo-800 text-xl"
+    (click)="navigate('game')"
+  >
+    Neues Spiel
+  </button>
+</div>
