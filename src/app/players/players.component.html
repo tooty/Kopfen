@@ -1,17 +1,39 @@
-<div class="my-8 max-w-md mx-auto">
-  <form (ngSubmit)=addPlayer(newPlayer) class="my-8 bg-white rounded-md shadow-md">
-    <input  #newPlayer placeholder="new Player" type="text" class="border rounded-t-md w-full px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
-    <div class="text-white flex w-full">
-     <button type="submit"
-        class="bg-green-500 flex-1 p-2 rounded-bl-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300">Hinzufügen</button>
-      <button [routerLink]="'/'"
+<div class="flex justify-end">
+      <button
+        [routerLink]="'/'"
         *ngIf="players.length >= 4"
-        class="bg-orange-500 w-1/3 p-2 hover:bg-orange-700 focus:outline-none focus:ring focus:border-blue-300"
-        >Tabelle</button>
-      <button (click)="reset()"
-        class="bg-red-500 w-1/3 p-2 rounded-br-md hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300"
-        >Reset All</button>
+        class="text-sky-400 px-2 active:text-sky-50"
+      >
+        Fertig
+      </button>
+</div>
+<div class="my-8 max-w-md mx-auto">
+  <form (ngSubmit)="addPlayer(newPlayer)" class="my-8 bg-indigo-900 rounded-md">
+    <input
+      #newPlayer
+      placeholder="new Player"
+      type="text"
+      class="rounded-t-md w-full text-sky-200 bg-indigo-900 px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+    />
+    <div class="text-sky-200 flex w-full">
+      <button
+        type="submit"
+        class="bg-indigo-950 flex-1 p-2 rounded-bl-md hover:bg-green-600 focus:outline-none focus:ring focus:border-green-300"
+      >
+        Hinzufügen
+      </button>
+      <button
+        (click)="reset()"
+        class="bg-red-700 w-1/3 p-2 rounded-br-md hover:bg-red-600 focus:outline-none focus:ring focus:border-blue-300"
+      >
+        Reset All
+      </button>
     </div>
   </form>
-  <div class="bg-gray-50 text-center rounded-full shadow p-1 my-2 bg-white" *ngFor="let player of players">{{player.name}}</div>
+  <div
+    class="bg-indigo-950 text-sky-300 text-center rounded-full p-1 my-2"
+    *ngFor="let player of players"
+  >
+    {{ player.name }}
+  </div>
 </div>
