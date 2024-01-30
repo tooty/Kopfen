@@ -1,4 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
+<<<<<<< HEAD
+import {NgChartsModule, BaseChartDirective } from 'ng2-charts';
+import {StateService} from '../state.service';
+import { Game } from '../game';
+import { ChartType,ChartConfiguration,} from 'chart.js';
+import {Player} from '../player';
+=======
 import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
 import { StateService } from '../state.service';
 import { Game } from '../game';
@@ -6,12 +13,39 @@ import { ChartType, ChartConfiguration } from 'chart.js';
 import { Player } from '../player';
 import 'chartjs-adapter-date-fns'
 import { de } from 'date-fns/locale'
+>>>>>>> main
 
 @Component({
   selector: 'app-graph',
   standalone: true,
   imports: [NgChartsModule],
   templateUrl: './graph.component.html',
+<<<<<<< HEAD
+  styleUrl: './graph.component.css'
+})
+export class GraphComponent {
+  sum: {p: Player, sum: number[]}[] = []
+  graphData: any
+  barChartOptions: any
+
+
+  constructor(
+    private stateService:StateService
+  ){
+    this.sum = stateService.gameSum()
+    this.stateService.games$.subscribe((data)=>{
+      this.sum = stateService.gameSum()
+      this.randomize()
+    })
+  }
+
+  lineChartData: ChartConfiguration['data'] = {
+    datasets: [
+    ]
+  };
+
+  public lineChartOptions: ChartConfiguration['options'] = {
+=======
   styleUrl: './graph.component.css',
 })
 export class GraphComponent {
@@ -21,16 +55,35 @@ export class GraphComponent {
   barChartOptions: any;
   lineChartData: ChartConfiguration['data'] = { datasets: [] };
   lineChartOptions: ChartConfiguration['options'] = {
+>>>>>>> main
     elements: {
       line: {
         tension: 0.3,
       },
+<<<<<<< HEAD
+      point: {
+        pointStyle: 'line'
+      }
+=======
+>>>>>>> main
     },
     scales: {
       y: {
         position: 'right',
       },
     },
+<<<<<<< HEAD
+
+  };
+
+  lineChartType: ChartType = 'line';
+
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
+  public randomize(): void {
+    let label: number[] = []
+    this.sum.forEach((x,i) => {
+=======
   };
   lineChartType: ChartType = 'line';
 
@@ -47,10 +100,24 @@ export class GraphComponent {
   buildData(): void {
     let label: number[] = [];
     this.sum.forEach((x, i) => {
+>>>>>>> main
       this.lineChartData.datasets[i] = {
         data: x.sum,
         label: x.p.name.toString(),
         fill: 'origin',
+<<<<<<< HEAD
+      }
+      let arr = [];
+      for (let i = 1; i < x.sum.length+1; i++) {
+            arr.push(i);
+      }
+      if (arr.length != label.length && label.length != 0){
+        console.error("corrupted Data")
+      }
+      label = arr
+    })
+    this.lineChartData.labels = label
+=======
       };
       let arr = [];
       for (let i = 1; i < x.sum.length + 1; i++) {
@@ -62,6 +129,7 @@ export class GraphComponent {
       label = arr;
     });
     this.lineChartData.labels = this.games.map((x,i) => i+1);
+>>>>>>> main
 
     this.chart?.update();
   }

@@ -1,9 +1,17 @@
+<<<<<<< HEAD
+<div class="h-55 w-full">
+=======
 <div class="flex-full mt-1">
+>>>>>>> main
   <canvas
   baseChart
   class=""
   [data]="lineChartData"
   [type]="lineChartType"
   [options]="lineChartOptions"
+<<<<<<< HEAD
+  (click)="randomize()"
+=======
+>>>>>>> main
 ></canvas>
 </div>
