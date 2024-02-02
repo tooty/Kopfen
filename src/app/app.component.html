@@ -1,5 +1,5 @@
-<div>
-<router-outlet *ngIf="!isLandscape && enoughPlayers"></router-outlet>
-<app-graph *ngIf="isLandscape && enoughPlayers"></app-graph>
-<app-players *ngIf="!enoughPlayers"></app-players>
+<div id="myElement" (swipeup)="swipeUp()" class="">
+  <router-outlet *ngIf="!isLandscape && enoughPlayers"></router-outlet>
+  <app-graph *ngIf="isLandscape && enoughPlayers"></app-graph>
+  <app-players *ngIf="!enoughPlayers"></app-players>
 </div>

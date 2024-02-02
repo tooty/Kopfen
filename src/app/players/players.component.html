@@ -1,11 +1,11 @@
 <div class="flex justify-end">
-      <button
-        [routerLink]="'/'"
-        *ngIf="players.length >= 4"
-        class="text-sky-400 px-2 active:text-sky-50"
-      >
-        Fertig
-      </button>
+  <button
+    [routerLink]="'/'"
+    *ngIf="players.length >= 4"
+    class="text-sky-400 px-2 active:text-sky-50"
+  >
+    Fertig
+  </button>
 </div>
 <div class="my-8 max-w-md mx-auto">
   <form (ngSubmit)="addPlayer(newPlayer)" class="my-8 bg-indigo-900 rounded-md">

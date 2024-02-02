@@ -12,9 +12,9 @@ import { ChartType, ChartConfiguration, Legend } from 'chart.js';
   styleUrl: './graph.component.css',
 })
 export class GraphComponent {
-  tableSum: number[][]=[]
-  tableCost: number[][]=[]
-  players: Player[] = []
+  tableSum: number[][] = [];
+  tableCost: number[][] = [];
+  players: Player[] = [];
   graphData: any;
   barChartOptions: any;
   lineChartData: ChartConfiguration['data'] = { datasets: [] };
@@ -34,64 +34,67 @@ export class GraphComponent {
         enabled: false,
       },
       legend: {
-        position: "left"
-      }
-    }
+        position: 'left',
+      },
+    },
   };
-  lineChartType: ChartType = 'line';
-
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+
   constructor(private stateService: StateService) {
     this.stateService.sumTable$.subscribe((value) => {
-      this.tableSum = value
+      this.tableSum = value;
       this.buildData();
     });
 
     this.stateService.coastTable$.subscribe((value) => {
-      this.tableCost = value
+      this.tableCost = value;
       this.buildData();
     });
 
     this.stateService.players$.subscribe((value) => {
-      this.players = value
+      this.players = value;
+      this.buildData();
     });
+  }
+  ngOnInit() {
+    this.buildData();
   }
 
   transpose(t: number[][]) {
-    t.push(t[0])
-    t[0] = t[0].map(() => 0)
-    return t[0].map((col, i) => t.map(row => row[i]));
+    let trans: number[][] = [];
+    trans = t[0].map((col, i) => t.map((row) => row[i]));
+    return trans;
   }
 
-  toggle(){
-    this.buildData(true)
+  toggle() {
+    this.buildData(true);
   }
 
-  buildData(bar? : boolean): void {
-    let tableSumT = this.transpose(this.tableSum)
-    let tableCostT = this.transpose(this.tableCost)
+  buildData(bar?: boolean): void {
+    let tableSumT = this.transpose(this.tableSum);
+    let tableCostT = this.transpose(this.tableCost);
 
     tableSumT.forEach((x, i) => {
-      this.lineChartData.datasets[2*i] = {
+      this.lineChartData.datasets[2 * i] = {
         data: x,
-        type: "line",
-        label:  this.players[i].name.toString(),
+        type: 'line',
+        label: this.players[i].name.toString(),
         fill: 'origin',
       };
-
     });
 
     tableCostT.forEach((x, i) => {
-      this.lineChartData.datasets[2*i+1] = {
+      this.lineChartData.datasets[2 * i + 1] = {
         data: x,
-        type: "bar",
+        type: 'bar',
         hidden: true,
-        backgroundColor: this.lineChartData.datasets[2*i].backgroundColor?.toString,
-        label: "𝚫 " + this.players[i].name.toString(),
+        backgroundColor:
+          this.lineChartData.datasets[2 * i].backgroundColor?.toString,
+        label: '𝚫 ' + this.players[i].name.toString(),
       };
-    })
+    });
 
-    this.lineChartData.labels = this.tableSum.map((x,i) => i);
+    this.lineChartData.labels = this.tableSum.map((x, i) => i);
 
     this.chart?.update();
   }

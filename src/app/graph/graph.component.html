@@ -1,9 +1,9 @@
-<div class="flex-full mt-1">
+<div class="h-full w-full mt-1">
   <canvas
-  baseChart
-  class=""
-  [data]="lineChartData"
-  [type]="lineChartType"
-  [options]="lineChartOptions"
-></canvas>
+    baseChart
+    class=""
+    [data]="lineChartData"
+    [options]="lineChartOptions"
+    (click)="(toggle)"
+  ></canvas>
 </div>
