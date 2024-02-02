@@ -6,7 +6,7 @@
     Spieler
   </button>
   <button
-    *ngIf="playersOver.length >= 4"
+    *ngIf="players.length >= 4"
     class="pb-2 px-5 text-xl active:text-sky-50"
     (click)="navigate('game')"
   >
@@ -14,40 +14,40 @@
   </button>
 </div>
 <div class="h-full overflow-y-auto pb-12">
-  <table *ngIf="playersOver.length >= 4" class="table-auto min-w-full">
+  <table *ngIf="players.length >= 4" class="table-auto min-w-full">
     <thead class="shadow-lg  sticky top-0 bg-slate-800 text-sky-600">
       <th class="w-2 pt-6">Runde</th>
-      <th class="" *ngFor="let player of playersOver">{{ player.name }}</th>
+      <th class="" *ngFor="let player of players">{{ player.name }}</th>
       <tr class="text-center bg-slate-700 pt-2">
         <td>∑</td>
-        <td *ngFor="let p of sum" class="text-xl p-1">
+        <td *ngFor="let s of sum" class="text-xl p-1">
           <p
             [ngClass]="{
-              'text-sky-300': p.sum[p.sum.length - 1] >= 0,
-              'text-red-500': p.sum[p.sum.length - 1] < 0
+              'text-sky-300': s >= 0,
+              'text-red-500': s < 0
             }"
           >
-            {{ p.sum[p.sum.length - 1] }}
+            {{ s }}
           </p>
         </td>
       </tr>
     </thead>
     <tbody class="">
       <tr
-        *ngFor="let game of games; let i = index"
+        *ngFor="let game of table; let i = index"
         class="text-center"
         [ngClass]="{ 'bg-slate-950': i % 2 == 1, 'bg-black': i % 2 != 1 }"
       >
-        <td class="bg-slate-900 text-sky-800">{{ games.length - i }}</td>
-        <td *ngFor="let player of playersOver">
+        <td class="bg-slate-900 text-sky-800">{{ table.length - i }}</td>
+        <td *ngFor="let player of table[table.length - i - 1]">
           <p
             [ngClass]="{
-              'text-sky-800': metchAmount(player, game) > 0,
-              'text-red-800': metchAmount(player, game) < 0,
-              hidden: metchAmount(player, game) == 0
+              'text-sky-800': player > 0,
+              'text-red-800': player < 0,
+              hidden: player == 0
             }"
           >
-            {{ metchAmount(player, game) }}
+            {{ player }}
           </p>
         </td>
       </tr>

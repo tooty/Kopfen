@@ -1,11 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
 import { StateService } from '../state.service';
-import { Game } from '../game';
-import { ChartType, ChartConfiguration } from 'chart.js';
-import { Player } from '../player';
-import 'chartjs-adapter-date-fns'
-import { de } from 'date-fns/locale'
+import { Game, Player } from '../interfaces';
+import { ChartType, ChartConfiguration, Legend } from 'chart.js';
 
 @Component({
   selector: 'app-graph',
@@ -15,8 +12,9 @@ import { de } from 'date-fns/locale'
   styleUrl: './graph.component.css',
 })
 export class GraphComponent {
-  sum: { p: Player; sum: number[] }[] = [];
-  games: Game[]=[]
+  tableSum: number[][]=[]
+  tableCost: number[][]=[]
+  players: Player[] = []
   graphData: any;
   barChartOptions: any;
   lineChartData: ChartConfiguration['data'] = { datasets: [] };
@@ -31,37 +29,69 @@ export class GraphComponent {
         position: 'right',
       },
     },
+    plugins: {
+      colors: {
+        enabled: false,
+      },
+      legend: {
+        position: "left"
+      }
+    }
   };
   lineChartType: ChartType = 'line';
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
   constructor(private stateService: StateService) {
-    this.sum = stateService.gameSum();
-    this.stateService.games$.subscribe((data) => {
-      this.sum = stateService.gameSum();
-      this.games = data
+    this.stateService.sumTable$.subscribe((value) => {
+      this.tableSum = value
       this.buildData();
+    });
+
+    this.stateService.coastTable$.subscribe((value) => {
+      this.tableCost = value
+      this.buildData();
+    });
+
+    this.stateService.players$.subscribe((value) => {
+      this.players = value
     });
   }
 
-  buildData(): void {
-    let label: number[] = [];
-    this.sum.forEach((x, i) => {
-      this.lineChartData.datasets[i] = {
-        data: x.sum,
-        label: x.p.name.toString(),
+  transpose(t: number[][]) {
+    t.push(t[0])
+    t[0] = t[0].map(() => 0)
+    return t[0].map((col, i) => t.map(row => row[i]));
+  }
+
+  toggle(){
+    this.buildData(true)
+  }
+
+  buildData(bar? : boolean): void {
+    let tableSumT = this.transpose(this.tableSum)
+    let tableCostT = this.transpose(this.tableCost)
+
+    tableSumT.forEach((x, i) => {
+      this.lineChartData.datasets[2*i] = {
+        data: x,
+        type: "line",
+        label:  this.players[i].name.toString(),
         fill: 'origin',
       };
-      let arr = [];
-      for (let i = 1; i < x.sum.length + 1; i++) {
-        arr.push(i);
-      }
-      if (arr.length != label.length && label.length != 0) {
-        console.error('corrupted Data');
-      }
-      label = arr;
+
     });
-    this.lineChartData.labels = this.games.map((x,i) => i+1);
+
+    tableCostT.forEach((x, i) => {
+      this.lineChartData.datasets[2*i+1] = {
+        data: x,
+        type: "bar",
+        hidden: true,
+        backgroundColor: this.lineChartData.datasets[2*i].backgroundColor?.toString,
+        label: "𝚫 " + this.players[i].name.toString(),
+      };
+    })
+
+    this.lineChartData.labels = this.tableSum.map((x,i) => i);
 
     this.chart?.update();
   }

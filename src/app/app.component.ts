@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import {StateService} from './state.service';
 import { Router, RouterOutlet } from '@angular/router';
 import {GraphComponent} from './graph/graph.component';
+import {PlayersComponent} from './players/players.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, GraphComponent],
+  imports: [CommonModule, RouterOutlet, GraphComponent, PlayersComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -16,8 +17,9 @@ export class AppComponent {
   enoughPlayers = true
   isLandscape = false
   @HostListener ("window:orientationchange", ['$event'])
+
   orientationchange(event: Event) {
-     this.isLandscape = screen.orientation && screen.orientation.angle !== 0;
+     this.isLandscape =  screen.orientation.type == "landscape-secondary";
   }
 
   constructor(
@@ -26,7 +28,6 @@ export class AppComponent {
   ){
     this.stateService.players$.subscribe(p => {
       if (p.length < 4) {
-        this.router.navigate(["players"])
         this.enoughPlayers = false
       }
       else {

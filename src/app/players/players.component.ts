@@ -1,7 +1,7 @@
 import {CommonModule} from '@angular/common';
 import { Component } from '@angular/core';
 import {RouterModule} from '@angular/router';
-import { Player } from '../player';
+import { Player } from '../interfaces';
 import { StateService } from '../state.service';
 import { Router } from '@angular/router';
 import {FormsModule} from '@angular/forms';

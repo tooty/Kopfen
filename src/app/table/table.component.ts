@@ -1,7 +1,7 @@
 import {CommonModule} from '@angular/common';
 import {  Component } from '@angular/core';
-import { Player } from '../player';
-import { Game } from '../game';
+import { Player } from '../interfaces';
+import { Game } from '../interfaces';
 import { StateService } from '../state.service';
 import {Router} from '@angular/router';
 import {GraphComponent} from '../graph/graph.component';
@@ -14,33 +14,26 @@ import {GraphComponent} from '../graph/graph.component';
   styleUrl: './table.component.css'
 })
 export class TableComponent {
-  playersOver: Player[] = []
-  games: Game[] = []
-  sum: {p: Player, sum: number[]}[] = []
+  players: Player[] = []
+  table: number[][] = []
+  sum: number[] = []
 
   constructor(
     private stateService: StateService,
     private router: Router,
   ) {
     this.stateService.players$.subscribe((data) => {
-      this.playersOver = JSON.parse(JSON.stringify(data))
+      this.players= data
     })
-    this.stateService.games$.subscribe((data) => {
-      this.games = data.sort((a,b)=> b.time-a.time)
-      this.sum = stateService.gameSum()
+    this.stateService.coastTable$.subscribe((data) => {
+      this.table = data
+    })
+    this.stateService.sumTable$.subscribe((data) => {
+      this.sum = data[data.length - 1]
     })
   }
 
   navigate(route: String){
     this.router.navigate([route])
-  }
-
-  metchAmount(player: Player, game: Game): number {
-    let match = game.players.find(p => player.id == p.id)
-    if (match != null){
-      return match.cost
-    } else {
-      return 0
-    }
   }
 }
