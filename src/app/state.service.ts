@@ -96,10 +96,15 @@ export class StateService {
   }
 
   reset() {
+    this.db?.close()
     this.games.next([]);
     this.players.next([]);
-    indexedDB.deleteDatabase('appState');
-    this.initDB();
+
+    let delet = window.indexedDB.deleteDatabase('appState');
+    delet.onerror = (ev) => console.error(ev.target);
+    delet.onsuccess = (ev) => {
+      this.initDB();
+    };
     this.rebuildsumTable();
     this.rebuildCostTable();
   }

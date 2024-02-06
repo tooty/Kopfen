@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
 import { StateService } from '../state.service';
 import { Game, Player } from '../interfaces';
@@ -12,14 +12,20 @@ import { ChartType, ChartConfiguration, Legend } from 'chart.js';
   styleUrl: './graph.component.css',
 })
 export class GraphComponent {
-  tableSum: number[][] = [];
-  tableCost: number[][] = [];
-  players: Player[] = [];
+  @Input() tableSum: number[][] = [];
+  @Input() tableCost: number[][] = [];
+  @Input() players: Player[] = [];
+  @Input() isLandscape: boolean = false;
+
   graphData: any;
   barChartOptions: any;
   lineChartData: ChartConfiguration['data'] = { datasets: [] };
   lineChartOptions: ChartConfiguration['options'] = {
+    maintainAspectRatio: false,
     elements: {
+      point: {
+        radius: 0,
+      },
       line: {
         tension: 0.3,
       },
@@ -31,31 +37,53 @@ export class GraphComponent {
     },
     plugins: {
       colors: {
-        enabled: false,
+        enabled: true,
       },
       legend: {
         position: 'left',
+        display: this.isLandscape
       },
     },
   };
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-  constructor(private stateService: StateService) {
-    this.stateService.sumTable$.subscribe((value) => {
-      this.tableSum = value;
-      this.buildData();
-    });
+  constructor(private stateService: StateService) {}
 
-    this.stateService.coastTable$.subscribe((value) => {
-      this.tableCost = value;
-      this.buildData();
-    });
-
-    this.stateService.players$.subscribe((value) => {
-      this.players = value;
-      this.buildData();
-    });
+  ngOnChanges(changes: SimpleChanges){
+    if (changes["tableSum"] || changes["players"]||changes["tableCost"]){
+      this.buildData()
+    }
+    if (changes["isLandscape"]) {
+      this.lineChartOptions = {
+    maintainAspectRatio: false,
+    elements: {
+      point: {
+        radius: 0,
+      },
+      line: {
+        tension: 0.3,
+      },
+    },
+    scales: {
+      y: {
+        position: 'right',
+      },
+    },
+    plugins: {
+      colors: {
+        enabled: true,
+      },
+      legend: {
+        position: 'left',
+        display: this.isLandscape
+      },
+    },
+  };
+      this.chart?.update();
+      console.log("is changed" + this.lineChartOptions!.plugins!.legend!.display)
+    }
   }
+
   ngOnInit() {
     this.buildData();
   }
@@ -66,19 +94,17 @@ export class GraphComponent {
     return trans;
   }
 
-  toggle() {
-    this.buildData(true);
-  }
-
   buildData(bar?: boolean): void {
     let tableSumT = this.transpose(this.tableSum);
     let tableCostT = this.transpose(this.tableCost);
+    let mycolor: String[]
 
     tableSumT.forEach((x, i) => {
       this.lineChartData.datasets[2 * i] = {
         data: x,
         type: 'line',
         label: this.players[i].name.toString(),
+        borderColor: "hsla("+ i*80 + ", 60%, 70%, 0.7)",
         fill: 'origin',
       };
     });
@@ -88,8 +114,7 @@ export class GraphComponent {
         data: x,
         type: 'bar',
         hidden: true,
-        backgroundColor:
-          this.lineChartData.datasets[2 * i].backgroundColor?.toString,
+        backgroundColor: "hsla("+ i*80 + ", 60%, 70%, 0.9)",
         label: '𝚫 ' + this.players[i].name.toString(),
       };
     });
