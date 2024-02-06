@@ -15,7 +15,7 @@ import {throwError} from 'rxjs';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'scharfkopf';
+  title = 'schafkopf';
   enoughPlayers = true;
 
 
