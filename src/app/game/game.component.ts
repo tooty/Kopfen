@@ -11,6 +11,7 @@ import { StateService } from '../state.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import {HttpService} from '../http.service';
 
 @Component({
   selector: 'app-game',
@@ -27,6 +28,7 @@ export class GameComponent {
 
   constructor(
     private stateService: StateService,
+    private htttpService: HttpService,
     private router: Router,
   ) {
     this.stateService.players$.subscribe((data) => {
@@ -73,7 +75,7 @@ export class GameComponent {
       return null;
     }
     console.log('gaod game');
-    let involved: { playerID: number; winner: boolean }[] = [];
+    let involved: { playerID: string; winner: boolean }[] = [];
     this.winners.forEach((x) =>
       involved.push({ playerID: x.p.id, winner: true }),
     );
@@ -102,6 +104,7 @@ export class GameComponent {
       return false;
     }
     this.stateService.addGame(myGame);
+    this.htttpService.putGame(myGame)
     this.router.navigate(['']);
     return true;
   }

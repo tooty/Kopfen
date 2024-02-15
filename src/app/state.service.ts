@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Player, Game } from './interfaces';
 import { BehaviorSubject } from 'rxjs';
+import {HttpService} from './http.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,9 @@ export class StateService {
   sumTable$ = this.sumTable.asObservable();
   db: IDBDatabase | null = null;
 
-  constructor() {
+  constructor(
+    private httpService: HttpService
+  ) {
     this.initDB();
   }
 
@@ -128,6 +131,7 @@ export class StateService {
     } else {
       console.error('no IDBDatabase');
     }
+    this.httpService.putPlayer(newPlayer)
 
     this.players.next(buff);
   }
