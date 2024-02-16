@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Player, Game } from './interfaces';
 import { BehaviorSubject } from 'rxjs';
-import {HttpService} from './http.service';
+import { HttpService } from './http.service';
+import { IndexDBService } from './index-db.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,61 +17,39 @@ export class StateService {
   games$ = this.games.asObservable();
   coastTable$ = this.coastTable.asObservable();
   sumTable$ = this.sumTable.asObservable();
-  db: IDBDatabase | null = null;
 
   constructor(
-    private httpService: HttpService
+    private httpService: HttpService,
+    private indexDBService: IndexDBService
   ) {
-    this.initDB();
+    this.indexDBService
+      .initDB()
+      .then(() => {
+        this.readInDB();
+      })
+      .catch((e) => console.error(e));
   }
 
-  initDB() {
-    let request = indexedDB.open('appState', 2);
-
-    request.onerror = (ev) => console.error(ev.target);
-    request.onupgradeneeded = () => {
-      this.db = request.result;
-      if (!this.db.objectStoreNames.contains('games')) {
-        this.db.createObjectStore('games', {
-          keyPath: 'time',
-          autoIncrement: true,
-        });
-      }
-      if (!this.db.objectStoreNames.contains('players')) {
-        this.db.createObjectStore('players', {
-          keyPath: 'id',
-          autoIncrement: true,
-        });
-      }
-    };
-
-    request.onsuccess = () => {
-      this.db = request.result;
-      this.readIDB();
-    };
+  readInDB() {
+    Promise.all([
+      this.indexDBService
+        .readPlayers()
+        .then((players) => {
+          this.players.next(players);
+        })
+        .catch((e) => console.error(e)),
+      this.indexDBService
+        .readGames()
+        .then((games) => {
+          this.games.next(games);
+        })
+        .catch((e) => console.error(e)),
+    ]).then(() => this.rebuildTables());
   }
 
-  readIDB() {
-    if (this.db == undefined) {
-      console.error('no db');
-      return;
-    }
-
-    const trans = this.db.transaction(['players', 'games']);
-    const osPlayers = trans.objectStore('players');
-    const reqPlayers = osPlayers.getAll();
-
-    reqPlayers.onsuccess = (event) => {
-      this.players.next(reqPlayers.result);
-    };
-
-    const osGames = trans.objectStore('games');
-    const reqGames = osGames.getAll();
-
-    reqGames.onsuccess = (event) => {
-      this.games.next(reqGames.result);
-      this.rebuildCostTable();
-    };
+  rebuildTables() {
+    this.rebuildCostTable();
+    this.rebuildSumTable();
   }
 
   rebuildCostTable() {
@@ -80,10 +59,9 @@ export class StateService {
       table[i] = this.players.value.map((p) => this.getCost(games[i], p)!);
     }
     this.coastTable.next(table);
-    this.rebuildsumTable();
   }
 
-  rebuildsumTable() {
+  rebuildSumTable() {
     let table: number[][] = [];
     let prvious: number[];
     table = this.coastTable.value.map((x, index, t) => {
@@ -98,21 +76,29 @@ export class StateService {
     this.sumTable.next(table);
   }
 
-  reset() {
-    this.db?.close()
+  removeLocalState() {
+    this.indexDBService.reset();
     this.games.next([]);
     this.players.next([]);
-
-    let delet = window.indexedDB.deleteDatabase('appState');
-    delet.onerror = (ev) => console.error(ev.target);
-    delet.onsuccess = (ev) => {
-      this.initDB();
-    };
-    this.rebuildsumTable();
-    this.rebuildCostTable();
+    this.rebuildTables()
   }
 
-  addPlayer(newPlayer: Player) {
+  addGame(newGame: Game, pushServer = true) {
+    let mygames = this.games.getValue();
+    if (mygames.find((x) => x.time == newGame.time) != null) {
+      return;
+    }
+    mygames.push(newGame);
+    this.games.next(mygames);
+    if (pushServer) {
+      this.httpService.pushGame(newGame)
+    }
+    this.indexDBService.saveGame(newGame);
+    this.rebuildTables();
+    //inefitient
+  }
+
+  addPlayer(newPlayer: Player, pushServer = true) {
     let buff = this.players.getValue();
     if (newPlayer.name.length < 1) {
       console.error('Name to short');
@@ -122,21 +108,17 @@ export class StateService {
       console.error('Name already used');
       return;
     }
-
     buff.push(newPlayer);
-
-    if (this.db != null) {
-      const trans = this.db.transaction('players', 'readwrite');
-      trans.objectStore('players').add(newPlayer);
-    } else {
-      console.error('no IDBDatabase');
+    if (pushServer) {
+      this.httpService.putPlayer(newPlayer)
     }
-    this.httpService.putPlayer(newPlayer)
-
+    this.indexDBService.savePlayer(newPlayer);
     this.players.next(buff);
+    this.rebuildTables();
   }
 
   getCost(game: Game, player: Player): number | null {
+    //returns individual palance change for perticluar game
     let winnerCount = 0;
 
     game.involved.forEach((p) => {
@@ -161,20 +143,5 @@ export class StateService {
       }
       return -game.cost;
     }
-  }
-
-  addGame(newGame: Game) {
-    let buff = this.games.getValue();
-    buff.push(newGame);
-
-    if (this.db != null) {
-      const trans = this.db.transaction('games', 'readwrite');
-      trans.objectStore('games').add(newGame);
-    } else {
-      console.error('no IDBDatabase');
-    }
-
-    this.games.next(buff);
-    this.rebuildCostTable();
   }
 }

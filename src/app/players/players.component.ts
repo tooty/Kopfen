@@ -31,7 +31,8 @@ export class PlayersComponent {
   addPlayer(input: HTMLInputElement) {
     var uuid = uuidv4()
     console.log(uuid)
-    this.stateService.addPlayer({ name: input.value, id: uuid });
+    const newPlayer = { name: input.value, id: uuid }
+    this.stateService.addPlayer(newPlayer);
     input.value = '';
   }
 
@@ -39,10 +40,16 @@ export class PlayersComponent {
   loadGames() {
     const s = 0
     const e = Date.now()
-    this.httpService.getGames(s,e)
+    const result = this.httpService.getGames(s,e)
+    result.subscribe((event) => {
+      if (event.body != null) {
+        event.body.map(x=>this.stateService.addGame(x))
+      }
+    }
+    )
   }
 
   reset() {
-    this.stateService.reset();
+    this.stateService.removeLocalState();
   }
 }
