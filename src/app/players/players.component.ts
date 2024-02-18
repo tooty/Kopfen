@@ -43,7 +43,7 @@ export class PlayersComponent {
     const result = this.httpService.getGames(s,e)
     result.subscribe((event) => {
       if (event.body != null) {
-        event.body.map(x=>this.stateService.addGame(x))
+        event.body.g.map(x=>this.stateService.addGame(x))
       }
     }
     )

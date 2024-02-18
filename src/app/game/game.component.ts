@@ -72,7 +72,6 @@ export class GameComponent {
     ) {
       return null;
     }
-    console.log('gaod game');
     let involved: { playerID: string; winner: boolean }[] = [];
     this.winners.forEach((x) =>
       involved.push({ playerID: x.p.id, winner: true }),

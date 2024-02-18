@@ -110,7 +110,7 @@ export class StateService {
     }
     buff.push(newPlayer);
     if (pushServer) {
-      this.httpService.putPlayer(newPlayer)
+      this.httpService.pushPlayer(newPlayer)
     }
     this.indexDBService.savePlayer(newPlayer);
     this.players.next(buff);

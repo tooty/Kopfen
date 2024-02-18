@@ -8,3 +8,8 @@ export interface Player {
   name: String;
   id: string;
 }
+
+export interface putItem {
+  content: Object,
+  putURL: string
+}

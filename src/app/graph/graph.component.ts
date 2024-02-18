@@ -80,7 +80,6 @@ export class GraphComponent {
     },
   };
       this.chart?.update();
-      console.log("is changed" + this.lineChartOptions!.plugins!.legend!.display)
     }
   }
 
