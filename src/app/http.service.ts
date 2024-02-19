@@ -2,19 +2,10 @@ import {
   HttpClient,
   HttpHeaders,
   HttpParams,
-  HttpResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Game, Player, putItem } from './interfaces';
-import {
-  Observable,
-  of,
-  mergeMap,
-  tap,
-  Subject,
-  catchError,
-  BehaviorSubject,
-} from 'rxjs';
+import { Observable, Subject, mergeMap, tap, delay, retry } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -28,46 +19,48 @@ export class HttpService {
   private putQueue = new Subject<putItem>();
 
   constructor(private http: HttpClient) {
-    this.putQueue.pipe(mergeMap((next) => this.putHandler(next))).subscribe();
+    this.putQueue
+      .pipe(mergeMap((next, index) => this.putHandler(next, index)))
+      .subscribe();
   }
 
   pushGame(game: Game) {
-    this.putQueue.next({ content: game, putURL: '/game' });
-    console.log('Game queued');
+    this.putQueue.next({ content: game, URL: '/game' });
   }
 
   pushPlayer(player: Player) {
-    console.log('pushPlayer()');
-    this.putQueue.next({ content: player, putURL: '/player' });
-    console.log('player queued');
+    this.putQueue.next({ content: player, URL: '/player' });
   }
 
-  putHandler(item: putItem): Observable<Object | null> {
+  putHandler(item: putItem, index: number): Observable<null> {
     return this.http
-      .put(this.url + item.putURL, item.content, this.httpOptions)
+      .put<null>(this.url + item.URL, item.content, this.httpOptions)
       .pipe(
-        catchError((err, caught) => {
-          new Promise((res) => setTimeout(res, 5000)).then(() =>
-            this.putQueue.next(item)
-          );
-          throw err;
+        tap(() => console.log('succcess', index)),
+        retry({
+         // delay: 5000
         })
       );
   }
 
-  getGames(
-    start: number,
-    end: number
-  ): Observable<HttpResponse<{ g: Game[]; p: Player[] }>> {
+  getPlayer(id: string): Observable<Player> {
+    let params = new HttpParams()
+      .set('playerID', id)
+
+    return this.http.get<Player>(`${this.url}/player`, {
+        responseType: 'json',
+        params: params,
+      })
+  }
+
+  getGames(start: number, end: number): Observable<Game[]>{
     let params = new HttpParams()
       .set('start', start.toString())
       .set('end', end.toString());
-    return this.http.get<HttpResponse<{ g: Game[]; p: Player[] }>>(
-      `${this.url}/game`,
-      {
+
+    return this.http.get<Game[]>(`${this.url}/game`, {
         responseType: 'json',
         params: params,
-      }
-    );
+      })
   }
 }

@@ -11,5 +11,5 @@ export interface Player {
 
 export interface putItem {
   content: Object,
-  putURL: string
+  URL: string
 }

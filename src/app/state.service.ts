@@ -85,7 +85,14 @@ export class StateService {
 
   addGame(newGame: Game, pushServer = true) {
     let mygames = this.games.getValue();
-    if (mygames.find((x) => x.time == newGame.time) != null) {
+    newGame.involved.map((p)=> {
+      if (this.players.value.find(pLocal => pLocal.id == p.playerID) == undefined) {
+        this.httpService.getPlayer(p.playerID).subscribe((player) => {
+          this.addPlayer(player,false);
+      });
+      }
+    })
+    if (mygames.find((x) => x.time == newGame.time) != undefined) {
       return;
     }
     mygames.push(newGame);

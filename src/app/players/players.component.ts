@@ -5,8 +5,8 @@ import { Player } from '../interfaces';
 import { StateService } from '../state.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import {HttpService} from '../http.service';
-import { v4 as uuidv4 } from 'uuid'
+import { HttpService } from '../http.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-players',
@@ -20,7 +20,6 @@ export class PlayersComponent {
 
   constructor(
     private stateService: StateService,
-    private router: Router,
     private httpService: HttpService
   ) {
     this.stateService.players$.subscribe((data) => {
@@ -29,24 +28,23 @@ export class PlayersComponent {
   }
 
   addPlayer(input: HTMLInputElement) {
-    var uuid = uuidv4()
-    console.log(uuid)
-    const newPlayer = { name: input.value, id: uuid }
+    var uuid = uuidv4();
+    console.log(uuid);
+    const newPlayer = { name: input.value, id: uuid };
     this.stateService.addPlayer(newPlayer);
     input.value = '';
   }
 
   //loadGames(start: Date, end: Date) {
   loadGames() {
-    const s = 0
-    const e = Date.now()
-    const result = this.httpService.getGames(s,e)
-    result.subscribe((event) => {
-      if (event.body != null) {
-        event.body.g.map(x=>this.stateService.addGame(x))
-      }
-    }
-    )
+    const s = 0;
+    const e = Date.now();
+    this.httpService.getGames(s, e)
+      .subscribe((data) => {
+        data.map((x) => {
+          this.stateService.addGame(x, false);
+        });
+      });
   }
 
   reset() {
