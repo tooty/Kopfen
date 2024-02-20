@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Player, Game } from './interfaces';
-import { BehaviorSubject, Observable, repeat,take } from 'rxjs';
+import {
+  pipe,
+  interval,
+  BehaviorSubject,
+  Observable,
+  repeat,
+  take,
+} from 'rxjs';
 import { HttpService } from './http.service';
 import { IndexDBService } from './index-db.service';
 
@@ -12,6 +19,7 @@ export class StateService {
   private games = new BehaviorSubject<Game[]>([]);
   private coastTable = new BehaviorSubject<number[][]>([]);
   private sumTable = new BehaviorSubject<number[][]>([]);
+  private syncTime = new BehaviorSubject<number>(0);
 
   players$ = this.players.asObservable();
   games$ = this.games.asObservable();
@@ -28,6 +36,19 @@ export class StateService {
         this.readInDB();
       })
       .catch((e) => console.error(e));
+    interval(2000)
+      .pipe(
+        repeat(),
+        pipe((x) => {
+          console.log('getGames', this.syncTime.value);
+          return this.httpService.getGames(this.syncTime.value, Date.now());
+        })
+      )
+      .subscribe((x) => this.syncTime.next(Date.now()));
+    this.syncTime.next(Number(localStorage.getItem('syncTime')));
+    this.syncTime.subscribe((next) =>
+      localStorage.setItem('syncTime', this.syncTime.value.toString())
+    );
   }
 
   readInDB() {
@@ -80,26 +101,28 @@ export class StateService {
     this.indexDBService.reset();
     this.games.next([]);
     this.players.next([]);
-    this.rebuildTables()
+    this.rebuildTables();
   }
-
 
   addGame(newGame: Game, pushServer = true) {
     let mygames = this.games.getValue();
-    newGame.involved.map((p)=> {
-      if (this.players.value.find(pLocal => pLocal.id == p.playerID) == undefined) {
+    newGame.involved.map((p) => {
+      if (
+        this.players.value.find((pLocal) => pLocal.id == p.playerID) ==
+        undefined
+      ) {
         this.httpService.getPlayer(p.playerID).subscribe((player) => {
-          this.addPlayer(player,false);
-      });
+          this.addPlayer(player, false);
+        });
       }
-    })
+    });
     if (mygames.find((x) => x.time == newGame.time) != undefined) {
       return;
     }
     mygames.push(newGame);
     this.games.next(mygames);
     if (pushServer) {
-      this.httpService.pushGame(newGame)
+      this.httpService.pushGame(newGame);
     }
     this.indexDBService.saveGame(newGame);
     this.rebuildTables();
@@ -118,7 +141,7 @@ export class StateService {
     }
     buff.push(newPlayer);
     if (pushServer) {
-      this.httpService.pushPlayer(newPlayer)
+      this.httpService.pushPlayer(newPlayer);
     }
     this.indexDBService.savePlayer(newPlayer);
     this.players.next(buff);
