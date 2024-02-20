@@ -39,14 +39,13 @@ export class StateService {
         this.readInDB();
       })
       .catch((e) => console.error(e));
-    interval(2000)
-      .pipe(
-        repeat(),
-        (x) => {
-          return this.httpService.getGames(this.syncTime.value, Date.now());
-        },tap(
-          ()=>console.log('getGames')
-        ),retry({delay:2000})).subscribe()
+    interval(2000).subscribe(x=>
+      this.httpService.getGames(this.syncTime.value, Date.now())
+      .subscribe((data) => {
+        data.map((x) => {
+          this.addGame(x, false);
+        });
+      }));
     this.syncTime.next(Number(localStorage.getItem('syncTime')));
     this.syncTime.subscribe((next) =>
       localStorage.setItem('syncTime', this.syncTime.value.toString())
