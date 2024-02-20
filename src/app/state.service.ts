@@ -12,13 +12,11 @@ export class StateService {
   private games = new BehaviorSubject<Game[]>([]);
   private coastTable = new BehaviorSubject<number[][]>([]);
   private sumTable = new BehaviorSubject<number[][]>([]);
-  private syncTime = new BehaviorSubject<number>(0);
 
   players$ = this.players.asObservable();
   games$ = this.games.asObservable();
   coastTable$ = this.coastTable.asObservable();
   sumTable$ = this.sumTable.asObservable();
-  syncTime$ = this.syncTime.asObservable()
 
   constructor(
     private httpService: HttpService,
@@ -30,12 +28,6 @@ export class StateService {
         this.readInDB();
       })
       .catch((e) => console.error(e));
-    this.syncTime.next(Number(localStorage.getItem("syncTime")))
-    this.syncTime.pipe(take(1),repeat({delay: 5000}))
-    this.syncTime.subscribe((next)=> {
-      this.httpService.getGames(next, Date.now())
-      localStorage.setItem("syncTime",next.toString())
-    })
   }
 
   readInDB() {
@@ -91,9 +83,6 @@ export class StateService {
     this.rebuildTables()
   }
 
-  setTime(time: number){
-    this.syncTime.next(time)
-  }
 
   addGame(newGame: Game, pushServer = true) {
     let mygames = this.games.getValue();
