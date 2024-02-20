@@ -31,8 +31,11 @@ export class StateService {
       })
       .catch((e) => console.error(e));
     this.syncTime.next(Number(localStorage.getItem("syncTime")))
-    this.syncTime.pipe(take(1),repeat({delay: 1000}))
-    this.syncTime.subscribe((next)=> localStorage.setItem("syncTime",next.toString()))
+    this.syncTime.pipe(take(1),repeat({delay: 5000}))
+    this.syncTime.subscribe((next)=> {
+      this.httpService.getGames(next, Date.now())
+      localStorage.setItem("syncTime",next.toString())
+    })
   }
 
   readInDB() {
