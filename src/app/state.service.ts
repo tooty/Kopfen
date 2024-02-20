@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Player, Game } from './interfaces';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, repeat,take } from 'rxjs';
 import { HttpService } from './http.service';
 import { IndexDBService } from './index-db.service';
 
@@ -12,11 +12,13 @@ export class StateService {
   private games = new BehaviorSubject<Game[]>([]);
   private coastTable = new BehaviorSubject<number[][]>([]);
   private sumTable = new BehaviorSubject<number[][]>([]);
+  private syncTime = new BehaviorSubject<number>(0);
 
   players$ = this.players.asObservable();
   games$ = this.games.asObservable();
   coastTable$ = this.coastTable.asObservable();
   sumTable$ = this.sumTable.asObservable();
+  syncTime$ = this.syncTime.asObservable()
 
   constructor(
     private httpService: HttpService,
@@ -28,6 +30,9 @@ export class StateService {
         this.readInDB();
       })
       .catch((e) => console.error(e));
+    this.syncTime.next(Number(localStorage.getItem("syncTime")))
+    this.syncTime.pipe(take(1),repeat({delay: 1000}))
+    this.syncTime.subscribe((next)=> localStorage.setItem("syncTime",next.toString()))
   }
 
   readInDB() {
@@ -81,6 +86,10 @@ export class StateService {
     this.games.next([]);
     this.players.next([]);
     this.rebuildTables()
+  }
+
+  setTime(time: number){
+    this.syncTime.next(time)
   }
 
   addGame(newGame: Game, pushServer = true) {

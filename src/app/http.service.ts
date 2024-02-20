@@ -5,7 +5,8 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Game, Player, putItem } from './interfaces';
-import { Observable, Subject, mergeMap, tap, delay, retry } from 'rxjs';
+import { Observable, Subject, mergeMap, tap, delay, retry, finalize } from 'rxjs';
+import {StateService} from './state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,10 @@ export class HttpService {
 
   private putQueue = new Subject<putItem>();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private stateService: StateService,
+             ) {
     this.putQueue
       .pipe(mergeMap((next, index) => this.putHandler(next, index)))
       .subscribe();
@@ -38,7 +42,7 @@ export class HttpService {
       .pipe(
         tap(() => console.log('succcess', index)),
         retry({
-         // delay: 5000
+          delay: 5000
         })
       );
   }
@@ -61,6 +65,6 @@ export class HttpService {
     return this.http.get<Game[]>(`${this.url}/game`, {
         responseType: 'json',
         params: params,
-      })
+      }).pipe(finalize(()=> stateService.))
   }
 }
