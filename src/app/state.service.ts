@@ -7,6 +7,9 @@ import {
   Observable,
   repeat,
   take,
+  tap,
+  retry,
+  delay,
 } from 'rxjs';
 import { HttpService } from './http.service';
 import { IndexDBService } from './index-db.service';
@@ -39,12 +42,11 @@ export class StateService {
     interval(2000)
       .pipe(
         repeat(),
-        pipe((x) => {
-          console.log('getGames', this.syncTime.value);
+        (x) => {
           return this.httpService.getGames(this.syncTime.value, Date.now());
-        })
-      )
-      .subscribe((x) => this.syncTime.next(Date.now()));
+        },tap(
+          ()=>console.log('getGames')
+        ),retry({delay:2000})).subscribe()
     this.syncTime.next(Number(localStorage.getItem('syncTime')));
     this.syncTime.subscribe((next) =>
       localStorage.setItem('syncTime', this.syncTime.value.toString())
