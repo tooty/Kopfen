@@ -65,6 +65,6 @@ export class HttpService {
     return this.http.get<Game[]>(`${this.url}/game`, {
         responseType: 'json',
         params: params,
-      }).pipe(finalize(()=> stateService.))
+      }).pipe(finalize(()=> this.stateService.setTime(end)))
   }
 }
