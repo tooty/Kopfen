@@ -117,7 +117,7 @@ export class StateService {
         });
       }
     });
-    if (mygames.find((x) => x.time == newGame.time) != undefined) {
+    if (mygames.find((x) => x.time == newGame.time) != undefined || newGame.time < 1700000000000) {
       return;
     }
     mygames.push(newGame);
