@@ -10,6 +10,8 @@ import {
   tap,
   retry,
   delay,
+  find,
+  throwError,
 } from 'rxjs';
 import { HttpService } from './http.service';
 import { IndexDBService } from './index-db.service';
@@ -39,17 +41,6 @@ export class StateService {
         this.readInDB();
       })
       .catch((e) => console.error(e));
-    interval(2000).subscribe(x=>
-      this.httpService.getGames(this.syncTime.value, Date.now())
-      .subscribe((data) => {
-        data.map((x) => {
-          this.addGame(x, false);
-        });
-      }));
-    this.syncTime.next(Number(localStorage.getItem('syncTime')));
-    this.syncTime.subscribe((next) =>
-      localStorage.setItem('syncTime', this.syncTime.value.toString())
-    );
   }
 
   readInDB() {
@@ -72,6 +63,30 @@ export class StateService {
   rebuildTables() {
     this.rebuildCostTable();
     this.rebuildSumTable();
+  }
+
+  toggleGameSync(time: number,set?:boolean){
+    const finding = this.games.value.find(x=> {x.time == time})
+    if (finding != undefined){
+      if (set == undefined) {
+        finding.synced = !finding.synced
+      } else {
+        finding.synced = set
+      }
+    }
+    else console.error("game not found")
+  }
+
+  togglePlayerSync(id: string,set?:boolean){
+    const finding = this.players.value.find(x=> {x.id == id})
+    if (finding != undefined){
+      if (set == undefined) {
+        finding.synced = !finding.synced
+      } else {
+        finding.synced = set
+      }
+    }
+    else console.error("player not found")
   }
 
   rebuildCostTable() {
@@ -105,48 +120,56 @@ export class StateService {
     this.rebuildTables();
   }
 
-  addGame(newGame: Game, pushServer = true) {
-    let mygames = this.games.getValue();
-    newGame.involved.map((p) => {
-      if (
-        this.players.value.find((pLocal) => pLocal.id == p.playerID) ==
-        undefined
-      ) {
-        this.httpService.getPlayer(p.playerID).subscribe((player) => {
-          this.addPlayer(player, false);
+  async addGame(newGame: Game, pushServer = true): Promise<null> {
+    return new Promise(
+      (resolve) => {
+        let mygames = this.games.getValue();
+        newGame.involved.map((p) => {
+          if (
+            this.players.value.find((pLocal) => pLocal.id == p.playerID) ==
+            undefined
+          ) {
+            this.httpService.getPlayer(p.playerID).subscribe((player) => {
+                this.addPlayer(player, false);
+            });
+          }
         });
+        if (mygames.find((x) => x.time == newGame.time) != undefined || newGame.time < 1700000000000) {
+          throw new Error("game rejected ")
+        }
+        mygames.push(newGame);
+        this.games.next(mygames);
+        this.indexDBService.saveGame(newGame);
+        this.rebuildTables();
+        resolve(null)
+        //inefitient
       }
-    });
-    if (mygames.find((x) => x.time == newGame.time) != undefined || newGame.time < 1700000000000) {
-      return;
-    }
-    mygames.push(newGame);
-    this.games.next(mygames);
-    if (pushServer) {
-      this.httpService.pushGame(newGame);
-    }
-    this.indexDBService.saveGame(newGame);
-    this.rebuildTables();
-    //inefitient
+    )
   }
 
-  addPlayer(newPlayer: Player, pushServer = true) {
-    let buff = this.players.getValue();
-    if (newPlayer.name.length < 1) {
-      console.error('Name to short');
-      return;
+  async addPlayer(newPlayer: Player, pushServer = true): Promise<null> {
+    return new Promise((resolve)=> {
+      let buff = this.players.getValue();
+      if (newPlayer.name.length < 1) {
+        throw Error('Name to short')
+      }
+      if (buff.filter((p) => p.name == newPlayer.name).length != 0) {
+        throw Error("allredy used")
+      }
+      buff.push(newPlayer);
+      this.indexDBService.savePlayer(newPlayer);
+      this.players.next(buff);
+      this.rebuildTables();
+      resolve(null)
     }
-    if (buff.filter((p) => p.name == newPlayer.name).length != 0) {
-      console.error('Name already used');
-      return;
-    }
-    buff.push(newPlayer);
-    if (pushServer) {
-      this.httpService.pushPlayer(newPlayer);
-    }
-    this.indexDBService.savePlayer(newPlayer);
-    this.players.next(buff);
-    this.rebuildTables();
+    )
+  }
+
+  getUnsyncedGames():Game[]{
+    return this.games.value.filter(x => x.synced == false)
+  }
+  getUnsyncedPlayers():Player[]{
+    return this.players.value.filter(x => x.synced == false)
   }
 
   getCost(game: Game, player: Player): number | null {

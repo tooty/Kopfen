@@ -14,31 +14,12 @@ export class HttpService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  private putQueue = new Subject<putItem>();
-
   constructor(private http: HttpClient) {
-    this.putQueue
-      .pipe(mergeMap((next, index) => this.putHandler(next, index)))
-      .subscribe();
   }
 
-  pushGame(game: Game) {
-    this.putQueue.next({ content: game, URL: '/game' });
-  }
-
-  pushPlayer(player: Player) {
-    this.putQueue.next({ content: player, URL: '/player' });
-  }
-
-  putHandler(item: putItem, index: number): Observable<null> {
+  pushGame(item: putItem): Observable<null> {
     return this.http
       .put<null>(this.url + item.URL, item.content, this.httpOptions)
-      .pipe(
-        tap(() => console.log('succcess', index)),
-        retry({
-          delay: 5000,
-        })
-      );
   }
 
   getPlayer(id: string): Observable<Player> {

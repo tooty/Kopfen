@@ -11,6 +11,7 @@ import { StateService } from '../state.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import {ControlerService} from '../controler.service';
 
 @Component({
   selector: 'app-game',
@@ -28,6 +29,7 @@ export class GameComponent {
   constructor(
     private stateService: StateService,
     private router: Router,
+    private controlerService: ControlerService,
   ) {
     this.stateService.players$.subscribe((data) => {
       this.players = data.map((p) => {
@@ -79,7 +81,7 @@ export class GameComponent {
     this.loosers.forEach((x) =>
       involved.push({ playerID: x.p.id, winner: false }),
     );
-    return { cost: this.amount, involved: involved, time: Date.now() };
+    return { cost: this.amount, involved: involved, time: Date.now(), synced: false };
   }
 
   updateCost() {
@@ -100,7 +102,7 @@ export class GameComponent {
     if (myGame == null) {
       return false;
     }
-    this.stateService.addGame(myGame);
+    this.controlerService.addGame(myGame);
     this.router.navigate(['']);
     return true;
   }

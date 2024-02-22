@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Player } from '../interfaces';
-import { StateService } from '../state.service';
+import { ControlerService } from '../controler.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpService } from '../http.service';
 import { v4 as uuidv4 } from 'uuid';
+import { StateService } from '../state.service';
 
 @Component({
   selector: 'app-players',
@@ -19,8 +19,8 @@ export class PlayersComponent {
   players: Player[] = [];
 
   constructor(
+    private controlerService: ControlerService,
     private stateService: StateService,
-    private httpService: HttpService
   ) {
     this.stateService.players$.subscribe((data) => {
       this.players = data;
@@ -29,22 +29,16 @@ export class PlayersComponent {
 
   addPlayer(input: HTMLInputElement) {
     var uuid = uuidv4();
-    console.log(uuid);
-    const newPlayer = { name: input.value, id: uuid };
-    this.stateService.addPlayer(newPlayer);
+    const newPlayer = { name: input.value, id: uuid, synced: false };
+    this.controlerService.addPlayer(newPlayer);
     input.value = '';
   }
 
   //loadGames(start: Date, end: Date) {
   loadGames() {
-    const s = 0;
-    const e = Date.now();
-    this.httpService.getGames(s, e)
-      .subscribe((data) => {
-        data.map((x) => {
-          this.stateService.addGame(x, false);
-        });
-      });
+    const s = new Date(0);
+    const e = new Date()
+    this.controlerService.loadServerGames(s,e)
   }
 
   reset() {
