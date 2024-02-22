@@ -35,7 +35,7 @@ export class ControlerService {
   }
 
   pushGameToServer(g: Game){
-    const obs = this.httpService.pushGame({content: g,URL:'game'})
+    const obs = this.httpService.pushGame({content: g,URL:'/game'})
     obs.subscribe(
       {
         complete: ()=> {
@@ -46,7 +46,7 @@ export class ControlerService {
   }
 
   pushPlayerToServer(g: Player){
-    const obs = this.httpService.pushGame({content: g,URL:'game'})
+    const obs = this.httpService.pushGame({content: g,URL:'/player'})
     obs.subscribe(
       {
         complete: ()=> {
