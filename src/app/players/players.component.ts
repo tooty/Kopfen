@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Player } from '../interfaces';
 import { ControlerService } from '../controler.service';
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { StateService } from '../state.service';
@@ -11,7 +10,7 @@ import { StateService } from '../state.service';
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './players.component.html',
   styleUrl: './players.component.css',
 })
@@ -37,7 +36,7 @@ export class PlayersComponent {
   //loadGames(start: Date, end: Date) {
   loadGames() {
     const s = new Date(0);
-    const e = new Date()
+    const e = new Date(Date.now())
     this.controlerService.loadServerGames(s,e)
   }
 
