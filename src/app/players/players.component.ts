@@ -10,7 +10,7 @@ import { StateService } from '../state.service';
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './players.component.html',
   styleUrl: './players.component.css',
 })
