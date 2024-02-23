@@ -55,31 +55,12 @@ export class StateService {
     this.rebuildSumTable();
   }
 
-  toggleGameSync(time: number,set?:boolean){
-    const finding = this.games.value.find(x=> x.time == time)
-    if (finding != undefined){
-      if (set == undefined) {
-        finding.synced = !finding.synced
-      } else {
-        finding.synced = set
-      }
-    }
-    else console.error("game not found")
+  gameUpdated(){
+    this.games.next(this.games.value)
   }
 
-  togglePlayerSync(id: string,set?:boolean){
-    let finding = this.players.value.find(x=> x.id == id)
-    console.log(id)
-    console.log(finding)
-    if (finding != undefined){
-      if (set == undefined) {
-        finding.synced = !finding.synced
-      } else {
-        finding.synced = set
-      }
-      this.players.next(this.players.value)
-    }
-    else console.error("player not found")
+  playerUpdated(){
+    this.players.next(this.players.value)
   }
 
   rebuildCostTable() {

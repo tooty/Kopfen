@@ -37,11 +37,10 @@ export class ControlerService {
   pushGameToServer(g: Game){
     const obs = this.httpService.pushGame({content: g,URL:'/game'})
     obs.subscribe(
-      {
-        complete: ()=> {
-          this.stateService.toggleGameSync(g.time,true)
+       ()=> {
+          g.synced = true
+          this.stateService.gameUpdated()
         }
-      }
     )
   }
 
@@ -49,7 +48,8 @@ export class ControlerService {
     const obs = this.httpService.pushGame({content: g,URL:'/player'})
     obs.subscribe(
         () => {
-          this.stateService.togglePlayerSync(g.id,true)
+          g.synced = false
+          this.stateService.playerUpdated()
         }
     )
   }
