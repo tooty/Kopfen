@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Player, Game } from './interfaces';
 import {
-  BehaviorSubject,
+  BehaviorSubject, tap,
 } from 'rxjs';
 import { HttpService } from './http.service';
 import { IndexDBService } from './index-db.service';
@@ -55,12 +55,14 @@ export class StateService {
     this.rebuildSumTable();
   }
 
-  gameUpdated(){
+  gameUpdated(g: Game){
     this.games.next(this.games.value)
+    this.indexDBService.saveGame(g)
   }
 
-  playerUpdated(){
+  playerUpdated(p: Player){
     this.players.next(this.players.value)
+    this.indexDBService.savePlayer(p)
   }
 
   rebuildCostTable() {
