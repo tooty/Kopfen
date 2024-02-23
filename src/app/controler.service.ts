@@ -48,8 +48,7 @@ export class ControlerService {
   pushPlayerToServer(g: Player){
     const obs = this.httpService.pushGame({content: g,URL:'/player'})
     obs.subscribe(
-        (next)=> {
-          console.log(next)
+        () => {
           this.stateService.togglePlayerSync(g.id,true)
         }
     )
