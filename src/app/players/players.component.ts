@@ -36,7 +36,7 @@ export class PlayersComponent {
   //loadGames(start: Date, end: Date) {
   loadGames() {
     const s = new Date(0);
-    const e = new Date(Date.now())
+    const e = new Date()
     this.controlerService.loadServerGames(s,e)
   }
 

@@ -57,7 +57,7 @@ export class ControlerService {
   }
 
   loadServerGames(s: Date, e: Date){
-    this.httpService.getGames(s.getUTCMilliseconds(), e.getUTCMilliseconds())
+    this.httpService.getGames(s.getTime(), e.getTime())
       .subscribe((data) => {
         data.map((x) => {
           this.stateService.addGame(x, false);
