@@ -79,7 +79,7 @@ export class StateService {
 
   togglePlayerSync(id: string,set?:boolean){
     let finding = this.players.value.find(x=> {x.id == id})
-    console.log("id")
+    console.log(id)
     console.log(finding)
     if (finding != undefined){
       if (set == undefined) {
