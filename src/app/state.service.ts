@@ -1,17 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Player, Game } from './interfaces';
 import {
-  pipe,
-  interval,
   BehaviorSubject,
-  Observable,
-  repeat,
-  take,
-  tap,
-  retry,
-  delay,
-  find,
-  throwError,
 } from 'rxjs';
 import { HttpService } from './http.service';
 import { IndexDBService } from './index-db.service';
@@ -66,7 +56,7 @@ export class StateService {
   }
 
   toggleGameSync(time: number,set?:boolean){
-    const finding = this.games.value.find(x=> {x.time == time})
+    const finding = this.games.value.find(x=> x.time == time)
     if (finding != undefined){
       if (set == undefined) {
         finding.synced = !finding.synced
@@ -78,7 +68,7 @@ export class StateService {
   }
 
   togglePlayerSync(id: string,set?:boolean){
-    let finding = this.players.value.find(x=> {x.id == id})
+    let finding = this.players.value.find(x=> x.id == id)
     console.log(id)
     console.log(finding)
     if (finding != undefined){
@@ -87,6 +77,7 @@ export class StateService {
       } else {
         finding.synced = set
       }
+      this.players.next(this.players.value)
     }
     else console.error("player not found")
   }
