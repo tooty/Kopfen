@@ -1,19 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { ViewChild, HostListener, Component } from '@angular/core';
+import { HostListener, Component, ViewChild } from '@angular/core';
 import { Player } from '../interfaces';
 import { StateService } from '../state.service';
 import { Router } from '@angular/router';
 import { GraphComponent } from '../graph/graph.component';
 import Hammer from 'hammerjs';
+import {HttpClientModule} from '@angular/common/http';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, GraphComponent],
+  imports: [HttpClientModule, CommonModule, GraphComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
 })
 export class TableComponent {
+  @ViewChild('myElement') swipeDiv: HTMLDivElement|null = null
   players: Player[] = [];
   table: number[][] = [];
   sum: number[][] = [];
@@ -21,6 +23,7 @@ export class TableComponent {
   isTablet = false;
 
   @HostListener('window:orientationchange', ['$event'])
+
   orientationchange(event: Event) {
     this.isLandscape =
       screen.orientation.type == 'landscape-secondary' ||
@@ -47,12 +50,13 @@ export class TableComponent {
   }
 
   ngOnInit() {
-    const element = document.getElementById('myElement');
-    const hammer = new Hammer.Manager(element!);
-    hammer.add(new Hammer.Swipe());
-    hammer.on('swipeleft', () => this.swipe());
-    if (window.screen.width >= 700){
-      this.isTablet = true
+    if (this.swipeDiv != null){
+      const hammer = new Hammer.Manager(this.swipeDiv!);
+      hammer.add(new Hammer.Swipe());
+      hammer.on('swipeleft', () => this.swipe());
+      if (window.screen.width >= 700){
+        this.isTablet = true
+      }
     }
   }
 

@@ -1,14 +1,15 @@
 import { Component} from '@angular/core';
 import { StateService } from './state.service';
-import { Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { GraphComponent } from './graph/graph.component';
 import { PlayersComponent } from './players/players.component';
 import { CommonModule } from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, GraphComponent, PlayersComponent],
+  imports: [HttpClientModule,CommonModule, RouterOutlet, PlayersComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -17,7 +18,7 @@ export class AppComponent {
   enoughPlayers = true;
 
 
-  constructor(private stateService: StateService, private router: Router) {
+  constructor(private stateService: StateService) {
   }
 
   ngOnInit(){
