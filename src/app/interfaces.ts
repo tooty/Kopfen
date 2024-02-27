@@ -6,7 +6,7 @@ export interface Game {
 }
 
 export interface Player {
-  name: String;
+  name: string;
   id: string;
   synced: boolean;
 }

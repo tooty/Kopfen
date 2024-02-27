@@ -1,7 +1,7 @@
 <div class="flex justify-end">
   <button
     [routerLink]="'/'"
-    *ngIf="players.length >= 4"
+    *ngIf="enoughPlayer$"
     class="text-sky-400 px-2 active:text-sky-50"
   >
     Fertig
@@ -34,7 +34,7 @@
   </form>
   <div
     class="bg-indigo-950 text-sky-300 text-center rounded-full p-1 my-2"
-    *ngFor="let player of players"
+    *ngFor="let player of players$ | async "
   >
     {{ player.name }}
   </div>

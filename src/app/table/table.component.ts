@@ -31,9 +31,7 @@ export class TableComponent {
     private stateService: StateService,
     private router: Router,
   ) {
-    this.stateService.players$.subscribe((data) => {
-      this.players = data;
-    });
+      this.players = [];
     this.stateService.coastTable$.subscribe((data) => {
       this.table = data;
     });

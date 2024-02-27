@@ -10,13 +10,25 @@ import { Game } from '../interfaces';
 import { StateService } from '../state.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+<<<<<<< HEAD
 import { Router, RouterModule } from '@angular/router';
 import {ControlerService} from '../controler.service';
+=======
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import {HttpClientModule} from '@angular/common/http';
+import { StoreModule,Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
+>>>>>>> aa47d5a6 (ngrx)
 
 @Component({
   selector: 'app-game',
   standalone: true,
+<<<<<<< HEAD
   imports: [RouterModule, CommonModule, DragDropModule, FormsModule],
+=======
+  imports: [StoreModule,RouterModule,HttpClientModule, CommonModule, DragDropModule, FormsModule],
+>>>>>>> aa47d5a6 (ngrx)
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
 })
@@ -25,13 +37,15 @@ export class GameComponent {
   loosers: { p: Player; c: number }[] = [];
   winners: { p: Player; c: number }[] = [];
   amount = 10;
+  players$: Observable<Player[]>
 
   constructor(
+    private store: Store<{players: Player[]}>,
     private stateService: StateService,
     private router: Router,
-    private controlerService: ControlerService,
   ) {
-    this.stateService.players$.subscribe((data) => {
+    this.players$ = this.store.select('players')
+    this.players$.subscribe((data) => {
       this.players = data.map((p) => {
         return { p: p, c: 0 };
       });
@@ -102,7 +116,6 @@ export class GameComponent {
     if (myGame == null) {
       return false;
     }
-    this.controlerService.addGame(myGame);
     this.router.navigate(['']);
     return true;
   }

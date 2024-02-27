@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Player, Game } from './interfaces';
+<<<<<<< HEAD
 import {
   BehaviorSubject, tap,
 } from 'rxjs';
+=======
+import { BehaviorSubject } from 'rxjs';
+>>>>>>> aa47d5a6 (ngrx)
 import { HttpService } from './http.service';
 import { IndexDBService } from './index-db.service';
 
@@ -10,37 +14,22 @@ import { IndexDBService } from './index-db.service';
   providedIn: 'root',
 })
 export class StateService {
-  private players = new BehaviorSubject<Player[]>([]);
   private games = new BehaviorSubject<Game[]>([]);
   private coastTable = new BehaviorSubject<number[][]>([]);
   private sumTable = new BehaviorSubject<number[][]>([]);
   private syncTime = new BehaviorSubject<number>(0);
 
-  players$ = this.players.asObservable();
   games$ = this.games.asObservable();
   coastTable$ = this.coastTable.asObservable();
   sumTable$ = this.sumTable.asObservable();
 
   constructor(
     private httpService: HttpService,
-    private indexDBService: IndexDBService
-  ) {
-    this.indexDBService
-      .initDB()
-      .then(() => {
-        this.readInDB();
-      })
-      .catch((e) => console.error(e));
-  }
+    private indexDBService: IndexDBService,
+  ) {}
 
   readInDB() {
     Promise.all([
-      this.indexDBService
-        .readPlayers()
-        .then((players) => {
-          this.players.next(players);
-        })
-        .catch((e) => console.error(e)),
       this.indexDBService
         .readGames()
         .then((games) => {
@@ -60,24 +49,27 @@ export class StateService {
     this.indexDBService.saveGame(g)
   }
 
+<<<<<<< HEAD
   playerUpdated(p: Player){
     this.players.next(this.players.value)
     this.indexDBService.savePlayer(p)
   }
 
+=======
+>>>>>>> aa47d5a6 (ngrx)
   rebuildCostTable() {
-    let table: number[][] = [];
-    const games = this.games.value;
-    for (let i = 0; i < games.length; i++) {
-      table[i] = this.players.value.map((p) => this.getCost(games[i], p)!);
-    }
-    this.coastTable.next(table);
+//    let table: number[][] = [];
+//    const games = this.games.value;
+//    for (let i = 0; i < games.length; i++) {
+//      table[i] = this.players.value.map((p) => this.getCost(games[i], p)!);
+//    }
+//    this.coastTable.next(table);
   }
 
   rebuildSumTable() {
     let table: number[][] = [];
     let prvious: number[];
-    table = this.coastTable.value.map((x, index, t) => {
+    table = this.coastTable.value.map((x, index:number) => {
       if (index == 0) {
         prvious = x;
         return prvious;
@@ -89,6 +81,7 @@ export class StateService {
     this.sumTable.next(table);
   }
 
+<<<<<<< HEAD
   removeLocalState() {
     this.indexDBService.reset();
     this.games.next([]);
@@ -119,10 +112,23 @@ export class StateService {
         this.rebuildTables();
         resolve(null)
         //inefitient
+=======
+  async addGame(newGame: Game): Promise<null> {
+    return new Promise((resolve) => {
+      let mygames = this.games.getValue();
+      newGame.involved.map((p) => {
+      });
+      if (
+        mygames.find((x) => x.time == newGame.time) != undefined ||
+        newGame.time < 1700000000000
+      ) {
+        throw new Error('game rejected ');
+>>>>>>> aa47d5a6 (ngrx)
       }
     )
   }
 
+<<<<<<< HEAD
   async addPlayer(newPlayer: Player, pushServer = true): Promise<null> {
     return new Promise((resolve)=> {
       let buff = this.players.getValue();
@@ -147,6 +153,11 @@ export class StateService {
   getUnsyncedPlayers():Player[]{
     return this.players.value.filter(x => x.synced == false)
   }
+=======
+  getUnsyncedGames(): Game[] {
+    return this.games.value.filter((x) => x.synced == false);
+  }
+>>>>>>> aa47d5a6 (ngrx)
 
   getCost(game: Game, player: Player): number | null {
     //returns individual palance change for perticluar game
