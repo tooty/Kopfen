@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient,HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Game, Player, putItem } from './interfaces';
-import { Observable} from 'rxjs';
+import { Observable, catchError,tap} from 'rxjs';
 
 import { StateService } from './state.service';
 
@@ -17,9 +17,9 @@ export class HttpService {
   constructor(private http: HttpClient) {
   }
 
-  pushGame(item: putItem): Observable<null> {
+  pushItem(item: putItem): Observable<HttpEvent<string>> {
     return this.http
-      .put<null>(this.url + item.URL, item.content, this.httpOptions)
+      .put<HttpEvent<string>>(this.url + item.URL, item.content, this.httpOptions)
   }
 
   getPlayer(id: string): Observable<Player> {
