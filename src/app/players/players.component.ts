@@ -6,11 +6,13 @@ import { FormsModule } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { validatePlayer,resetLocal } from '../store/player.action';
 import { pullGamesHttp } from "../store/game.action";
+import { Store, StoreModule } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [HttpClientModule,CommonModule, RouterModule, FormsModule,StoreModule],
+  imports: [CommonModule, RouterModule, FormsModule,StoreModule],
   templateUrl: './players.component.html',
   styleUrl: './players.component.css',
 })

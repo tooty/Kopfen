@@ -67,6 +67,7 @@ export class TableComponent {
       }
     }
   }
+  }
 
   swipe() {
     if (this.isTablet) {

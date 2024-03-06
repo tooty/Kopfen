@@ -1,5 +1,4 @@
 import { Component} from '@angular/core';
-import { loadIndexDbPlayers } from './player.action';
 import { RouterModule, RouterOutlet, Router } from '@angular/router';
 import { PlayersComponent } from './players/players.component';
 import { CommonModule } from '@angular/common';

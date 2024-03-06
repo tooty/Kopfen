@@ -17,12 +17,6 @@
     "@angular/core": "^17.2.3",
     "@angular/forms": "^17.2.3",
     "@angular/language-server": "^17.0.3",
-<<<<<<< HEAD
-    "@angular/platform-browser": "^17.2.3",
-    "@angular/platform-browser-dynamic": "^17.2.3",
-    "@angular/router": "^17.2.3",
-    "@angular/service-worker": "^17.2.3",
-=======
     "@angular/platform-browser": "^17.0.0",
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
@@ -30,7 +24,6 @@
     "@ngrx/component-store": "^17.1.1",
     "@ngrx/effects": "^17.1.1",
     "@ngrx/store": "^17.1.1",
->>>>>>> aa47d5a6 (ngrx)
     "@types/uuid": "^9.0.8",
     "cdk": "^2.118.0",
     "chart.js": "^4.4.1",
