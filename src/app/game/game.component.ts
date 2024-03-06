@@ -7,28 +7,20 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Player } from '../interfaces';
 import { Game } from '../interfaces';
-import { StateService } from '../state.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-<<<<<<< HEAD
 import { Router, RouterModule } from '@angular/router';
-import {ControlerService} from '../controler.service';
-=======
-import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import { StoreModule,Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { validateGame } from '../store/game.action';
+import { HelperService } from '../services/helper.service';
 
->>>>>>> aa47d5a6 (ngrx)
 
 @Component({
   selector: 'app-game',
   standalone: true,
-<<<<<<< HEAD
-  imports: [RouterModule, CommonModule, DragDropModule, FormsModule],
-=======
   imports: [StoreModule,RouterModule,HttpClientModule, CommonModule, DragDropModule, FormsModule],
->>>>>>> aa47d5a6 (ngrx)
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
 })
@@ -41,8 +33,8 @@ export class GameComponent {
 
   constructor(
     private store: Store<{players: Player[]}>,
-    private stateService: StateService,
     private router: Router,
+    private helperService: HelperService
   ) {
     this.players$ = this.store.select('players')
     this.players$.subscribe((data) => {
@@ -102,10 +94,10 @@ export class GameComponent {
     let game = this.constructGame();
     if (game != null) {
       this.winners.forEach(
-        (p) => (p.c = this.stateService.getCost(game!, p.p) ?? 0),
+        (p) => (p.c = this.helperService.gameCost(game!, p.p) ?? 0),
       );
       this.loosers.forEach(
-        (p) => (p.c = this.stateService.getCost(game!, p.p) ?? 0),
+        (p) => (p.c = this.helperService.gameCost(game!, p.p) ?? 0),
       );
       this.players.forEach((p) => (p.c = 0));
     }
@@ -116,7 +108,9 @@ export class GameComponent {
     if (myGame == null) {
       return false;
     }
+    this.store.dispatch(validateGame(myGame))
     this.router.navigate(['']);
     return true;
   }
 }
+

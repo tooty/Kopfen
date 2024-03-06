@@ -1,10 +1,10 @@
 <div class="flex justify-end">
   <button
     [routerLink]="'/'"
-    *ngIf="enoughPlayer$"
+    *ngIf="((players$ | async)?.length ?? 0) >= 4"
     class="text-sky-400 px-2 active:text-sky-50"
   >
-    Fertig
+  Fertig
   </button>
 </div>
 <div class="my-8 max-w-md mx-auto">

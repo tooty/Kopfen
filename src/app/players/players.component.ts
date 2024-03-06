@@ -4,23 +4,13 @@ import { RouterModule } from '@angular/router';
 import { Player } from '../interfaces';
 import { FormsModule } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
-<<<<<<< HEAD
-import { StateService } from '../state.service';
-=======
-import {HttpClientModule} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { StoreModule,Store } from '@ngrx/store';
-import { validatePlayer,resetLocal } from '../player.action';
->>>>>>> aa47d5a6 (ngrx)
+import { validatePlayer,resetLocal } from '../store/player.action';
+import { pullGames} from "../store/game.action";
 
 @Component({
   selector: 'app-players',
   standalone: true,
-<<<<<<< HEAD
-  imports: [CommonModule, RouterModule, FormsModule],
-=======
   imports: [HttpClientModule,CommonModule, RouterModule, FormsModule,StoreModule],
->>>>>>> aa47d5a6 (ngrx)
   templateUrl: './players.component.html',
   styleUrl: './players.component.css',
 })
@@ -44,6 +34,7 @@ export class PlayersComponent {
 
   //loadGames(start: Date, end: Date) {
   loadGames() {
+    this.store.dispatch(pullGames({start:0,end: Date.now()}))
   }
 
   reset() {

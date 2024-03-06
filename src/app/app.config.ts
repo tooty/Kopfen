@@ -3,12 +3,14 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
-import {provideHttpClient} from '@angular/common/http';
-import { provideStore,provideState } from '@ngrx/store';
-import { playerReducer } from './player.reducer';
+import { provideHttpClient } from '@angular/common/http';
+import { provideStore, provideState } from '@ngrx/store';
+import { playerReducer } from './store/player.reducer';
 import { provideEffects } from '@ngrx/effects';
-import { PlayersEffects } from './player.effects';
-import { IndexDBService } from './index-db.service';
+import { gameReducer } from './store/game.reducer';
+import { PlayersEffects } from './store/player.effects';
+import { IndexDBService } from './services/index-db.service';
+import { GameEffects } from './store/game.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,11 +24,13 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideStore(),
     provideState({ name: 'players', reducer: playerReducer }),
+    provideState({ name: 'game', reducer: gameReducer }),
     provideEffects(PlayersEffects),
+    provideEffects(GameEffects),
     provideServiceWorker('ngsw-worker.js', {
-        enabled: !isDevMode(),
-        registrationStrategy: 'registerWhenStable:30000',
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
     }),
     provideEffects()
-],
+  ],
 };
