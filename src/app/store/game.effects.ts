@@ -6,6 +6,7 @@ import { createEffect, Actions, ofType } from '@ngrx/effects'
 import { Store, select } from '@ngrx/store'
 import { Game } from '../interfaces'
 import * as GameAction from './game.action'
+import * as PlayerActin from './player.action'
 import { HttpService } from '../services/http.service'
 
 @Injectable({
@@ -99,6 +100,7 @@ export class GameEffects {
     ofType(GameAction.handlePullResponse),
     exhaustMap((game) => from(this.indexDbService.saveGame(game))
       .pipe(
+        tap(()=> PlayerActin.newHttpPulledGame({payload: game.involved})),
         map(() => GameAction.storeStore(game)),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
       )

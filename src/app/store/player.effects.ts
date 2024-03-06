@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core'
 import { IndexDBService } from '../services/index-db.service'
-import { from, catchError, map, of, withLatestFrom, mergeMap, Observable, throwError } from 'rxjs'
+import { from, catchError, map, of, withLatestFrom, mergeMap, Observable, throwError, OperatorFunction } from 'rxjs'
 import { tap, exhaustMap } from 'rxjs'
 import { createEffect, Actions, ofType } from '@ngrx/effects'
 import { Store, select } from '@ngrx/store'
 import { Player } from '../interfaces'
-import * as pa from './player.action'
+import * as PlayerAction from './player.action'
 import { HttpService } from '../services/http.service'
 
 @Injectable({
@@ -22,11 +22,11 @@ export class PlayersEffects {
   ) { }
 
   loadIndexDbPlayers$ = createEffect(() => this.actions$.pipe(
-    ofType(pa.loadIndexDbPlayers),
+    ofType(PlayerAction.loadIndexDbPlayers),
     exhaustMap(() => from(this.indexDbService.readPlayers())
       .pipe(
-        tap((players) => pa.loadIndexDBPlayersSuccess({ payload: players })),
-        map(() => pa.httpSyncPlayers()),
+        tap((players) => PlayerAction.loadIndexDBPlayersSuccess({ payload: players })),
+        map(() => PlayerAction.httpSyncPlayers()),
         catchError((e) => of({ type: '[App] Load Players Error', e }))
       )
     )
@@ -34,17 +34,17 @@ export class PlayersEffects {
 
   setIndexDbPlayers$ = createEffect(() => this.actions$.pipe(
     tap((e) => console.log(e)),
-    ofType(pa.storePlayer),
+    ofType(PlayerAction.storePlayer),
     exhaustMap((p) => from(this.indexDbService.savePlayer(p))
       .pipe(
-        map(() => pa.httpSyncPlayers()),
+        map(() => PlayerAction.httpSyncPlayers()),
         catchError((e) => of({ type: '[indexDBService] Save Player Error', e }))
       )
     )
   ))
 
   resetIndexDb$ = createEffect(() => this.actions$.pipe(
-    ofType(pa.resetLocal),
+    ofType(PlayerAction.resetLocal),
     exhaustMap(() => from(this.indexDbService.reset())
       .pipe(
         map(() => ({ type: '[indexDBService] Reset IndexDB Success' }))
@@ -54,52 +54,56 @@ export class PlayersEffects {
   ))
 
   validatePlayer$ = createEffect(() => this.actions$.pipe(
-    ofType(pa.validatePlayer),
+    ofType(PlayerAction.validatePlayer),
     withLatestFrom(this.store.pipe(select('players'))),
     exhaustMap((newAndCurr) => this.playerIsValid(newAndCurr[0], newAndCurr[1])
       .pipe(
-        map(() => pa.storePlayer(newAndCurr[0])),
+        map(() => PlayerAction.storePlayer(newAndCurr[0])),
         catchError((reason) => of({ type: '[Players Effect] Player Not Valid', reason }))
       )
     )
   ))
 
   httpSyncPlayers$ = createEffect(() => this.actions$.pipe(
-    ofType(pa.httpSyncPlayers),
+    ofType(PlayerAction.httpSyncPlayers),
     withLatestFrom(this.store.pipe(select('players'))),
     exhaustMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
-        map((p) => pa.playerSynced(p)),
+        map((p) => PlayerAction.playerSynced(p)),
         catchError((reason) => of({ type: '[Players Effect] Http Put Failed', reason }))
       )
     )
   ))
 
   pullPlayerHttp$ = createEffect(() => this.actions$.pipe(
-    ofType(pa.pullPlayerHttp),
-    exhaustMap(id => this.httpService.getPlayer(id.toString())
+    ofType(PlayerAction.pullPlayerHttp),
+    mergeMap(id => this.httpService.getPlayer(id.toString())
       .pipe(
-        map((p) => pa.storePlayer(p)),
+        map((p) => PlayerAction.storePlayer(p)),
         catchError((reason) => of({ type: '[Players Effect] Http Pull Failed', reason }))
       )
     ))
   )
 
-  playerExists(id: String, state: Player[]): Observable<any> {
-    if (state.findIndex(x => x.id == id) < 0) {
-
-      return of(pa.pullPlayerHttp(id))
-    }
-    return of({ type: '[Player Effect] Player Exists' })
-  }
 
   newPulledGame = createEffect(() => this.actions$.pipe(
-    ofType(pa.pullPlayerHttp),
+    ofType(PlayerAction.newHttpPulledGame),
     withLatestFrom(this.store.pipe(select('players'))),
-    exhaustMap((idAndState) => this.playerExists(idAndState[0], idAndState[1])
+    mergeMap((idAndState) => this.playerExists(idAndState[0].payload, idAndState[1])
       .pipe(
         catchError((reason) => of({ type: '[Players Effect] Http Put Failed', reason }))
-      ))))
+      )
+    )
+  ))
+
+  playerExists(ids: {playerID: string; winner: Boolean }[], state: Player[]): Observable<any> {
+    return of(...ids).pipe(mergeMap(id => {
+      if (state.findIndex(x => x.id == id.playerID) < 0) {
+        return of(PlayerAction.pullPlayerHttp(id.playerID))
+      }
+      return of({ type: '[Player Effect] Player Exists' })
+    }))
+  }
 
 
   mergeMapSyncPlayers(ps: Player[]): Observable<Player> {
