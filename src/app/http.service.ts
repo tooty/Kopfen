@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { Game, Player, putItem } from './interfaces';
 import { Observable, Subject, mergeMap, tap, retry } from 'rxjs';
 
+import { StateService } from './state.service';
+
 @Injectable({
   providedIn: 'root',
 })
-
 export class HttpService {
   private url = 'api';
   private httpOptions = {

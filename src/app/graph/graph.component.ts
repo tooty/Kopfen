@@ -3,12 +3,11 @@ import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
 import { StateService } from '../state.service';
 import { Game, Player } from '../interfaces';
 import { ChartType, ChartConfiguration, Legend } from 'chart.js';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-graph',
   standalone: true,
-  imports: [HttpClientModule, NgChartsModule],
+  imports: [NgChartsModule],
   templateUrl: './graph.component.html',
   styleUrl: './graph.component.css',
 })
@@ -90,11 +89,7 @@ export class GraphComponent {
 
   transpose(t: number[][]) {
     let trans: number[][] = [];
-    if (t.length >= 1){
-      trans = t[0].map((col, i) => {
-        return t.map((row) => row[i])
-      });
-    }
+    trans = t[0].map((col, i) => t.map((row) => row[i]));
     return trans;
   }
 

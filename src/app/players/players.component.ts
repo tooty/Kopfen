@@ -6,12 +6,11 @@ import { ControlerService } from '../controler.service';
 import { FormsModule } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { StateService } from '../state.service';
-import {HttpClientModule} from '@angular/common/http';
 
 @Component({
   selector: 'app-players',
   standalone: true,
-  imports: [HttpClientModule,CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './players.component.html',
   styleUrl: './players.component.css',
 })

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   DragDropModule,
   CdkDragDrop,
@@ -10,15 +10,13 @@ import { Game } from '../interfaces';
 import { StateService } from '../state.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {ControlerService} from '../controler.service';
-import {HttpClientModule} from '@angular/common/http';
-
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [RouterModule,HttpClientModule, CommonModule, DragDropModule, FormsModule],
+  imports: [RouterModule, CommonModule, DragDropModule, FormsModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
 })
