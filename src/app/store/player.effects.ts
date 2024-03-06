@@ -25,10 +25,8 @@ export class PlayersEffects {
     ofType(pa.loadIndexDbPlayers),
     exhaustMap(() => from(this.indexDbService.readPlayers())
       .pipe(
-        mergeMap((players) => [
-          pa.loadIndexDBPlayersSuccess({ payload: players }),
-          pa.httpSyncPlayers(),
-        ]),
+        tap((players) => pa.loadIndexDBPlayersSuccess({ payload: players })),
+        map(() => pa.httpSyncPlayers()),
         catchError((e) => of({ type: '[App] Load Players Error', e }))
       )
     )
@@ -66,7 +64,6 @@ export class PlayersEffects {
     )
   ))
 
-
   httpSyncPlayers$ = createEffect(() => this.actions$.pipe(
     ofType(pa.httpSyncPlayers),
     withLatestFrom(this.store.pipe(select('players'))),
@@ -77,6 +74,33 @@ export class PlayersEffects {
       )
     )
   ))
+
+  pullPlayerHttp$ = createEffect(() => this.actions$.pipe(
+    ofType(pa.pullPlayerHttp),
+    exhaustMap(id => this.httpService.getPlayer(id.toString())
+      .pipe(
+        map((p) => pa.storePlayer(p)),
+        catchError((reason) => of({ type: '[Players Effect] Http Pull Failed', reason }))
+      )
+    ))
+  )
+
+  playerExists(id: String, state: Player[]): Observable<any> {
+    if (state.findIndex(x => x.id == id) < 0) {
+
+      return of(pa.pullPlayerHttp(id))
+    }
+    return of({ type: '[Player Effect] Player Exists' })
+  }
+
+  newPulledGame = createEffect(() => this.actions$.pipe(
+    ofType(pa.pullPlayerHttp),
+    withLatestFrom(this.store.pipe(select('players'))),
+    exhaustMap((idAndState) => this.playerExists(idAndState[0], idAndState[1])
+      .pipe(
+        catchError((reason) => of({ type: '[Players Effect] Http Put Failed', reason }))
+      ))))
+
 
   mergeMapSyncPlayers(ps: Player[]): Observable<Player> {
     return from(ps.filter(x => x.synced == false)).pipe(

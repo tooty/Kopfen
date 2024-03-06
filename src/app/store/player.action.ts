@@ -13,3 +13,6 @@ export const resetLocal = createAction('[Players Component] ResetLocal')
 export const validatePlayer = createAction('[Players Component] Validate Player', props<Player>())
 export const httpSyncPlayers = createAction('[App] Http Sync Players')
 export const playerSynced = createAction('[Players Effect] Player Synced',props<Player>())
+export const pullPlayerHttp = createAction('[Game Effect] Pull Player from Server',props<String>())
+export const newHttpPulledGame = createAction('[Game Effect] Check if Players Exist else pull form Server',props<String>())
+

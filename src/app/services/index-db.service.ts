@@ -75,7 +75,7 @@ export class IndexDBService {
   }
 
   async readPlayers(): Promise<Player[]> {
-    return new Promise<Player[]>((res) => {
+    return new Promise<Player[]>((res, rej) => {
       if (this.db == null) {
         throw new Error('no IndexDB');
       }

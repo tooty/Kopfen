@@ -1,7 +1,7 @@
-import { HttpClient, HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient,HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Game, Player, putItem } from '../interfaces';
-import { Observable } from 'rxjs';
+import { Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
