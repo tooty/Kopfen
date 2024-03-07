@@ -1,9 +1,7 @@
 import { HttpClient,HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Game, Player, putItem } from './interfaces';
-import { Observable, catchError,tap} from 'rxjs';
-
-import { StateService } from './state.service';
+import { Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

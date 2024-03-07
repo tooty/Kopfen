@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore,MockStore } from '@ngrx/store/testing';
 import { GameComponent } from './game.component';
+import {  routes } from '../app.routes';
+import { RouterModule } from '@angular/router'
 
 describe('GameComponent', () => {
   let component: GameComponent;

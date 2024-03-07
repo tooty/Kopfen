@@ -99,7 +99,9 @@ export class PlayersEffects {
   ))
 
   playerExists(ids: { playerID: string; winner: Boolean }[], state: Player[]): Observable<any> {
-    return of(...ids).pipe(mergeMap(id => {
+    return of(...ids).pipe(tap(
+      (x)=> console.log(x)
+    ),mergeMap(id => {
       if (state.findIndex(x => x.id == id.playerID) < 0) {
         return of(PlayerAction.pullPlayerHttp(id.playerID))
       }

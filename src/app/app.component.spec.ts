@@ -33,12 +33,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-<<<<<<< HEAD
-    expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Hello, schafkopf',
-    );
-=======
     expect(compiled).toBeTruthy();
->>>>>>> aa47d5a6 (ngrx)
   });
 });

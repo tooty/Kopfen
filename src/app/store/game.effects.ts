@@ -108,7 +108,6 @@ export class GameEffects {
           PlayerActin.newHttpPulledGame({ payload: game.involved }),
           GameAction.storeStore(game)
         ])),
-        tap((o)=>console.log(0)),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
       )
     )

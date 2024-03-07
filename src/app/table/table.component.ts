@@ -52,21 +52,21 @@ export class TableComponent {
   }
 
   ngOnInit() {
-    const element = document.getElementById('myElement');
-    const hammer = new Hammer.Manager(element!);
-    hammer.add(new Hammer.Swipe());
-    hammer.on('swipeleft', () => this.swipe());
-    if (window.screen.width >= 700){
-      this.isTablet = true
-    if (this.swipeDiv != null) {
-      const hammer = new Hammer.Manager(this.swipeDiv!);
-      hammer.add(new Hammer.Swipe());
-      hammer.on('swipeleft', () => this.swipe());
-      if (window.screen.width >= 700) {
-        this.isTablet = true
-      }
-    }
-  }
+  //  const element = document.getElementById('myElement');
+  //  const hammer = new Hammer.Manager(element!);
+  //  hammer.add(new Hammer.Swipe());
+  //  hammer.on('swipeleft', () => this.swipe());
+  //  if (window.screen.width >= 700){
+  //    this.isTablet = true
+  //  if (this.swipeDiv != null) {
+  //    const hammer = new Hammer.Manager(this.swipeDiv!);
+  //    hammer.add(new Hammer.Swipe());
+  //    hammer.on('swipeleft', () => this.swipe());
+  //    if (window.screen.width >= 700) {
+  //      this.isTablet = true
+  //    }
+  //  }
+  //}
   }
 
   swipe() {

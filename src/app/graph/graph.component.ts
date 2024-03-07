@@ -61,7 +61,7 @@ export class GraphComponent {
     private store: Store<{players: Player[]}>,
   ) {
     [this.tableCost$, this.tableSum$] = this.helperService.getObservables()
-    this.players$ = store.select('players')
+    this.players$ = this.store.select('players')
     merge(
       this.tableSum$.pipe(tap(x=> this.tableSum = x)),
       this.players$.pipe(tap(x=> this.players = x)),
