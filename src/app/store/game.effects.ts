@@ -101,15 +101,14 @@ export class GameEffects {
   ))
 
   handlePullResponse$ = createEffect(() => this.actions$.pipe(
-        tap(()=>console.log("here")),
     ofType(GameAction.handlePullResponse),
     concatMap((game) => from(this.indexDbService.saveGame(game))
       .pipe(
-        tap(()=>console.log("here")),
         mergeMap(() => from([
           PlayerActin.newHttpPulledGame({ payload: game.involved }),
           GameAction.storeStore(game)
         ])),
+        tap((o)=>console.log(0)),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
       )
     )
