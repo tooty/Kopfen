@@ -103,6 +103,7 @@ export class PlayersEffects {
       (x)=> console.log(x)
     ),mergeMap(id => {
       if (state.find(x => x.id == id.playerID) == undefined) {
+          console.log(id.playerID)
         return of(PlayerAction.pullPlayerHttp(id.playerID))
       }
       return of({ type: '[Player Effect] Player Exists' })
