@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { IndexDBService } from '../services/index-db.service'
-import { tap, from, catchError, map, of, withLatestFrom, mergeMap, Observable } from 'rxjs'
+import { from, catchError, map, of, withLatestFrom, mergeMap, Observable, concatMap } from 'rxjs'
 import { exhaustMap } from 'rxjs'
 import { createEffect, Actions, ofType } from '@ngrx/effects'
 import { Store, select } from '@ngrx/store'
@@ -26,8 +26,10 @@ export class GameEffects {
     ofType(GameAction.loadIndexDbGame),
     exhaustMap(() => from(this.indexDbService.readGames())
       .pipe(
-        tap(()=>GameAction.httpSyncGame()),
-        map((games) => GameAction.loadIndexDBGameSuccess({ payload: games })),
+        mergeMap((games) => from([
+          GameAction.httpSyncGame(),
+          GameAction.loadIndexDBGameSuccess({ payload: games })
+        ])),
         catchError((e) => of({ type: '[App] Load Game Error', e }))
       )
     )
@@ -37,8 +39,10 @@ export class GameEffects {
     ofType(GameAction.storeIndexDB),
     exhaustMap((g) => from(this.indexDbService.saveGame(g))
       .pipe(
-        tap(() => GameAction.httpSyncGame()),
-        map(() => GameAction.storeStore(g)),
+        mergeMap(() => from([
+          GameAction.httpSyncGame(),
+          GameAction.storeStore(g)
+        ])),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
       )
     )
@@ -59,7 +63,7 @@ export class GameEffects {
     withLatestFrom(this.store.pipe(select('game'))),
     exhaustMap((newAndCurr) => this.gameIsValid(newAndCurr[0], newAndCurr[1])
       .pipe(
-        map(() => GameAction.storeIndexDB(newAndCurr[0])),
+        map((g) => GameAction.storeIndexDB(g)),
         catchError((e) => of({ type: '[Game Effect] Game Not Valid', e }))
       )
     )
@@ -98,10 +102,12 @@ export class GameEffects {
 
   handlePullResponse$ = createEffect(() => this.actions$.pipe(
     ofType(GameAction.handlePullResponse),
-    exhaustMap((game) => from(this.indexDbService.saveGame(game))
+    concatMap((game) => from(this.indexDbService.saveGame(game))
       .pipe(
-        tap(()=> PlayerActin.newHttpPulledGame({payload: game.involved})),
-        map(() => GameAction.storeStore(game)),
+        mergeMap(() => from([
+          PlayerActin.newHttpPulledGame({ payload: game.involved }),
+          GameAction.storeStore(game)
+        ])),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
       )
     )
@@ -109,8 +115,8 @@ export class GameEffects {
 
 
 
-  gameIsValid(game: Game, state: Game[]): Observable<boolean> {
-    return of(true)
+  gameIsValid(game: Game, state: Game[]): Observable<Game> {
+    return of(game)
   }
 
 }

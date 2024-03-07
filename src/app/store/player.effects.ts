@@ -25,8 +25,10 @@ export class PlayersEffects {
     ofType(PlayerAction.loadIndexDbPlayers),
     exhaustMap(() => from(this.indexDbService.readPlayers())
       .pipe(
-        tap((players) => PlayerAction.loadIndexDBPlayersSuccess({ payload: players })),
-        map(() => PlayerAction.httpSyncPlayers()),
+        mergeMap((players) => from([
+          PlayerAction.loadIndexDBPlayersSuccess({ payload: players }),
+          PlayerAction.httpSyncPlayers(),
+        ])),
         catchError((e) => of({ type: '[App] Load Players Error', e }))
       )
     )
@@ -96,7 +98,7 @@ export class PlayersEffects {
     )
   ))
 
-  playerExists(ids: {playerID: string; winner: Boolean }[], state: Player[]): Observable<any> {
+  playerExists(ids: { playerID: string; winner: Boolean }[], state: Player[]): Observable<any> {
     return of(...ids).pipe(mergeMap(id => {
       if (state.findIndex(x => x.id == id.playerID) < 0) {
         return of(PlayerAction.pullPlayerHttp(id.playerID))

@@ -15,4 +15,3 @@ export const httpSyncPlayers = createAction('[App] Http Sync Players')
 export const playerSynced = createAction('[Players Effect] Player Synced',props<Player>())
 export const pullPlayerHttp = createAction('[Player Effect] Pull Player from Server',props<String>())
 export const newHttpPulledGame = createAction('[Game Effect] Check if Players Exist else pull form Server',props<{payload: {playerID: string; winner: Boolean }[]}>())
-
