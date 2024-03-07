@@ -102,7 +102,7 @@ export class PlayersEffects {
     return of(...ids).pipe(tap(
       (x)=> console.log(x)
     ),mergeMap(id => {
-      if (state.findIndex(x => x.id == id.playerID) < 0) {
+      if (state.find(x => x.id == id.playerID) == undefined) {
         return of(PlayerAction.pullPlayerHttp(id.playerID))
       }
       return of({ type: '[Player Effect] Player Exists' })
