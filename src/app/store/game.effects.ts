@@ -101,6 +101,7 @@ export class GameEffects {
   ))
 
   handlePullResponse$ = createEffect(() => this.actions$.pipe(
+        tap(()=>console.log("here")),
     ofType(GameAction.handlePullResponse),
     concatMap((game) => from(this.indexDbService.saveGame(game))
       .pipe(
