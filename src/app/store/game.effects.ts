@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { IndexDBService } from '../services/index-db.service'
-import { from, catchError, map, of, withLatestFrom, mergeMap, Observable, concatMap } from 'rxjs'
+import {tap, from, catchError, map, of, withLatestFrom, mergeMap, Observable, concatMap } from 'rxjs'
 import { exhaustMap } from 'rxjs'
 import { createEffect, Actions, ofType } from '@ngrx/effects'
 import { Store, select } from '@ngrx/store'
@@ -104,6 +104,7 @@ export class GameEffects {
     ofType(GameAction.handlePullResponse),
     concatMap((game) => from(this.indexDbService.saveGame(game))
       .pipe(
+        tap(()=>console.log("here")),
         mergeMap(() => from([
           PlayerActin.newHttpPulledGame({ payload: game.involved }),
           GameAction.storeStore(game)
