@@ -9,50 +9,50 @@ import { throwError } from 'rxjs';
 export class IndexDBService {
   private db: IDBDatabase | null = null;
 
-  constructor() {}
+  constructor() { }
 
   async reset(): Promise<boolean> {
-    return new Promise<boolean>((res)=>{
+    return new Promise<boolean>((res,rej) => {
       this.db?.close()
       let delet = window.indexedDB.deleteDatabase('appState');
-      delet.onerror = (ev) => {throw Error(JSON.stringify(ev))};
+      delet.onerror = (ev) => { throw Error(JSON.stringify(ev)) };
       delet.onsuccess = () => {
-        this.initDB().then(()=>res(true)).catch((e)=> {throw Error(e)})
+        this.initDB().then(() => res(true)).catch((e) => rej(e))
       };
     })
   }
 
-  async saveGame(newGame: Game) : Promise<boolean> {
+  async saveGame(newGame: Game): Promise<boolean> {
     console.log("saveGame")
-    return new Promise( res=> {
+    return new Promise((res, rej) => {
       if (this.db != null) {
         const trans = this.db.transaction('games', 'readwrite');
         let req = trans.objectStore('games').add(newGame);
-        req.onerror = () => {throw throwError(()=>{"save Game Failed"})}
+        req.onerror = () => rej("save Game Failed")
         req.onsuccess = () => res(true)
       } else {
-      throw throwError(()=> "no IndexDB")
+        throw throwError(() => "no IndexDB")
       }
     })
   }
 
-  async savePlayer(newPlayer: Player): Promise<boolean>  {
-    return new Promise( res=> {
-      if (this.db != null){
+  async savePlayer(newPlayer: Player): Promise<boolean> {
+    return new Promise((res, rej) => {
+      if (this.db != null) {
         const trans = this.db.transaction('players', 'readwrite');
         let req = trans.objectStore('players').add(newPlayer);
-        req.onerror = () => {throw throwError(()=>{"save Game Failed"})}
+        req.onerror = (ev) => rej("save Player Failed" + ev.target)
         req.onsuccess = () => res(true);
-      }else{
-        throw throwError(()=> "no IndexDB")
+      } else {
+        throw throwError(() => "no IndexDB")
       }
     })
   }
 
-  async initDB() : Promise<void> {
-    return new Promise((res)=> {
+  async initDB(): Promise<void> {
+    return new Promise((res) => {
       let request = indexedDB.open('appState', 2);
-      request.onerror = (ev) => {throw Error(JSON.stringify(ev))};
+      request.onerror = (ev) => { throw Error(JSON.stringify(ev)) };
 
       request.onupgradeneeded = () => {
         this.db = request.result;
@@ -70,9 +70,9 @@ export class IndexDBService {
           });
         }
       };
-      request.onsuccess = () => {this.db = request.result;res();}
+      request.onsuccess = () => { this.db = request.result; res(); }
     }
-  )
+    )
   }
 
   async readPlayers(): Promise<Player[]> {
