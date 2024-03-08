@@ -80,7 +80,7 @@ export class PlayersEffects {
 
   pullPlayerHttp$ = createEffect(() => this.actions$.pipe(
     ofType(PlayerAction.pullPlayerHttp),
-    mergeMap(id => this.httpService.getPlayer(id.toString())
+    mergeMap(id => this.httpService.getPlayer(id.payload)
       .pipe(
         map((p) => PlayerAction.storePlayer(p)),
         catchError((reason) => of({ type: '[Players Effect] Http Pull Failed', reason }))
@@ -102,7 +102,6 @@ export class PlayersEffects {
   playerExists(ids: string[], state: Player[]): Observable<TypedAction<string>> {
     return from(ids).pipe(mergeMap(id => {
       if (state.find(x => x.id == id) == undefined) {
-        console.log(id)
         return of(PlayerAction.pullPlayerHttp({payload: id}))
       }
       return of({ type: '[Player Effect] Player Exists' })
