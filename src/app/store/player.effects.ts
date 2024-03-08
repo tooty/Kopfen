@@ -38,7 +38,7 @@ export class PlayersEffects {
   setIndexDbPlayers$ = createEffect(() => this.actions$.pipe(
     tap((e) => console.log(e)),
     ofType(PlayerAction.storePlayer),
-    exhaustMap((p) => from(this.indexDbService.savePlayer(p))
+    concatMap((p) => from(this.indexDbService.savePlayer(p))
       .pipe(
         map(() => PlayerAction.httpSyncPlayers()),
         catchError((e) => of({ type: '[indexDBService] Save Player Error', e }))
@@ -59,7 +59,7 @@ export class PlayersEffects {
   validatePlayer$ = createEffect(() => this.actions$.pipe(
     ofType(PlayerAction.validatePlayer),
     withLatestFrom(this.store.pipe(select('players'))),
-    exhaustMap((newAndCurr) => this.playerIsValid(newAndCurr[0], newAndCurr[1])
+    mergeMap((newAndCurr) => this.playerIsValid(newAndCurr[0], newAndCurr[1])
       .pipe(
         map(() => PlayerAction.storePlayer(newAndCurr[0])),
         catchError((reason) => of({ type: '[Players Effect] Player Not Valid', reason }))
