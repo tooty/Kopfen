@@ -22,7 +22,7 @@ export class HttpService {
 
   getPlayer(id: string): Observable<Player> {
     let params = new HttpParams().set('playerID', id);
-    console.log("getPlayer with id:",id)
+    console.log("my Params:",params)
     return this.http.get<Player>(`${this.url}/player`, {
       responseType: 'json',
       params: params,
