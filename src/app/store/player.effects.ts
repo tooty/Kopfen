@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { IndexDBService } from '../services/index-db.service'
-import { from, catchError, map, of, withLatestFrom, mergeMap, Observable, throwError} from 'rxjs'
+import { from, catchError, map, of, withLatestFrom, mergeMap, Observable, throwError, concatMap} from 'rxjs'
 import { tap, exhaustMap } from 'rxjs'
 import { createEffect, Actions, ofType } from '@ngrx/effects'
 import { Store, select } from '@ngrx/store'
@@ -92,7 +92,7 @@ export class PlayersEffects {
   newPulledGame = createEffect(() => this.actions$.pipe(
     ofType(PlayerAction.newHttpPulledGame),
     withLatestFrom(this.store.pipe(select('players'))),
-    mergeMap((idAndState) => this.playerExists(idAndState[0].payload, idAndState[1])
+    concatMap((idAndState) => this.playerExists(idAndState[0].payload, idAndState[1])
       .pipe(
         catchError((reason) => of({ type: '[Players Effect] Http Put Failed', reason }))
       )
