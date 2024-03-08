@@ -99,11 +99,11 @@ export class PlayersEffects {
     )
   ))
 
-  playerExists(ids: String[], state: Player[]): Observable<TypedAction<string>> {
+  playerExists(ids: string[], state: Player[]): Observable<TypedAction<string>> {
     return from(ids).pipe(mergeMap(id => {
       if (state.find(x => x.id == id) == undefined) {
         console.log(id)
-        return of(PlayerAction.pullPlayerHttp(id))
+        return of(PlayerAction.pullPlayerHttp({payload: id}))
       }
       return of({ type: '[Player Effect] Player Exists' })
     }))
