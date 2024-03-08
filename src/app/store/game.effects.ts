@@ -92,7 +92,7 @@ export class GameEffects {
     ofType(GameAction.pullGamesHttp),
     exhaustMap((scope) => from(this.httpService.getGames(scope.start, scope.end)
       .pipe(
-        mergeMap((games) => of(...games)),
+        concatMap((games) => from(games)),
         map((game) => GameAction.handlePullResponse(game)),
         catchError((e) => of({ type: '[Http Service] Pull Games Error', e }))
       )
