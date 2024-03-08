@@ -80,9 +80,9 @@ export class PlayersEffects {
 
   pullPlayerHttp$ = createEffect(() => this.actions$.pipe(
     ofType(PlayerAction.pullPlayerHttp),
-    mergeMap(id => this.httpService.getPlayer(id.payload)
+    concatMap(id => this.httpService.getPlayer(id.payload)
       .pipe(
-        map((p) => PlayerAction.storePlayer(p)),
+        map((p) => PlayerAction.validatePlayer(p)),
         catchError((reason) => of({ type: '[Players Effect] Http Pull Failed', reason }))
       )
     ))
