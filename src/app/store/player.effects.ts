@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core'
 import { IndexDBService } from '../services/index-db.service'
-import { from, catchError, map, of, withLatestFrom, mergeMap, Observable, throwError, OperatorFunction } from 'rxjs'
+import { from, catchError, map, of, withLatestFrom, mergeMap, Observable, throwError} from 'rxjs'
 import { tap, exhaustMap } from 'rxjs'
 import { createEffect, Actions, ofType } from '@ngrx/effects'
 import { Store, select } from '@ngrx/store'
 import { Player } from '../interfaces'
 import * as PlayerAction from './player.action'
 import { HttpService } from '../services/http.service'
+import { TypedAction } from '@ngrx/store/src/models'
 
 @Injectable({
   providedIn: 'root',
@@ -98,12 +99,9 @@ export class PlayersEffects {
     )
   ))
 
-  playerExists(ids: { playerID: string; winner: Boolean }[], state: Player[]): Observable<any> {
-    return of(...ids).pipe(tap(
-      (x)=> console.log(x)
-    ),mergeMap(id => {
+  playerExists(ids: { playerID: string; winner: Boolean }[], state: Player[]): Observable<TypedAction<string>> {
+    return from(ids).pipe(mergeMap(id => {
       if (state.find(x => x.id == id.playerID) == undefined) {
-          console.log(id.playerID)
         return of(PlayerAction.pullPlayerHttp(id.playerID))
       }
       return of({ type: '[Player Effect] Player Exists' })
