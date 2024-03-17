@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output } from '@angular/core';
 import {
   DragDropModule,
   CdkDragDrop,
@@ -9,10 +9,9 @@ import { Player } from '../interfaces';
 import { Game } from '../interfaces';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import {HttpClientModule} from '@angular/common/http';
-import { StoreModule,Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { HttpClientModule } from '@angular/common/http';
+import { StoreModule, Store } from '@ngrx/store';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { validateGame } from '../store/game.action';
 import { HelperService } from '../services/helper.service';
 
@@ -20,7 +19,7 @@ import { HelperService } from '../services/helper.service';
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [StoreModule,RouterModule,HttpClientModule, CommonModule, DragDropModule, FormsModule],
+  imports: [StoreModule, HttpClientModule, CommonModule, DragDropModule, FormsModule],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',
 })
@@ -30,12 +29,14 @@ export class GameComponent {
   winners: { p: Player; c: number }[] = [];
   amount = 10;
   players$: Observable<Player[]>
+  @Output() $game: Observable<Game | null>
+  game = new BehaviorSubject<Game | null>(null)
 
   constructor(
-    private store: Store<{players: Player[]}>,
-    private router: Router,
+    private store: Store<{ players: Player[] }>,
     private helperService: HelperService
   ) {
+    this.$game=this.game.asObservable()
     this.players$ = this.store.select('players')
     this.players$.subscribe((data) => {
       this.players = data.map((p) => {
@@ -72,13 +73,14 @@ export class GameComponent {
     this.updateCost();
   }
 
-  constructGame(): Game | null {
+  constructGame() {
     if (
       this.winners.length + this.loosers.length != 4 ||
       this.winners.length < 1 ||
       this.loosers.length < 1
     ) {
-      return null;
+      this.game.next(null)
+      return
     }
     let involved: { playerID: string; winner: boolean }[] = [];
     this.winners.forEach((x) =>
@@ -87,30 +89,28 @@ export class GameComponent {
     this.loosers.forEach((x) =>
       involved.push({ playerID: x.p.id, winner: false }),
     );
-    return { cost: this.amount, involved: involved, time: Date.now(), synced: false };
+    this.game.next({ cost: this.amount, involved: involved, time: Date.now(), synced: false });
   }
 
   updateCost() {
-    let game = this.constructGame();
-    if (game != null) {
+    this.constructGame()
+    if (this.game.value != null) {
       this.winners.forEach(
-        (p) => (p.c = this.helperService.gameCost(game!, p.p) ?? 0),
+        (p) => (p.c = this.helperService.gameCost(this.game.value!, p.p) ?? 0),
       );
       this.loosers.forEach(
-        (p) => (p.c = this.helperService.gameCost(game!, p.p) ?? 0),
+        (p) => (p.c = this.helperService.gameCost(this.game.value!, p.p) ?? 0),
       );
       this.players.forEach((p) => (p.c = 0));
     }
   }
 
-  addGame(): boolean {
+  addGame() {
     const myGame = this.constructGame();
     if (myGame == null) {
-      return false;
+      return
     }
     this.store.dispatch(validateGame(myGame))
-    this.router.navigate(['']);
-    return true;
   }
 }
 

@@ -1,6 +1,40 @@
+<nav class="flex justify-between px-6 py-4 text-sky-400"
+  [ngSwitch]="($screen|async)"
+>
+  <button
+    (click)=screen.next(1)
+    *ngSwitchCase="0"
+    [disabled]="(($playersCount|async)?? 0) <= 3"
+    class="ml-auto active:text-sky-50 disabled:text-sky-800"
+  >
+  Fertig
+  </button>
+  <ng-container *ngSwitchCase="1">
+    <button class="active:text-sky-50" (click)="screen.next(0)">
+      Spieler
+    </button>
+    <button
+      class="text-xl  active:text-sky-50"
+      (click)="screen.next(2)"
+    >
+      +
+    </button>
+  </ng-container>
+  <ng-container *ngSwitchCase="2">
+  <button  (click)="screen.next(1)" class=" active:text-sky-50">
+    Abbrechen
+  </button>
+  <button [disabled]="game == null" class="disabled:text-sky-800 active:text-sky-50" (click)="addGame()">
+    Hinzufügen
+  </button>
+  </ng-container>
+</nav>
 <div id="myElement" class="h-screen">
-  <router-outlet *ngIf="enoughPlayers"></router-outlet>
-  <app-players *ngIf="!enoughPlayers"></app-players>
-<div class="h-screen">
-  <router-outlet></router-outlet>
+<div class="h-screen" [ngSwitch]="$screen|async">
+    <app-players *ngSwitchCase="0"></app-players>
+    <app-table *ngSwitchCase="1"></app-table>
+    <app-game ($game)="game=$event" *ngSwitchCase="2"></app-game>
+    <app-graph *ngSwitchCase="3"></app-graph>
 </div>
+</div>
+

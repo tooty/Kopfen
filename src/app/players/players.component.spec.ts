@@ -3,8 +3,6 @@ import { provideMockStore,MockStore } from '@ngrx/store/testing';
 
 import { PlayersComponent } from './players.component';
 import { StoreModule } from '@ngrx/store';
-import { provideRouter } from '@angular/router';
-import { routes } from '../app.routes';
 
 
 describe('PlayerOverviewComponent', () => {
@@ -18,7 +16,6 @@ describe('PlayerOverviewComponent', () => {
       imports: [PlayersComponent],
       providers: [
         provideMockStore({initialState}),
-        provideRouter(routes)
       ]
     }).compileComponents();
     store = TestBed.inject(MockStore)

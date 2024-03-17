@@ -15,3 +15,11 @@ export interface putItem {
   content: Object,
   URL: string
 }
+
+export enum Screen {
+  //component templates use order indexes
+  player,//0
+  table,//1
+  game,//2
+  graph//3
+}

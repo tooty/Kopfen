@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore,MockStore } from '@ngrx/store/testing';
 import { TableComponent } from './table.component';
-import { provideRouter } from '@angular/router';
-import { routes } from '../app.routes';
 import {Player, Game} from '../interfaces'
+import { Store } from '@ngrx/store';
 
 describe('TableComponent', () => {
   let component: TableComponent;
   let fixture: ComponentFixture<TableComponent>;
+  let store: MockStore<{ players: Player[], game: Game[] }>
   const ps: Player[] = [{name: "player", id: "myid", synced: false}]
   const gs: Game[] = [{
     time: 1000,
@@ -23,10 +23,9 @@ describe('TableComponent', () => {
       imports: [TableComponent],
       providers: [
         provideMockStore({selectors: [players, games]}),
-        provideRouter(routes)
       ]
     }).compileComponents();
-
+    store = TestBed.inject(MockStore)
     fixture = TestBed.createComponent(TableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

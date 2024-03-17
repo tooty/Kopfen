@@ -1,7 +1,4 @@
 import { APP_INITIALIZER, ApplicationConfig, isDevMode } from '@angular/core';
-import { provideRouter } from '@angular/router';
-
-import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient } from '@angular/common/http';
 import { provideStore, provideState } from '@ngrx/store';
@@ -21,7 +18,6 @@ export const appConfig: ApplicationConfig = {
       multi: true
     },
     provideHttpClient(),
-    provideRouter(routes),
     provideStore(),
     provideState({ name: 'players', reducer: playerReducer }),
     provideState({ name: 'game', reducer: gameReducer }),

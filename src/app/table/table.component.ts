@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HostListener, Component, ViewChild } from '@angular/core';
 import { Game, Player } from '../interfaces';
-import { Router } from '@angular/router';
 import { GraphComponent } from '../graph/graph.component';
 import Hammer from 'hammerjs';
 import { HttpClientModule } from '@angular/common/http';
@@ -35,7 +34,6 @@ export class TableComponent {
   }
 
   constructor(
-    private router: Router,
     private store: Store<{ players: Player[], game: Game[] }>,
     private helperService: HelperService
   ) {
@@ -45,10 +43,6 @@ export class TableComponent {
     this.players$.subscribe(next => {
       this.players = next
     })
-  }
-
-  navigate(route: String) {
-    this.router.navigate([route]);
   }
 
   ngOnInit() {

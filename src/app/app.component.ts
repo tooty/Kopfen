@@ -1,39 +1,53 @@
-import { Component} from '@angular/core';
-import { RouterModule, RouterOutlet, Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { PlayersComponent } from './players/players.component';
 import { CommonModule } from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
-import {StoreModule, Store} from '@ngrx/store'
+import { StoreModule, Store } from '@ngrx/store'
 import { loadIndexDbPlayers } from './store/player.action';
-import { loadIndexDbGame } from './store/game.action';
-import { Player } from './interfaces';
-import { Observable, skip } from 'rxjs';
+import { loadIndexDbGame, validateGame } from './store/game.action';
+import { Player, Game, Screen } from './interfaces';
+import { BehaviorSubject, Observable, tap, of, skip, take } from 'rxjs';
+import { GameComponent } from './game/game.component';
+import { GraphComponent } from './graph/graph.component';
+import { TableComponent } from './table/table.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [StoreModule, HttpClientModule,CommonModule, RouterOutlet, PlayersComponent, RouterModule],
+  imports: [StoreModule, GameComponent, TableComponent, GraphComponent, CommonModule, PlayersComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'schafkopf';
-  enoughPlayers = true;
-  playersCount$ = new Observable<number>
-
+  $playersCount = new Observable<number>
+  screen = new BehaviorSubject<Screen>(Screen.table)
+  $screen: Observable<Screen>
+  game: Game | null = null
 
   constructor(
-    private store: Store<{players: Player[]}>,
-    private router: Router
+    private store: Store<{ players: Player[] }>,
   ) {
+    this.$screen = this.screen.asObservable()
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.store.dispatch(loadIndexDbPlayers())
     this.store.dispatch(loadIndexDbGame())
-    this.store.select('players').pipe(skip(1)).subscribe(x=> {
-      if (x.length < 4)
-        this.router.navigate(["players"])
+    this.store.select('players').subscribe(x=>
+      this.$playersCount = of(x.length)
+    )
+    this.store.select('players').pipe(skip(1), take(1)).subscribe(x => {
+      if (x.length <= 3)
+        this.screen.next(Screen.player)
+
     })
+  }
+
+  addGame() {
+    if (this.game != null) {
+      this.store.dispatch(validateGame(this.game))
+      this.game = null
+      this.screen.next(1)
+    }
   }
 }
