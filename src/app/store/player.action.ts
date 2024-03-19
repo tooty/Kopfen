@@ -6,8 +6,8 @@ export const storePlayer = createAction('[Players Effect] Store Player',
                                       props<Player>()
                                     )
 export const loadIndexDbPlayers = createAction('[App] Load IndexDb Players')
-export const loadIndexDBPlayersSuccess = createAction(
-  '[App] Load Players Success',props<{payload: Player[]}>()
+export const addPlayersStore = createAction(
+  '[Player Effects] Add Players to Store',props<{payload: Player[]}>()
 )
 export const resetLocal = createAction('[Players Component] ResetLocal')
 export const validatePlayer = createAction('[Players Component] Validate Player', props<Player>())

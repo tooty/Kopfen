@@ -27,7 +27,7 @@ export class PlayersEffects {
     exhaustMap(() => from(this.indexDbService.readPlayers())
       .pipe(
         mergeMap((players) => from([
-          PlayerAction.loadIndexDBPlayersSuccess({ payload: players }),
+          PlayerAction.addPlayersStore({ payload: players }),
           PlayerAction.httpSyncPlayers(),
         ])),
         catchError((e) => of({ type: '[App] Load Players Error', e }))
@@ -111,8 +111,12 @@ export class PlayersEffects {
 
   mergeMapSyncPlayers(ps: Player[]): Observable<Player> {
     return from(ps.filter(x => x.synced == false)).pipe(
-      mergeMap((p) => this.httpService.pushItem({ content: p, URL: '/player' }).pipe(
-        catchError((e) => e), map(() => p)))
+      mergeMap((p) => this.httpService.pushItem<Player>({ content: p, URL: '/player' }).pipe(
+        map((res) =>{
+          if (res != null)
+            return res
+          return p
+        })))
     )
   }
 

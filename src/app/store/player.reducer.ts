@@ -9,7 +9,7 @@ export const playerReducer = createReducer(
 
   on(pa.storePlayer, (state, p) => [...state, p]),
   on(pa.resetLocal, () => initialState),
-  on(pa.loadIndexDBPlayersSuccess, (_,p) => p.payload),
+  on(pa.addPlayersStore, (_,p) => p.payload),
   on(pa.playerSynced, (state,p) => {
     let copy = {...p}
     copy.synced = !copy.synced

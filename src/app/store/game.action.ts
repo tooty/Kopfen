@@ -18,3 +18,5 @@ export const httpSyncGame = createAction('[App] Http Sync Game')
 export const gameSynced = createAction('[Game Effect] Game Synced', props<Game>())
 export const pullGamesHttp = createAction('[Player Component] Pull Games from Server', props<{ start: number, end: number }>())
 export const handlePullResponse = createAction('[Game Effect] Pull Response from Server', props<Game>())
+export const replacePlayer = createAction('[Game Effect] Replace Player (Server Collision)', props<Game>())
+

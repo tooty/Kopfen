@@ -16,9 +16,9 @@ export class HttpService {
   constructor(private http: HttpClient) {
   }
 
-  pushItem(item: putItem): Observable<HttpEvent<string>> {
+  pushItem<T extends Game|Player>(item: putItem): Observable<T> {
     return this.http
-      .put<HttpEvent<string>>(this.url + item.URL, item.content, this.httpOptions)
+      .put<T>(this.url + item.URL, item.content, this.httpOptions)
   }
 
   getPlayer(id: string): Observable<Player> {

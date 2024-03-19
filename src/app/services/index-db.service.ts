@@ -17,6 +17,7 @@ export class IndexDBService {
       let delet = window.indexedDB.deleteDatabase('appState');
       delet.onerror = (ev) => { throw Error(JSON.stringify(ev)) };
       delet.onsuccess = () => {
+        console.log("DeleteIndexDb")
         this.initDB().then(() => res(true)).catch((e) => rej(e))
       };
     })
