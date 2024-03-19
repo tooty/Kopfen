@@ -29,12 +29,10 @@
   </button>
   </ng-container>
 </nav>
-<div id="myElement" class="h-screen">
-<div class="h-screen" [ngSwitch]="$screen|async">
+<div #display class="h-screen" [ngSwitch]="$screen|async">
     <app-players *ngSwitchCase="0"></app-players>
     <app-table *ngSwitchCase="1"></app-table>
     <app-game ($game)="game=$event" *ngSwitchCase="2"></app-game>
     <app-graph *ngSwitchCase="3"></app-graph>
-</div>
 </div>
 

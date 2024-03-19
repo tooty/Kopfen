@@ -37,7 +37,7 @@ export class PlayersComponent {
   loadGames(start: string) {
     var date = new Date(start).getTime()
     if (start.length <= 1) {
-      date = Date.now() - 1000 * 60 * 6
+      date = Date.now() - 1000 * 60 * 6 * 60
     }
     this.store.dispatch(pullGamesHttp({ start: date, end: Date.now() }))
   }
