@@ -50,6 +50,23 @@ export class IndexDBService {
     })
   }
 
+  async replacePlayer(newPlayer: Player): Promise<boolean>{
+    return new Promise(()=> {
+      if (this.db != null) {
+        const trans = this.db.transaction('players', 'readwrite');
+        let req = trans.objectStore('players').getAll()
+        req.onsuccess = () => {
+          let myres = req.result as Player[]
+          let oldKey = myres.find(x=> x.name == newPlayer.name)?.name
+          if (oldKey != null) {
+            trans.objectStore('players').delete(oldKey)
+            this.savePlayer(newPlayer)
+          }else{throw Error}
+        }
+      }
+    })
+  }
+
   async initDB(): Promise<void> {
     return new Promise((res) => {
       let request = indexedDB.open('appState', 2);
