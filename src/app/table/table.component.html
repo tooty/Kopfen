@@ -30,7 +30,7 @@
           class="text-center            "
           [ngClass]="{ 'bg-slate-950': i % 2 == 1, 'bg-black': i % 2 != 1 }"
         >
-          <td class="bg-slate-900 text-sky-800">{{ (games$|async)?.length ?? 0 - i  }}</td>
+          <td class="bg-slate-900 text-sky-800">{{ ((games$|async)?.length ?? 0) - i }}</td>
           <td *ngFor="let value of game">
             <p
               [ngClass]="{
