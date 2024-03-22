@@ -14,9 +14,4 @@ export const playerReducer = createReducer(
     const newState = state.filter(x=>x.name != p.name);
     return [...newState, p]
   }),
-  on(pa.playerSynced, (state,p) => {
-    let copy = {...p}
-    copy.synced = !copy.synced
-    return state.map(x=> x.name === p.name ? x:copy)
-  }),
 )

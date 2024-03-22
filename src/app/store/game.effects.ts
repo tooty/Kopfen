@@ -42,8 +42,8 @@ export class GameEffects {
     exhaustMap((g) => from(this.indexDbService.saveGame(g))
       .pipe(
         mergeMap(() => from([
-          GameAction.httpSyncGame(),
           GameAction.storeStore(g),
+          GameAction.httpSyncGame(),
           regenTable()
         ])),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))

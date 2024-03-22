@@ -40,7 +40,6 @@ export class TableEffects {
     )))
 
   genTabel(games: Game[], players: Player[]): Observable<number[][]> {
-    console.log("here")
     let table: number[][] = [];
     for (let i = 0; i < games.length; i++) {
       table[i] = players.map((p) => this.gameCost(games[i], p)!);

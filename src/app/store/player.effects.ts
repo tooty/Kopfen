@@ -91,7 +91,7 @@ export class PlayersEffects {
     exhaustMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
         mergeMap((p) => [
-          PlayerAction.playerSynced(p),
+          PlayerAction.replacePlayer(p),
           regenTable()
         ]),
         catchError((reason) => {
@@ -143,6 +143,9 @@ export class PlayersEffects {
   }
 
   playerIsValid(p: Player, state: Player[]): Observable<boolean> {
+    p.name.replace(/\s+/g,"")
+    if (p.name.length > 36)
+      return throwError(() => "to long")
     if (p.name.length <= 3)
       return throwError(() => "to short")
     if (state.find(x => x.id == p.id) != undefined)
