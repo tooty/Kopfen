@@ -8,6 +8,7 @@ import { Game } from '../interfaces'
 import * as GameAction from './game.action'
 import * as PlayerActin from './player.action'
 import { HttpService } from '../services/http.service'
+import { regenTable } from './table.action'
 
 @Injectable({
   providedIn: 'root',
@@ -27,8 +28,9 @@ export class GameEffects {
     exhaustMap(() => from(this.indexDbService.readGames())
       .pipe(
         mergeMap((games) => from([
+          GameAction.loadIndexDBGameSuccess({ payload: games }),
           GameAction.httpSyncGame(),
-          GameAction.loadIndexDBGameSuccess({ payload: games })
+          regenTable()
         ])),
         catchError((e) => of({ type: '[App] Load Game Error', e }))
       )
@@ -41,7 +43,8 @@ export class GameEffects {
       .pipe(
         mergeMap(() => from([
           GameAction.httpSyncGame(),
-          GameAction.storeStore(g)
+          GameAction.storeStore(g),
+          regenTable()
         ])),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
       )
@@ -52,7 +55,7 @@ export class GameEffects {
     ofType(GameAction.resetLocal),
     exhaustMap(() => from(this.indexDbService.reset())
       .pipe(
-        map(() => ({ type: '[indexDBService] Reset IndexDB Success' }))
+        map(() => regenTable())
         , catchError((e) => of({ type: '[indexDBService] Reset IndexDB Error', e }))
       )
     )
@@ -107,7 +110,8 @@ export class GameEffects {
         tap(()=>console.log("here")),
         mergeMap(() => from([
           PlayerActin.newHttpPulledGame({ payload: game.involved.map((x)=>x.playerID) }),
-          GameAction.storeStore(game)
+          GameAction.storeStore(game),
+          regenTable()
         ])),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
       )

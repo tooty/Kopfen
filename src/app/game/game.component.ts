@@ -13,7 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { validateGame } from '../store/game.action';
-import { HelperService } from '../services/helper.service';
 
 
 @Component({
@@ -34,7 +33,6 @@ export class GameComponent {
 
   constructor(
     private store: Store<{ players: Player[] }>,
-    private helperService: HelperService
   ) {
     this.$game=this.game.asObservable()
     this.players$ = this.store.select('players')
@@ -96,12 +94,39 @@ export class GameComponent {
     this.constructGame()
     if (this.game.value != null) {
       this.winners.forEach(
-        (p) => (p.c = this.helperService.gameCost(this.game.value!, p.p) ?? 0),
+        (p) => (p.c = this.gameCost(this.game.value!, p.p) ?? 0),
       );
       this.loosers.forEach(
-        (p) => (p.c = this.helperService.gameCost(this.game.value!, p.p) ?? 0),
+        (p) => (p.c = this.gameCost(this.game.value!, p.p) ?? 0),
       );
       this.players.forEach((p) => (p.c = 0));
+    }
+  }
+
+  gameCost(game: Game, player: Player): number | null {
+    let winnerCount = 0;
+
+    game.involved.forEach((p) => {
+      if (p.winner) {
+        winnerCount++;
+      }
+    });
+
+    const serchedPlayer = game.involved.find((x) => x.playerID == player.id);
+    if (serchedPlayer == undefined) {
+      return null;
+    }
+
+    if (serchedPlayer.winner) {
+      if (winnerCount == 1) {
+        return game.cost * 3;
+      }
+      return game.cost;
+    } else {
+      if (winnerCount == 3) {
+        return -game.cost * 3;
+      }
+      return -game.cost;
     }
   }
 

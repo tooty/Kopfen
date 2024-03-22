@@ -8,6 +8,7 @@ import { Player } from '../interfaces'
 import * as PlayerAction from './player.action'
 import { HttpService } from '../services/http.service'
 import { TypedAction } from '@ngrx/store/src/models'
+import { regenTable } from './table.action'
 
 @Injectable({
   providedIn: 'root',
@@ -26,10 +27,11 @@ export class PlayersEffects {
     ofType(PlayerAction.loadIndexDbPlayers),
     exhaustMap(() => from(this.indexDbService.readPlayers())
       .pipe(
-        mergeMap((players) => from([
+        mergeMap((players) => [
           PlayerAction.addPlayersStore({ payload: players }),
           PlayerAction.httpSyncPlayers(),
-        ])),
+          regenTable()
+        ]),
         catchError((e) => of({ type: '[App] Load Players Error', e }))
       )
     )
@@ -60,7 +62,10 @@ export class PlayersEffects {
     ofType(PlayerAction.resetLocal),
     exhaustMap(() => from(this.indexDbService.reset())
       .pipe(
-        map(() => ({ type: '[indexDBService] Reset IndexDB Success' }))
+        mergeMap(() => [
+          { type: '[indexDBService] Reset IndexDB Success' },
+          regenTable()
+        ])
         , catchError((e) => of({ type: '[indexDBService] Reset IndexDB Error', e }))
       )
     )
@@ -71,7 +76,10 @@ export class PlayersEffects {
     withLatestFrom(this.store.pipe(select('players'))),
     mergeMap((newAndCurr) => this.playerIsValid(newAndCurr[0], newAndCurr[1])
       .pipe(
-        map(() => PlayerAction.storePlayer(newAndCurr[0])),
+        mergeMap(() => [
+          PlayerAction.storePlayer(newAndCurr[0]),
+          regenTable()
+        ]),
         catchError((reason) => of({ type: '[Players Effect] Player Not Valid', reason }))
       )
     )
@@ -82,7 +90,10 @@ export class PlayersEffects {
     withLatestFrom(this.store.pipe(select('players'))),
     exhaustMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
-        map((p) => PlayerAction.playerSynced(p)),
+        mergeMap((p) => [
+          PlayerAction.playerSynced(p),
+          regenTable()
+        ]),
         catchError((reason) => {
           if (reason.error as Player != null) {
             PlayerAction.replacePlayer(reason.error)

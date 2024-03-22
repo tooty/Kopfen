@@ -8,6 +8,8 @@ import { gameReducer } from './store/game.reducer';
 import { PlayersEffects } from './store/player.effects';
 import { IndexDBService } from './services/index-db.service';
 import { GameEffects } from './store/game.effects';
+import { tableReducer, tableSumReducer } from './store/table.reducer';
+import { TableEffects } from './store/table.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,8 +23,11 @@ export const appConfig: ApplicationConfig = {
     provideStore(),
     provideState({ name: 'players', reducer: playerReducer }),
     provideState({ name: 'game', reducer: gameReducer }),
+    provideState({ name: 'table', reducer: tableReducer }),
+    provideState({ name: 'sumTable', reducer: tableSumReducer }),
     provideEffects(PlayersEffects),
     provideEffects(GameEffects),
+    provideEffects(TableEffects),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',

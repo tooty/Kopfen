@@ -6,7 +6,6 @@ import Hammer from 'hammerjs';
 import { HttpClientModule } from '@angular/common/http';
 import { BehaviorSubject, skip, Observable } from 'rxjs';
 import { StoreModule, Store } from '@ngrx/store';
-import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-table',
@@ -17,7 +16,6 @@ import { HelperService } from '../services/helper.service';
 })
 export class TableComponent {
   players$: Observable<Player[]>
-  players: Player[] = []
   games$: Observable<Game[]>
   table$: Observable<number[][]>
   sum$: Observable<number[][]>
@@ -34,15 +32,14 @@ export class TableComponent {
   }
 
   constructor(
-    private store: Store<{ players: Player[], game: Game[] }>,
-    private helperService: HelperService
+    private store: Store<{
+      table: number[][], sumTable: number[][],
+      players: Player[], game: Game[] }>,
   ) {
-    [this.table$, this.sum$] = this.helperService.getObservables()
+    this.table$ = this.store.select('table')
+    this.sum$ = this.store.select('sumTable')
     this.players$ = this.store.select('players')
     this.games$ = this.store.select('game')
-    this.players$.subscribe(next => {
-      this.players = next
-    })
   }
 
   ngOnInit() {

@@ -3,9 +3,8 @@ import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
 import { Game, Player } from '../interfaces';
 import { ChartType, ChartConfiguration, Legend } from 'chart.js';
 import { HttpClientModule } from '@angular/common/http';
-import {merge,Observable, Subject, switchMap ,of, tap} from 'rxjs';
-import { HelperService } from '../services/helper.service';
-import { StoreModule ,Store} from '@ngrx/store';
+import { merge, Observable, Subject, switchMap, of, tap } from 'rxjs';
+import { StoreModule, Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-graph',
@@ -57,17 +56,17 @@ export class GraphComponent {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   constructor(
-    private helperService: HelperService,
-    private store: Store<{players: Player[]}>,
+    private store: Store<{ players: Player[], table: number[][], sumTable: number[][] }>,
   ) {
-    [this.tableCost$, this.tableSum$] = this.helperService.getObservables()
+    this.tableCost$ = this.store.select('table')
+    this.tableSum$ = this.store.select('sumTable')
     this.players$ = this.store.select('players')
     merge(
-      this.tableSum$.pipe(tap(x=> this.tableSum = x)),
-      this.players$.pipe(tap(x=> this.players = x)),
-      this.tableCost$.pipe(tap(x=> this.tableCost = x)),
-    ).pipe(switchMap(()=>{this.buildData();return of(null)}))
-    .subscribe()
+      this.tableSum$.pipe(tap(x => this.tableSum = x)),
+      this.players$.pipe(tap(x => this.players = x)),
+      this.tableCost$.pipe(tap(x => this.tableCost = x)),
+    ).pipe(switchMap(() => { this.buildData(); return of(null) }))
+      .subscribe()
   }
 
   ngOnChanges(changes: SimpleChanges) {
