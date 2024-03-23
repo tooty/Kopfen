@@ -86,7 +86,7 @@ export class GameEffects {
   mergeMapPushGames(games: Game[]): Observable<Game> {
     //Make push Request for all games and return
     return from(games.filter(x => x.synced == false)).pipe(
-      mergeMap((g) => this.httpService.pushItem({ content: g, URL: '/game' }).pipe(
+      mergeMap((g) => this.httpService.putItem(g).pipe(
         catchError((e) => e), map(() => g)))
     )
   }

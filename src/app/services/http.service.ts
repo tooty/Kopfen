@@ -1,7 +1,7 @@
-import { HttpClient,HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Game, Player, putItem } from '../interfaces';
-import { Observable} from 'rxjs';
+import { Game, Player } from '../interfaces';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,9 +16,10 @@ export class HttpService {
   constructor(private http: HttpClient) {
   }
 
-  pushItem<T extends Game|Player>(item: putItem): Observable<T> {
+  putItem<T extends Game | Player>(item: Game | Player): Observable<T> {
+    const url: string = "time" in item ? "/games" : "/player"
     return this.http
-      .put<T>(this.url + item.URL, item.content, this.httpOptions)
+      .put<T>(this.url + url, item, this.httpOptions)
   }
 
   getPlayer(id: string): Observable<Player> {

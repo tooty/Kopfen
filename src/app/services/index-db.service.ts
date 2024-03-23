@@ -24,7 +24,6 @@ export class IndexDBService {
   }
 
   async saveGame(newGame: Game): Promise<boolean> {
-    console.log("saveGame")
     return new Promise((res, rej) => {
       if (this.db != null) {
         const trans = this.db.transaction('games', 'readwrite');

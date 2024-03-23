@@ -95,7 +95,8 @@ export class PlayersEffects {
           regenTable()
         ]),
         catchError((reason) => {
-          if (reason.error as Player != null) {
+          console.log(reason)
+          if (reason.error != null) {
             PlayerAction.replacePlayer(reason.error)
           }
           return of({ type: '[Players Effect] Http Put Failed', reason })
@@ -137,7 +138,7 @@ export class PlayersEffects {
 
   mergeMapSyncPlayers(ps: Player[]): Observable<Player> {
     return from(ps.filter(x => x.synced == false)).pipe(
-      mergeMap((p) => this.httpService.pushItem<Player>({ content: p, URL: '/player' }).pipe(
+      mergeMap((p) => this.httpService.putItem<Player>(p).pipe(
         catchError((e) => e), map(() => p)))
     )
   }

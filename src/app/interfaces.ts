@@ -11,11 +11,6 @@ export interface Player {
   synced: boolean;
 }
 
-export interface putItem {
-  content: Object,
-  URL: string
-}
-
 export enum Screen {
   //component templates use order indexes
   player,//0
