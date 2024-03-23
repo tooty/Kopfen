@@ -18,6 +18,7 @@ export class HttpService {
 
   putItem<T extends Game | Player>(item: Game | Player): Observable<T> {
     const url: string = "time" in item ? "/games" : "/player"
+    console.log("myurl: "+url)
     return this.http
       .put<T>(this.url + url, item, this.httpOptions)
   }
