@@ -88,6 +88,7 @@ export class PlayersEffects {
   httpSyncPlayers$ = createEffect(() => this.actions$.pipe(
     ofType(PlayerAction.httpSyncPlayers),
     withLatestFrom(this.store.pipe(select('players'))),
+    tap((a)=> console.log(a)),
     exhaustMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
         mergeMap((p) => [
