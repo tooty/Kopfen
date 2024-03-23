@@ -95,12 +95,9 @@ export class PlayersEffects {
           PlayerAction.replacePlayer(p),
           regenTable()
         ]),
-        catchError((reason) => {
-          console.log(reason)
-          //if (reason.error != null) {
-          //  return of(PlayerAction.replacePlayer(reason.error as Player))
-          //}
-          return of({ type: '[Players Effect] Http Put Failed', reason })
+        catchError((error) => {
+          console.log(error)
+          return of({ type: '[Players Effect] Http Put Failed', error })
         })
       )
     )
