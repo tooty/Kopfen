@@ -10,6 +10,7 @@ import { HttpService } from '../services/http.service'
 import { TypedAction } from '@ngrx/store/src/models'
 import { regenTable } from './table.action'
 import { HttpEvent,HttpResponse,HttpHeaderResponse,HttpErrorResponse } from '@angular/common/http'
+import { Action } from 'rxjs/internal/scheduler/Action'
 
 @Injectable({
   providedIn: 'root',
@@ -91,8 +92,10 @@ export class PlayersEffects {
     withLatestFrom(this.store.pipe(select('players'))),
     concatMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
-        map((event) =>
+        mergeMap((action) =>[
+          action,
           regenTable()
+        ]
         ),
         catchError((error) => {
           console.log(error)
@@ -133,22 +136,21 @@ export class PlayersEffects {
   }
 
 
-  mergeMapSyncPlayers(ps: Player[]): Observable<any> {
+  mergeMapSyncPlayers(ps: Player[]): Observable<Player & TypedAction<any>> {
     return from(ps.filter(x => x.synced === false)).pipe(
       mergeMap((p) => this.httpService.putItem<Player>(p).pipe(map((event)=> {
         if (event instanceof HttpResponse) {
           if (event.body !== null) {
-            return of(PlayerAction.replacePlayer(event.body))
+            return PlayerAction.replacePlayer(event.body)
           }
         }
         throw event
       }),
         catchError((event)=>{
-          console.log("one")
           if (event instanceof HttpErrorResponse) {
-            console.log("two", event)
             if (event.status == 409){
               console.log("three", event.error)
+              event.error as Player
               return of(PlayerAction.replacePlayer(event.error))
             }
           }
