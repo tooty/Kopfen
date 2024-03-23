@@ -89,7 +89,6 @@ export class PlayersEffects {
   httpSyncPlayers$ = createEffect(() => this.actions$.pipe(
     ofType(PlayerAction.httpSyncPlayers),
     withLatestFrom(this.store.pipe(select('players'))),
-    tap((a)=> console.log(a)),
     concatMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
         map((event) =>
@@ -135,7 +134,6 @@ export class PlayersEffects {
 
 
   mergeMapSyncPlayers(ps: Player[]): Observable<any> {
-    console.log(ps)
     return from(ps.filter(x => x.synced === false)).pipe(
       mergeMap((p) => this.httpService.putItem<Player>(p).pipe(map((event)=> {
         if (event instanceof HttpResponse) {
