@@ -97,7 +97,7 @@ export class GameEffects {
       .pipe(
         concatMap((games) => from(games)),
         map((game) => GameAction.handlePullResponse(game)),
-        catchError((e) => of({ type: '[Http Service] Pull Games Error', e }))
+        catchError((e) => of({ type: '[Game Effects] Pull Games Error', e }))
       )
     )
     )

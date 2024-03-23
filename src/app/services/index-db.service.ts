@@ -60,7 +60,6 @@ export class IndexDBService {
           if (oldKey != null) {
             let mytrans = trans.objectStore('players').delete(oldKey)
               mytrans.onsuccess = (r)=>{
-              console.log(r)
               this.savePlayer(newPlayer).catch(()=>{throw Error}).then(()=>
                 res(true)
               )
