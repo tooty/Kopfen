@@ -91,6 +91,9 @@ export class PlayersEffects {
     tap((a)=> console.log(a)),
     exhaustMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
+    tap((a)=> console.log(a)),
+      )
+      .pipe(
         mergeMap((p) => [
           PlayerAction.replacePlayer(p),
           regenTable()
