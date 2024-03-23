@@ -9,7 +9,7 @@ import * as PlayerAction from './player.action'
 import { HttpService } from '../services/http.service'
 import { TypedAction } from '@ngrx/store/src/models'
 import { regenTable } from './table.action'
-import { HttpEvent,HttpResponse,HttpHeaderResponse } from '@angular/common/http'
+import { HttpEvent,HttpResponse,HttpHeaderResponse,HttpErrorResponse } from '@angular/common/http'
 
 @Injectable({
   providedIn: 'root',
@@ -139,9 +139,12 @@ export class PlayersEffects {
     return from(ps.filter(x => x.synced === false)).pipe(
       mergeMap((p) => this.httpService.putItem<Player>(p).pipe(map((event)=> {
         if (event instanceof HttpResponse) {
-          if (event.body != null) {
+          if (event.body !== null) {
             return of(PlayerAction.replacePlayer(event.body))
           }
+        }
+        else if (event instanceof HttpErrorResponse) {
+          if (event.status == 409) of(PlayerAction.replacePlayer(event.error))
         }
         throw event
       })))
