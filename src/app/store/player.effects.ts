@@ -144,7 +144,9 @@ export class PlayersEffects {
         throw event
       }),
         catchError((event)=>{
+          console.log("one")
           if (event instanceof HttpErrorResponse) {
+            console.log("two", event)
             if (event.status == 409) return of(PlayerAction.replacePlayer(event.error))
           }
           throw event
