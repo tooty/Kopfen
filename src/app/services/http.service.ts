@@ -20,6 +20,7 @@ export class HttpService {
     const url: string = "time" in item ? "/games" : "/player"
     return this.http
       .put<HttpEvent<T>>(this.url + url, item, this.httpOptions)
+      .pipe(tap((a)=>console.log(a)))
   }
 
   getPlayer(id: string): Observable<Player> {
