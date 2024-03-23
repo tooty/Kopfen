@@ -138,10 +138,10 @@ export class PlayersEffects {
     console.log(ps)
     return from(ps.filter(x => x.synced === false)).pipe(
       mergeMap((p) => this.httpService.putItem<Player>(p).pipe(map((event)=> {
-        if (event instanceof HttpHeaderResponse) {
-          return of(null)
-        } else if (event instanceof HttpResponse){
-          throw event
+        if (event instanceof HttpResponse) {
+          if (event.body != null) {
+            return of(PlayerAction.replacePlayer(event.body))
+          }
         }
         throw event
       })))
