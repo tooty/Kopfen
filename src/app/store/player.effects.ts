@@ -143,11 +143,15 @@ export class PlayersEffects {
             return of(PlayerAction.replacePlayer(event.body))
           }
         }
-        else if (event instanceof HttpErrorResponse) {
-          if (event.status == 409) of(PlayerAction.replacePlayer(event.error))
-        }
         throw event
-      })))
+      }),
+        catchError((event)=>{
+          if (event instanceof HttpErrorResponse) {
+            if (event.status == 409) return of(PlayerAction.replacePlayer(event.error))
+          }
+          throw event
+        })
+      ))
     )
   }
 
