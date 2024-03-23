@@ -95,6 +95,7 @@ export class PlayersEffects {
           regenTable()
         ]),
         catchError((reason) => {
+          console.log(reason)
           if (reason.error != null) {
             return of(PlayerAction.replacePlayer(reason.error as Player))
           }
