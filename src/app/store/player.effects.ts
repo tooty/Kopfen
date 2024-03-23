@@ -52,7 +52,7 @@ export class PlayersEffects {
 
   replacePlayer$ = createEffect(() => this.actions$.pipe(
     ofType(PlayerAction.replacePlayer),
-    concatMap((p) => from(this.indexDbService.savePlayer(p))
+    concatMap((p) => from(this.indexDbService.replacePlayer(p))
       .pipe(
         map(() => ({ type: "[IndexDb] changed Key" })),
         catchError((e) => of({ type: '[http Service] changed Key error', e }))
