@@ -9,6 +9,7 @@ import * as PlayerAction from './player.action'
 import { HttpService } from '../services/http.service'
 import { TypedAction } from '@ngrx/store/src/models'
 import { regenTable } from './table.action'
+import { HttpEvent,HttpResponse,HttpHeaderResponse } from '@angular/common/http'
 
 @Injectable({
   providedIn: 'root',
@@ -91,10 +92,9 @@ export class PlayersEffects {
     tap((a)=> console.log(a)),
     concatMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
-        mergeMap((p) => [
-          PlayerAction.replacePlayer(p),
+        map((event) =>
           regenTable()
-        ]),
+        ),
         catchError((error) => {
           console.log(error)
           return of({ type: '[Players Effect] Http Put Failed', error })
@@ -134,12 +134,17 @@ export class PlayersEffects {
   }
 
 
-  mergeMapSyncPlayers(ps: Player[]): Observable<Player> {
+  mergeMapSyncPlayers(ps: Player[]): Observable<any> {
     console.log(ps)
     return from(ps.filter(x => x.synced === false)).pipe(
-      tap((e) => console.log(e)),
-      mergeMap((p) => this.httpService.putItem<Player>(p).pipe(
-        catchError((e) => e), map(() => p)))
+      mergeMap((p) => this.httpService.putItem<Player>(p).pipe(map((event)=> {
+        if (event instanceof HttpHeaderResponse) {
+          return of(null)
+        } else if (event instanceof HttpResponse){
+          throw event
+        }
+        throw event
+      })))
     )
   }
 
