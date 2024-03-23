@@ -88,14 +88,14 @@ export class PlayersEffects {
   httpSyncPlayers$ = createEffect(() => this.actions$.pipe(
     ofType(PlayerAction.httpSyncPlayers),
     withLatestFrom(this.store.pipe(select('players'))),
-    exhaustMap((ps) => this.mergeMapSyncPlayers(ps[1])
+    exhaustMap((ps) => this.mergeMapSyncPlayers(ps[1],)
       .pipe(
         mergeMap((p) => [
           PlayerAction.replacePlayer(p),
           regenTable()
         ]),
         catchError((reason) => {
-          console.log(reason)
+          console.log(ps)
           if (reason.error != null) {
             PlayerAction.replacePlayer(reason.error)
           }
@@ -137,10 +137,8 @@ export class PlayersEffects {
 
 
   mergeMapSyncPlayers(ps: Player[]): Observable<Player> {
-    console.log(ps)
     return from(ps.filter(x => x.synced == false)).pipe(
       mergeMap((p) => this.httpService.putItem<Player>(p).pipe(
-        tap((p)=>console.log(p)),
         catchError((e) => e), map(() => p)))
     )
   }
