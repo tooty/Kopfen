@@ -21,14 +21,6 @@ export class HttpService {
     console.log(url, item)
     return this.http
       .put<HttpEvent<T>>(url, item, this.httpOptions)
-      .pipe(
-        catchError((error: any) => {
-          // Handle errors here
-          console.error('An error occurred:', error);
-          // You can throw the error again if needed
-          throw new Error(error);
-        })
-      );
   }
 
   getPlayer(id: string): Observable<Player> {
