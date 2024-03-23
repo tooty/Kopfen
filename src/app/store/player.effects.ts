@@ -139,7 +139,8 @@ export class PlayersEffects {
 
   mergeMapSyncPlayers(ps: Player[]): Observable<Player> {
     console.log(ps)
-    return from(ps.filter(x => x.synced == false)).pipe(
+    return from(ps.filter(x => x.synced === false)).pipe(
+      tap((e) => console.log(e)),
       mergeMap((p) => this.httpService.putItem<Player>(p).pipe(
         catchError((e) => e), map(() => p)))
     )
