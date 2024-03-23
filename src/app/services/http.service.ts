@@ -1,7 +1,7 @@
 import { HttpClient, HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Game, Player } from '../interfaces';
-import {throwError, Observable, catchError, pipe, tap } from 'rxjs';
+import {Observable, catchError, pipe, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +26,7 @@ export class HttpService {
           // Handle errors here
           console.error('An error occurred:', error);
           // You can throw the error again if needed
-          return throwError(error);
+          throw new Error(error);
         })
       );
   }
