@@ -58,8 +58,8 @@ export class IndexDBService {
           let myres = req.result as Player[]
           let oldKey = myres.find(x=> x.name == newPlayer.name)?.name
           if (oldKey != null) {
-            trans.objectStore('players').delete(oldKey)
-            this.savePlayer(newPlayer)
+            trans.objectStore('players').delete(oldKey).onerror = ()=>{throw Error}
+            this.savePlayer(newPlayer).catch(()=>{throw Error})
           }else{throw Error}
         }
       }
