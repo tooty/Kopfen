@@ -90,12 +90,12 @@ export class PlayersEffects {
     withLatestFrom(this.store.pipe(select('players'))),
     exhaustMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
-        tap((reason)=>console.log(reason)),
         mergeMap((p) => [
           PlayerAction.replacePlayer(p),
           regenTable()
         ]),
         catchError((reason) => {
+          console.log(reason)
           if (reason.error != null) {
             PlayerAction.replacePlayer(reason.error)
           }
