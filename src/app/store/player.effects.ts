@@ -89,7 +89,7 @@ export class PlayersEffects {
     ofType(PlayerAction.httpSyncPlayers),
     withLatestFrom(this.store.pipe(select('players'))),
     tap((a)=> console.log(a)),
-    concatMap((ps) => this.mergeMapSyncPlayers(ps[1])
+    exhaustMap((ps) => this.mergeMapSyncPlayers(ps[1])
       .pipe(
     tap((a)=> console.log(a)),
       )
