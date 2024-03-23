@@ -97,9 +97,9 @@ export class PlayersEffects {
         ]),
         catchError((reason) => {
           console.log(reason)
-          if (reason.error != null) {
-            return of(PlayerAction.replacePlayer(reason.error as Player))
-          }
+          //if (reason.error != null) {
+          //  return of(PlayerAction.replacePlayer(reason.error as Player))
+          //}
           return of({ type: '[Players Effect] Http Put Failed', reason })
         })
       )
