@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Game, Player } from '../interfaces';
-import { Observable } from 'rxjs';
+import { Observable,tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +21,7 @@ export class HttpService {
     console.log("myurl: "+url)
     return this.http
       .put<T>(this.url + url, item, this.httpOptions)
+      .pipe(tap(response=> console.log(response)))
   }
 
   getPlayer(id: string): Observable<Player> {
