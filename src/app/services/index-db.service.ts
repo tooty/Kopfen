@@ -50,7 +50,7 @@ export class IndexDBService {
   }
 
   async replacePlayer(newPlayer: Player): Promise<boolean>{
-    return new Promise(()=> {
+    return new Promise<boolean>((res)=> {
       if (this.db != null) {
         const trans = this.db.transaction('players', 'readwrite');
         let req = trans.objectStore('players').getAll()
@@ -58,8 +58,13 @@ export class IndexDBService {
           let myres = req.result as Player[]
           let oldKey = myres.find(x=> x.name == newPlayer.name)?.name
           if (oldKey != null) {
-            trans.objectStore('players').delete(oldKey).onerror = ()=>{throw Error}
-            this.savePlayer(newPlayer).catch(()=>{throw Error})
+            let mytrans = trans.objectStore('players').delete(oldKey)
+              mytrans.onsuccess = ()=>{
+              this.savePlayer(newPlayer).catch(()=>{throw Error}).then(()=>
+                res(true)
+              )
+            }
+            mytrans.onerror = (e) => {throw Error(e.type)}
           }else{throw Error}
         }
       }
