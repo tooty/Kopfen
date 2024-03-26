@@ -23,11 +23,11 @@ export class TableComponent {
   loading$ = new Observable<boolean>
   isLandscape = false;
   isTablet = false;
-  @ViewChild('myElement') swipeDiv: HTMLDivElement | null = null
 
   @HostListener('window:orientationchange', ['$event'])
   orientationchange(event: Event) {
     console.log("hallo")
+    console.log(event)
     this.isLandscape =
       screen.orientation.type == 'landscape-secondary' ||
       screen.orientation.type == 'landscape-primary';
@@ -54,21 +54,6 @@ export class TableComponent {
   }
 
   ngOnInit() {
-    //  const element = document.getElementById('myElement');
-    //  const hammer = new Hammer.Manager(element!);
-    //  hammer.add(new Hammer.Swipe());
-    //  hammer.on('swipeleft', () => this.swipe());
-    //  if (window.screen.width >= 700){
-    //    this.isTablet = true
-    //  if (this.swipeDiv != null) {
-    //    const hammer = new Hammer.Manager(this.swipeDiv!);
-    //    hammer.add(new Hammer.Swipe());
-    //    hammer.on('swipeleft', () => this.swipe());
-    //    if (window.screen.width >= 700) {
-    //      this.isTablet = true
-    //    }
-    //  }
-    //}
   }
 
   swipe() {
