@@ -28,6 +28,7 @@ export class TableComponent {
   @HostListener("window:orientationchange", ['$event'])
   orientationchange(event: Event) {
     this.isLandscape = screen.orientation && screen.orientation.angle !== 0;
+    console.log("orienttation change")
   }
 
   fun(ev: any) {
@@ -45,6 +46,9 @@ export class TableComponent {
     this.sum$ = this.store.select('sumTable')
     this.players$ = this.store.select('players')
     this.games$ = this.store.select('game')
+window.addEventListener('orientationchange', (event) => {
+  console.log('Orientation changed');
+});
   }
 
   ngOnInit() {
