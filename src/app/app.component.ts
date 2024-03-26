@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { HostListener,Component } from '@angular/core';
 import { PlayersComponent } from './players/players.component';
 import { CommonModule } from '@angular/common';
 import { StoreModule, Store } from '@ngrx/store'
@@ -23,6 +23,13 @@ export class AppComponent {
   screen = new BehaviorSubject<Screen>(Screen.table)
   $screen: Observable<Screen>
   game: Game | null = null
+
+  @HostListener('window.orientationchange', ['$event'])
+  orientationchange(event: Event) {
+    console.log("hallo")
+    console.log(event)
+    console.log(screen.orientation.type)
+  }
 
   constructor(
     private store: Store<{ players: Player[] }>,
