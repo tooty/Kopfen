@@ -24,7 +24,7 @@ export class TableComponent {
   isLandscape = false;
   isTablet = false;
 
-  @HostListener('window:orientationchange', ['$event'])
+  @HostListener('window.orientationchange', ['$event'])
   orientationchange(event: Event) {
     console.log("hallo")
     console.log(event)
