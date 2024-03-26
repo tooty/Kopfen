@@ -4,13 +4,14 @@ import { Game, Player } from '../interfaces';
 import { GraphComponent } from '../graph/graph.component';
 import Hammer from 'hammerjs';
 import { HttpClientModule } from '@angular/common/http';
-import { BehaviorSubject, skip, Observable } from 'rxjs';
+import { BehaviorSubject, skip,of, Observable } from 'rxjs';
 import { StoreModule, Store } from '@ngrx/store';
+import { OverscrollDirective } from '../overscroll.directive';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [StoreModule, HttpClientModule, CommonModule, GraphComponent],
+  imports: [OverscrollDirective ,StoreModule, HttpClientModule, CommonModule, GraphComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
 })
@@ -19,6 +20,7 @@ export class TableComponent {
   games$: Observable<Game[]>
   table$: Observable<number[][]>
   sum$: Observable<number[][]>
+  loading$ = new Observable<boolean>
   isLandscape = false;
   isTablet = false;
   @HostListener('window:orientationchange', ['$event'])
@@ -30,6 +32,10 @@ export class TableComponent {
       screen.orientation.type == 'landscape-secondary' ||
       screen.orientation.type == 'landscape-primary';
   }
+   fun(ev:any){
+      this.loading$ = of(true)
+      setTimeout(() => this.loading$ = of(false), 1000)
+   }
 
   constructor(
     private store: Store<{

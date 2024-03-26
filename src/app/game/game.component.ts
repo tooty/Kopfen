@@ -34,7 +34,7 @@ export class GameComponent {
   constructor(
     private store: Store<{ players: Player[] }>,
   ) {
-    this.$game=this.game.asObservable()
+    this.$game = this.game.asObservable()
     this.players$ = this.store.select('players')
     this.players$.subscribe((data) => {
       this.players = data.map((p) => {

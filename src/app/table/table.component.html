@@ -1,6 +1,7 @@
-<div class="h-screen flex-col flex content-between">
-  <div *ngIf="!isLandscape" class="overflow-y-auto flex-1 w-full pb-12 md:pb-0">
-    <table *ngIf="(players$|async)?.length ?? 0 >= 4" class="table-auto w-full">
+<div class="h-screen flex-col flex content-between" >
+<div *ngIf="loading$|async" class="w-full text-sky-800 flex text-center">Loading...</div>
+  <div *ngIf="!isLandscape" class="overflow-y-auto flex-1 w-full pb-12 md:pb-0" (appOverscroll)="fun($event)">
+    <table *ngIf="((players$|async)?.length) ?? 0 >= 4" class="table-auto w-full">
       <thead class="table-headder-goup shadow-lg sticky top-0 bg-slate-800 text-sky-600">
         <tr class="table-row">
           <th class="w-2 pt-6 table-coll">Runde</th>
@@ -24,7 +25,7 @@
           </td>
         </tr>
       </thead>
-      <tbody>
+      <tbody >
         <tr
           *ngFor="let game of (table$|async)?.slice()?.reverse()  ?? [] ; let i = index"
           class="text-center            "

@@ -106,7 +106,7 @@ export class GraphComponent {
 
   transpose(t: number[][]) {
     let trans: number[][] = [];
-    if (t.length >= 1) {
+    if (t?.length ?? 0 >= 1) {
       trans = t[0].map((col, i) => {
         return t.map((row) => row[i])
       });
@@ -138,7 +138,9 @@ export class GraphComponent {
       };
     });
 
-    this.lineChartData.labels = this.tableSum.map((_, i) => i);
+    if (this.tableSum != undefined) {
+      this.lineChartData.labels = this.tableSum.map((_, i) => i);
+    }
 
     this.chart?.update();
   }
