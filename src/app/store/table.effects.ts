@@ -41,6 +41,7 @@ export class TableEffects {
 
   genTabel(games: Game[], players: Player[]): Observable<number[][]> {
     let table: number[][] = [];
+    games.sort((a,b)=>a.time - b.time)
     for (let i = 0; i < games.length; i++) {
       table[i] = players.map((p) => this.gameCost(games[i], p)!);
     }
