@@ -1,4 +1,4 @@
-import { HostListener,Component } from '@angular/core';
+import { HostListener, Component } from '@angular/core';
 import { PlayersComponent } from './players/players.component';
 import { CommonModule } from '@angular/common';
 import { StoreModule, Store } from '@ngrx/store'
@@ -24,12 +24,6 @@ export class AppComponent {
   $screen: Observable<Screen>
   game: Game | null = null
 
-  @HostListener('window:orientationchange', ['$event'])
-  orientationchange(event: Event) {
-    console.log("hallo")
-    console.log(event)
-    console.log(screen.orientation.type)
-  }
 
   constructor(
     private store: Store<{ players: Player[] }>,
@@ -40,7 +34,7 @@ export class AppComponent {
   ngOnInit() {
     this.store.dispatch(loadIndexDbPlayers())
     this.store.dispatch(loadIndexDbGame())
-    this.store.select('players').subscribe(x=>
+    this.store.select('players').subscribe(x =>
       this.$playersCount = of(x.length)
     )
     this.store.select('players').pipe(skip(1), take(1)).subscribe(x => {
