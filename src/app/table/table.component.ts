@@ -24,12 +24,6 @@ export class TableComponent {
   isLandscape = false;
   isTablet = false;
 
-
-  @HostListener("window:orientationchange", ['$event'])
-  orientationchange(event: Event) {
-    this.isLandscape = screen.orientation && screen.orientation.angle !== 0;
-  }
-
   fun(ev: any) {
     this.loading$ = of(true)
     setTimeout(() => this.loading$ = of(false), 1000)

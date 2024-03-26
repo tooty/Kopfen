@@ -33,6 +33,6 @@
     <app-players *ngSwitchCase="0"></app-players>
     <app-table *ngSwitchCase="1"></app-table>
     <app-game ($game)="game=$event" *ngSwitchCase="2"></app-game>
-    <app-graph *ngSwitchCase="3"></app-graph>
+    <app-graph [isLandscape]=isLandscape *ngSwitchCase="3"></app-graph>
 </div>
 

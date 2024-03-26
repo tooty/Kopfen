@@ -23,7 +23,13 @@ export class AppComponent {
   screen = new BehaviorSubject<Screen>(Screen.table)
   $screen: Observable<Screen>
   game: Game | null = null
+  isLandscape = false;
 
+  @HostListener("window:orientationchange", ['$event'])
+  orientationchange(event: Event) {
+    this.isLandscape = screen.orientation && screen.orientation.angle !== 0;
+    this.screen.next(3)
+  }
 
   constructor(
     private store: Store<{ players: Player[] }>,
