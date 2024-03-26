@@ -24,7 +24,7 @@ export class AppComponent {
   $screen: Observable<Screen>
   game: Game | null = null
 
-  @HostListener('window.orientationchange', ['$event'])
+  @HostListener('window:orientationchange', ['$event'])
   orientationchange(event: Event) {
     console.log("hallo")
     console.log(event)
