@@ -28,7 +28,6 @@ export class TableComponent {
   @HostListener("window:orientationchange", ['$event'])
   orientationchange(event: Event) {
     this.isLandscape = screen.orientation && screen.orientation.angle !== 0;
-    console.log(this.isLandscape)
   }
 
   fun(ev: any) {
