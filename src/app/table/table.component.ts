@@ -15,6 +15,7 @@ import { OverscrollDirective } from '../overscroll.directive';
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
 })
+
 export class TableComponent {
   players$: Observable<Player[]>
   games$: Observable<Game[]>
