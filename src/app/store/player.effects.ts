@@ -9,8 +9,8 @@ import * as PlayerAction from './player.action'
 import { HttpService } from '../services/http.service'
 import { TypedAction } from '@ngrx/store/src/models'
 import { regenTable } from './table.action'
-import { HttpEvent,HttpResponse,HttpHeaderResponse,HttpErrorResponse } from '@angular/common/http'
-import { Action } from 'rxjs/internal/scheduler/Action'
+import { HttpResponse,HttpErrorResponse } from '@angular/common/http'
+import { resetLocalGames } from './game.action'
 
 @Injectable({
   providedIn: 'root',
@@ -65,8 +65,7 @@ export class PlayersEffects {
     exhaustMap(() => from(this.indexDbService.reset())
       .pipe(
         mergeMap(() => [
-          { type: '[indexDBService] Reset IndexDB Success' },
-          regenTable()
+          resetLocalGames(),
         ])
         , catchError((e) => of({ type: '[indexDBService] Reset IndexDB Error', e }))
       )

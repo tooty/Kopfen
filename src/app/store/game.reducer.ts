@@ -8,7 +8,7 @@ export const gameReducer = createReducer(
   initialState,
 
   on(ga.storeStore, (state, g) => [...state, g]),
-  on(ga.resetLocal, () => initialState),
+  on(ga.resetLocalGames, () => initialState),
   on(ga.loadIndexDBGameSuccess, (_,p) => p.payload),
   on(ga.gameSynced, (state,p) => {
     let copy = {...p}

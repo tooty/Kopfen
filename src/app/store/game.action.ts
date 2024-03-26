@@ -12,7 +12,7 @@ export const loadIndexDbGame = createAction('[App] Load IndexDb Game')
 export const loadIndexDBGameSuccess = createAction(
   '[App] Load Game Success', props<{ payload: Game[] }>()
 )
-export const resetLocal = createAction('[Game Component] ResetLocal')
+export const resetLocalGames = createAction('[Player Effect] ResetLocalGames')
 export const validateGame = createAction('[App Component] Validate Game', props<Game>())
 export const httpSyncGame = createAction('[App] Http Sync Game')
 export const gameSynced = createAction('[Game Effect] Game Synced', props<Game>())

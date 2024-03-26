@@ -52,7 +52,7 @@ export class GameEffects {
   ))
 
   resetIndexDb$ = createEffect(() => this.actions$.pipe(
-    ofType(GameAction.resetLocal),
+    ofType(GameAction.resetLocalGames),
     exhaustMap(() => from(this.indexDbService.reset())
       .pipe(
         map(() => regenTable())
