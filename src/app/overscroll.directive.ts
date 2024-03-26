@@ -26,7 +26,7 @@ export class OverscrollDirective {
     if (ev instanceof TouchEvent) {
       if (ev.touches[0].clientY - this.tochstart > 200) {
         this.tochstart = Infinity
-        this.store.dispatch(pullGamesHttp({ start: 0, end: Date.now() }))
+        this.store.dispatch(pullGamesHttp({ start: Date.now() - 1000 * 60 * 6 * 60, end: Date.now() }))
         if (this.el.nativeElement instanceof HTMLDivElement) {
           this.el.nativeElement.dispatchEvent(new Event('appOverscroll'))
         }
