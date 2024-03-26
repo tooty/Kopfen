@@ -15,7 +15,6 @@ import { OverscrollDirective } from '../overscroll.directive';
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
 })
-
 export class TableComponent {
   players$: Observable<Player[]>
   games$: Observable<Game[]>
@@ -25,6 +24,17 @@ export class TableComponent {
   isLandscape = false;
   isTablet = false;
 
+  @HostListener('window:orientationchange', ['$event'])
+  orientationchange(event: Event) {
+    console.log("hallo")
+    console.log(event)
+    this.isLandscape =
+      screen.orientation.type == 'landscape-secondary' ||
+      screen.orientation.type == 'landscape-primary';
+
+    console.log(screen.orientation.type)
+    console.log(this.isLandscape)
+  }
 
   fun(ev: any) {
     this.loading$ = of(true)
