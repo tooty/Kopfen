@@ -56,12 +56,6 @@ export class TableComponent {
   ngOnInit() {
   }
 
-  swipe() {
-    if (this.isTablet) {
-      this.isLandscape = !this.isLandscape;
-    }
-  }
-
   color(i: number): string {
     return "color:hsla(" + i * 80 + ", 60%, 70%, 1)"
   }
