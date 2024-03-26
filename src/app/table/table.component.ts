@@ -27,6 +27,7 @@ export class TableComponent {
 
   @HostListener('window:orientationchange', ['$event'])
   orientationchange(event: Event) {
+    console.log("hallo")
     this.isLandscape =
       screen.orientation.type == 'landscape-secondary' ||
       screen.orientation.type == 'landscape-primary';
