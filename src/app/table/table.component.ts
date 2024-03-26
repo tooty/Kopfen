@@ -30,6 +30,8 @@ export class TableComponent {
     this.isLandscape =
       screen.orientation.type == 'landscape-secondary' ||
       screen.orientation.type == 'landscape-primary';
+
+    console.log(this.isLandscape)
   }
 
   fun(ev: any) {
