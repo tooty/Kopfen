@@ -28,7 +28,6 @@ export class AppComponent {
   @HostListener("window:orientationchange", ['$event'])
   orientationchange(event: Event) {
     this.isLandscape = screen.orientation && screen.orientation.angle !== 0;
-    this.screen.next(3)
   }
 
   constructor(

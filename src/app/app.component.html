@@ -1,4 +1,4 @@
-<nav *ngIf="($screen|async)!= 3" class="flex justify-between px-6 py-4 text-sky-400"
+<nav *ngIf="!isLandscape" class="flex justify-between px-6 py-4 text-sky-400"
   [ngSwitch]="($screen|async)"
 >
   <button
@@ -29,10 +29,11 @@
   </button>
   </ng-container>
 </nav>
-<div #display class="h-screen" [ngSwitch]="$screen|async">
+<div *ngIf="!isLandscape" #display class="h-screen" [ngSwitch]="$screen|async">
     <app-players *ngSwitchCase="0"></app-players>
     <app-table *ngSwitchCase="1"></app-table>
     <app-game ($game)="game=$event" *ngSwitchCase="2"></app-game>
     <app-graph [isLandscape]=isLandscape *ngSwitchCase="3"></app-graph>
 </div>
+<app-graph *ngIf=isLandscape [isLandscape]=isLandscape></app-graph>
 
