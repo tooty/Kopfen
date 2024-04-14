@@ -24,7 +24,7 @@
   <button  (click)="screen.next(1)" class=" active:text-sky-50">
     Abbrechen
   </button>
-  <button [disabled]="game == null" class="disabled:text-sky-800 active:text-sky-50" (click)="addGame()">
+  <button [disabled]="game == null" class="disabled:text-sky-800 active:text-sky-50" (click)="dispatchGame()">
     Hinzufügen
   </button>
   </ng-container>

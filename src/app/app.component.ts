@@ -5,7 +5,7 @@ import { StoreModule, Store } from '@ngrx/store'
 import { loadIndexDbPlayers } from './store/player.action';
 import { loadIndexDbGame, pullGamesHttp, validateGame } from './store/game.action';
 import { Player, Game, Screen } from './interfaces';
-import { BehaviorSubject, Observable, tap, of, skip, take } from 'rxjs';
+import { BehaviorSubject, Observable, of, skip, take } from 'rxjs';
 import { GameComponent } from './game/game.component';
 import { GraphComponent } from './graph/graph.component';
 import { TableComponent } from './table/table.component';
@@ -27,7 +27,7 @@ export class AppComponent {
   isLandscape = false;
 
   @HostListener("window:orientationchange", ['$event'])
-  orientationchange(event: Event) {
+  onOrientatinoChange(event: Event) {
     this.isLandscape = screen.orientation && screen.orientation.angle !== 0;
   }
 
@@ -52,7 +52,7 @@ export class AppComponent {
     })
   }
 
-  addGame() {
+  dispatchGame() {
     if (this.game != null) {
       this.store.dispatch(validateGame(this.game))
       this.game = null
