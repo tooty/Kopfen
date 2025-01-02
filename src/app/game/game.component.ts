@@ -8,11 +8,10 @@ import {FormControl, FormsModule} from '@angular/forms';
 import {Router, RouterModule} from '@angular/router';
 
 @Component({
-  selector: 'app-game',
-  standalone: true,
-  imports: [RouterModule, CommonModule, DragDropModule, FormsModule],
-  templateUrl: './game.component.html',
-  styleUrl: './game.component.css'
+    selector: 'app-game',
+    imports: [RouterModule, CommonModule, DragDropModule, FormsModule],
+    templateUrl: './game.component.html',
+    styleUrl: './game.component.css'
 })
 
 export class GameComponent {

@@ -7,11 +7,10 @@ import {Router} from '@angular/router';
 import {GraphComponent} from '../graph/graph.component';
 
 @Component({
-  selector: 'app-table',
-  standalone: true,
-  imports: [CommonModule,GraphComponent],
-  templateUrl: './table.component.html',
-  styleUrl: './table.component.css'
+    selector: 'app-table',
+    imports: [CommonModule, GraphComponent],
+    templateUrl: './table.component.html',
+    styleUrl: './table.component.css'
 })
 export class TableComponent {
   playersOver: Player[] = []

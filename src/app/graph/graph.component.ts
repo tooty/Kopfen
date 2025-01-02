@@ -8,11 +8,10 @@ import 'chartjs-adapter-date-fns'
 import { de } from 'date-fns/locale'
 
 @Component({
-  selector: 'app-graph',
-  standalone: true,
-  imports: [NgChartsModule],
-  templateUrl: './graph.component.html',
-  styleUrl: './graph.component.css',
+    selector: 'app-graph',
+    imports: [NgChartsModule],
+    templateUrl: './graph.component.html',
+    styleUrl: './graph.component.css'
 })
 export class GraphComponent {
   sum: { p: Player; sum: number[] }[] = [];

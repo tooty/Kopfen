@@ -7,11 +7,10 @@ import { Router } from '@angular/router';
 import {FormsModule} from '@angular/forms';
 
 @Component({
-  selector: 'app-players',
-  standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './players.component.html',
-  styleUrl: './players.component.css'
+    selector: 'app-players',
+    imports: [CommonModule, RouterModule, FormsModule],
+    templateUrl: './players.component.html',
+    styleUrl: './players.component.css'
 })
 export class PlayersComponent {
   players: Player[] = []
