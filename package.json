@@ -11,7 +11,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.0.5",
-    "@angular/cdk": "^18.2.14",
+    "@angular/cdk": "^19.0.4",
     "@angular/common": "^19.0.5",
     "@angular/compiler": "^19.0.5",
     "@angular/core": "^19.0.5",
@@ -23,6 +23,7 @@
     "@angular/service-worker": "^19.0.5",
     "cdk": "^2.118.0",
     "chart.js": "^4.4.1",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "cjs": "^0.0.11",
     "date-fns": "^4.1.0",
     "ng2-charts": "^5.0.4",
