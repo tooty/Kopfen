@@ -7,11 +7,10 @@ import { merge, Observable, Subject, switchMap, of, tap } from 'rxjs';
 import { StoreModule, Store } from '@ngrx/store';
 
 @Component({
-  selector: 'app-graph',
-  standalone: true,
-  imports: [HttpClientModule, NgChartsModule, StoreModule],
-  templateUrl: './graph.component.html',
-  styleUrl: './graph.component.css',
+    selector: 'app-graph',
+    imports: [HttpClientModule, NgChartsModule, StoreModule],
+    templateUrl: './graph.component.html',
+    styleUrl: './graph.component.css'
 })
 export class GraphComponent {
   tableSum$: Observable<number[][]>

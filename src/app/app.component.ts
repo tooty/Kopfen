@@ -12,11 +12,10 @@ import { TableComponent } from './table/table.component';
 import { WebsocketService } from './websocket.service';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [StoreModule, GameComponent, TableComponent, GraphComponent, CommonModule, PlayersComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+    selector: 'app-root',
+    imports: [StoreModule, GameComponent, TableComponent, GraphComponent, CommonModule, PlayersComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'schafkopf';

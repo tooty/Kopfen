@@ -9,11 +9,10 @@ import { StoreModule, Store } from '@ngrx/store';
 import { OverscrollDirective } from '../overscroll.directive';
 
 @Component({
-  selector: 'app-table',
-  standalone: true,
-  imports: [OverscrollDirective, StoreModule, HttpClientModule, CommonModule, GraphComponent],
-  templateUrl: './table.component.html',
-  styleUrl: './table.component.css',
+    selector: 'app-table',
+    imports: [OverscrollDirective, StoreModule, HttpClientModule, CommonModule, GraphComponent],
+    templateUrl: './table.component.html',
+    styleUrl: './table.component.css'
 })
 export class TableComponent {
   players$: Observable<Player[]>

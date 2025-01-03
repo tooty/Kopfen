@@ -9,11 +9,10 @@ import { Store, StoreModule } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-players',
-  standalone: true,
-  imports: [CommonModule, FormsModule, StoreModule],
-  templateUrl: './players.component.html',
-  styleUrl: './players.component.css',
+    selector: 'app-players',
+    imports: [CommonModule, FormsModule, StoreModule],
+    templateUrl: './players.component.html',
+    styleUrl: './players.component.css'
 })
 export class PlayersComponent {
   players$: Observable<Player[]>

@@ -16,11 +16,10 @@ import { validateGame } from '../store/game.action';
 
 
 @Component({
-  selector: 'app-game',
-  standalone: true,
-  imports: [StoreModule, HttpClientModule, CommonModule, DragDropModule, FormsModule],
-  templateUrl: './game.component.html',
-  styleUrl: './game.component.css',
+    selector: 'app-game',
+    imports: [StoreModule, HttpClientModule, CommonModule, DragDropModule, FormsModule],
+    templateUrl: './game.component.html',
+    styleUrl: './game.component.css'
 })
 export class GameComponent {
   players: { p: Player; c: number }[] = [];
