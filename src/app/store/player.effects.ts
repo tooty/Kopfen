@@ -3,11 +3,10 @@ import { IndexDBService } from '../services/index-db.service'
 import { from, catchError, map, of, withLatestFrom, mergeMap, Observable, throwError, concatMap } from 'rxjs'
 import { tap, exhaustMap } from 'rxjs'
 import { createEffect, Actions, ofType } from '@ngrx/effects'
-import { Store, select } from '@ngrx/store'
+import { Store, select, Action } from '@ngrx/store';
 import { Player } from '../interfaces'
 import * as PlayerAction from './player.action'
 import { HttpService } from '../services/http.service'
-import { TypedAction } from '@ngrx/store/src/models'
 import { regenTable } from './table.action'
 import { HttpResponse,HttpErrorResponse } from '@angular/common/http'
 import { resetLocalGames } from './game.action'
@@ -125,7 +124,7 @@ export class PlayersEffects {
     )
   ))
 
-  playerExists(ids: string[], state: Player[]): Observable<TypedAction<string>> {
+  playerExists(ids: string[], state: Player[]): Observable<Action<string>> {
     return from(ids).pipe(mergeMap(id => {
       if (state.find(x => x.id == id) == undefined) {
         return of(PlayerAction.pullPlayerHttp({ payload: id }))
@@ -135,7 +134,7 @@ export class PlayersEffects {
   }
 
 
-  mergeMapSyncPlayers(ps: Player[]): Observable<Player & TypedAction<any>> {
+  mergeMapSyncPlayers(ps: Player[]): Observable<Player & Action<any>> {
     return from(ps.filter(x => x.synced === false)).pipe(
       mergeMap((p) => this.httpService.putItem<Player>(p).pipe(map((event)=> {
         if (event instanceof HttpResponse) {
