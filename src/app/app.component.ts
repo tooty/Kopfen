@@ -9,7 +9,6 @@ import { BehaviorSubject, Observable, of, skip, take } from 'rxjs';
 import { GameComponent } from './game/game.component';
 import { GraphComponent } from './graph/graph.component';
 import { TableComponent } from './table/table.component';
-import { WebsocketService } from './websocket.service';
 
 @Component({
     selector: 'app-root',
@@ -32,7 +31,6 @@ export class AppComponent {
 
   constructor(
     private store: Store<{ players: Player[] }>,
-    private websocketService: WebsocketService
   ) {
     this.$screen = this.screen.asObservable()
   }

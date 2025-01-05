@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "scharfkopf": {
+    "schafkopf": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/scharfkopf",
+            "outputPath": "dist/schafkopf",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "scharfkopf:build:production"
+              "buildTarget": "schafkopf:build:production"
             },
             "development": {
-              "buildTarget": "scharfkopf:build:development"
+              "buildTarget": "schafkopf:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -70,7 +70,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "scharfkopf:build"
+            "buildTarget": "schafkopf:build"
           }
         },
         "test": {
