@@ -5,6 +5,7 @@ import { ChartType, ChartConfiguration, Legend } from 'chart.js';
 import { HttpClientModule } from '@angular/common/http';
 import { merge, Observable, Subject, switchMap, of, tap } from 'rxjs';
 import { StoreModule, Store } from '@ngrx/store';
+import { WebSocketService } from '../services/web-socket.service';
 
 @Component({
     selector: 'app-graph',
@@ -55,6 +56,7 @@ export class GraphComponent {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   constructor(
+    private webSocketService: WebSocketService,
     private store: Store<{ players: Player[], table: number[][], sumTable: number[][] }>,
   ) {
     this.tableCost$ = this.store.select('table')
@@ -101,6 +103,7 @@ export class GraphComponent {
 
   ngOnInit() {
     this.buildData();
+    this.webSocketService.connect('ws://' + window.location.host + '/ws')
   }
 
   transpose(t: number[][]) {
