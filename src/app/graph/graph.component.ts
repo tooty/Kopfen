@@ -1,15 +1,13 @@
 import { Component, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { NgChartsModule, BaseChartDirective } from 'ng2-charts';
-import { Game, Player } from '../interfaces';
-import { ChartType, ChartConfiguration, Legend } from 'chart.js';
-import { HttpClientModule } from '@angular/common/http';
+import { Player } from '../interfaces';
+import { ChartConfiguration } from 'chart.js';
 import { merge, Observable, Subject, switchMap, of, tap } from 'rxjs';
 import { StoreModule, Store } from '@ngrx/store';
-import { WebSocketService } from '../services/web-socket.service';
 
 @Component({
     selector: 'app-graph',
-    imports: [HttpClientModule, NgChartsModule, StoreModule],
+    imports: [NgChartsModule, StoreModule],
     templateUrl: './graph.component.html',
     styleUrl: './graph.component.css'
 })
@@ -56,7 +54,6 @@ export class GraphComponent {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   constructor(
-    private webSocketService: WebSocketService,
     private store: Store<{ players: Player[], table: number[][], sumTable: number[][] }>,
   ) {
     this.tableCost$ = this.store.select('table')
@@ -103,7 +100,6 @@ export class GraphComponent {
 
   ngOnInit() {
     this.buildData();
-    this.webSocketService.connect('ws://' + window.location.host + '/ws')
   }
 
   transpose(t: number[][]) {

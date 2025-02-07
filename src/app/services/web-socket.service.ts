@@ -1,22 +1,35 @@
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { Store, StoreModule } from '@ngrx/store';
+import {pullGamesHttp} from '../store/game.action'
+import { Game, Player } from '../interfaces';
+import {Observable, retryWhen,switchMap, pipe, delay,of ,take} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
 
-  constructor() { }
 
-  private socket$!: WebSocketSubject<any>;
+  private socket: WebSocketSubject<any>;
+  public socket$: Observable<WebSocketSubject<any>>;
 
-  connect(url: string) {
-    this.socket$ = webSocket(url);
+  constructor(
+  ) {
+    this.socket = webSocket('wss://' + window.location.host + '/ws');
+    this.socket$ = this.socket.asObservable();
+    this.socket.pipe(
+      retryWhen(errors => errors.pipe(
+        switchMap((error, index) => {
+            const delayTime = Math.pow(2, index) * 1000; // Exponential backoff
+            console.error(`WebSocket disconnected. Retrying in ${delayTime}ms...`);
+            return of(error).pipe(delay(delayTime));
+          }),
+      )))
+  }
 
-    this.socket$.subscribe(
-      (msg) => console.log('message received: ' + msg),
-      (err) => console.error(err),
-      () => console.log('complete')
-    );
+  reconnect() {
+    this.socket = webSocket('wss://' + window.location.host + '/ws');
+    this.socket$ = this.socket.asObservable();
   }
 }
