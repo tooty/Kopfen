@@ -9,49 +9,51 @@ import { throwError } from 'rxjs';
 export class IndexDBService {
   private db: IDBDatabase | null = null;
 
-  constructor() { }
+  constructor() {}
 
-async reset(): Promise<boolean> {
-  if (!this.db) {
-    throw new Error('No IndexedDB instance available');
+  async reset(): Promise<boolean> {
+    if (!this.db) {
+      throw new Error('No IndexedDB instance available');
+    }
+
+    this.db.close();
+
+    return new Promise((resolve, reject) => {
+      const req = window.indexedDB.deleteDatabase('appState');
+
+      req.onerror = (ev) => {
+        reject(`IndexedDB deletion failed: ${ev.target}`);
+      };
+
+      req.onsuccess = async () => {
+        console.log('Initiaalizing IndexedDB database');
+        try {
+          await this.initDB();
+          resolve(true);
+        } catch (initError) {
+          reject(`IndexedDB initialization failed: ${initError}`);
+        }
+      };
+
+      req.onblocked = () => {
+        reject(
+          new Error('IndexedDB deletion was blocked by another connection.'),
+        );
+      };
+    });
   }
-
-  this.db.close();
-
-  return new Promise((resolve, reject) => {
-    const req = window.indexedDB.deleteDatabase('appState');
-
-    req.onerror = (ev) => {
-      reject(`IndexedDB deletion failed: ${ev.target}`);
-    };
-
-    req.onsuccess = async () => {
-      console.log('Initiaalizing IndexedDB database');
-      try {
-        await this.initDB();
-        resolve(true);
-      } catch (initError) {
-        reject(`IndexedDB initialization failed: ${initError}`);
-      }
-    };
-
-    req.onblocked = () => {
-      reject(new Error('IndexedDB deletion was blocked by another connection.'));
-    };
-  });
-}
 
   async saveGame(newGame: Game): Promise<boolean> {
     return new Promise((res, rej) => {
       if (this.db != null) {
         const trans = this.db.transaction('games', 'readwrite');
         let req = trans.objectStore('games').add(newGame);
-        req.onerror = () => rej("save Game Failed")
-        req.onsuccess = () => res(true)
+        req.onerror = () => rej('save Game Failed');
+        req.onsuccess = () => res(true);
       } else {
-        throw throwError(() => "no IndexDB")
+        throw throwError(() => 'no IndexDB');
       }
-    })
+    });
   }
 
   async savePlayer(newPlayer: Player): Promise<boolean> {
@@ -59,40 +61,48 @@ async reset(): Promise<boolean> {
       if (this.db != null) {
         const trans = this.db.transaction('players', 'readwrite');
         let req = trans.objectStore('players').add(newPlayer);
-        req.onerror = (ev) => rej("save Player Failed" + ev.target)
+        req.onerror = (ev) => rej('save Player Failed' + ev.target);
         req.onsuccess = () => res(true);
       } else {
-        throw throwError(() => "no IndexDB")
+        throw throwError(() => 'no IndexDB');
       }
-    })
+    });
   }
 
-  async replacePlayer(newPlayer: Player): Promise<boolean>{
-    return new Promise<boolean>((res)=> {
+  async replacePlayer(newPlayer: Player): Promise<boolean> {
+    return new Promise<boolean>((res) => {
       if (this.db != null) {
         const trans = this.db.transaction('players', 'readwrite');
-        let req = trans.objectStore('players').getAll()
+        let req = trans.objectStore('players').getAll();
         req.onsuccess = () => {
-          let myres = req.result as Player[]
-          let oldKey = myres.find(x=> x.name == newPlayer.name)?.name
+          let myres = req.result as Player[];
+          let oldKey = myres.find((x) => x.name == newPlayer.name)?.name;
           if (oldKey != null) {
-            let mytrans = trans.objectStore('players').delete(oldKey)
-              mytrans.onsuccess = (r)=>{
-              this.savePlayer(newPlayer).catch(()=>{throw Error}).then(()=>
-                res(true)
-              )
-            }
-            mytrans.onerror = (e) => {throw Error(e.type)}
-          }else{throw Error}
-        }
+            let mytrans = trans.objectStore('players').delete(oldKey);
+            mytrans.onsuccess = (r) => {
+              this.savePlayer(newPlayer)
+                .catch(() => {
+                  throw Error;
+                })
+                .then(() => res(true));
+            };
+            mytrans.onerror = (e) => {
+              throw Error(e.type);
+            };
+          } else {
+            throw Error;
+          }
+        };
       }
-    })
+    });
   }
 
   async initDB(): Promise<void> {
     return new Promise((res) => {
       let request = indexedDB.open('appState', 2);
-      request.onerror = (ev) => { throw Error(JSON.stringify(ev)) };
+      request.onerror = (ev) => {
+        throw Error(JSON.stringify(ev));
+      };
 
       request.onupgradeneeded = () => {
         this.db = request.result;
@@ -110,9 +120,11 @@ async reset(): Promise<boolean> {
           });
         }
       };
-      request.onsuccess = () => { this.db = request.result; res(); }
-    }
-    )
+      request.onsuccess = () => {
+        this.db = request.result;
+        res();
+      };
+    });
   }
 
   async readPlayers(): Promise<Player[]> {

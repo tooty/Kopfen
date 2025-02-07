@@ -13,8 +13,8 @@ export interface Player {
 
 export enum Screen {
   //component templates use order indexes
-  player,//0
-  table,//1
-  game,//2
-  graph//3
+  player, //0
+  table, //1
+  game, //2
+  graph, //3
 }

@@ -14,27 +14,30 @@ import { StoreModule, Store } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { validateGame } from '../store/game.action';
 
-
 @Component({
-    selector: 'app-game',
-    imports: [StoreModule, HttpClientModule, CommonModule, DragDropModule, FormsModule],
-    templateUrl: './game.component.html',
-    styleUrl: './game.component.css'
+  selector: 'app-game',
+  imports: [
+    StoreModule,
+    HttpClientModule,
+    CommonModule,
+    DragDropModule,
+    FormsModule,
+  ],
+  templateUrl: './game.component.html',
+  styleUrl: './game.component.css',
 })
 export class GameComponent {
   players: { p: Player; c: number }[] = [];
   loosers: { p: Player; c: number }[] = [];
   winners: { p: Player; c: number }[] = [];
   amount = 10;
-  players$: Observable<Player[]>
-  @Output() $game: Observable<Game | null>
-  game = new BehaviorSubject<Game | null>(null)
+  players$: Observable<Player[]>;
+  @Output() $game: Observable<Game | null>;
+  game = new BehaviorSubject<Game | null>(null);
 
-  constructor(
-    private store: Store<{ players: Player[] }>,
-  ) {
-    this.$game = this.game.asObservable()
-    this.players$ = this.store.select('players')
+  constructor(private store: Store<{ players: Player[] }>) {
+    this.$game = this.game.asObservable();
+    this.players$ = this.store.select('players');
     this.players$.subscribe((data) => {
       this.players = data.map((p) => {
         return { p: p, c: 0 };
@@ -76,8 +79,8 @@ export class GameComponent {
       this.winners.length < 1 ||
       this.loosers.length < 1
     ) {
-      this.game.next(null)
-      return
+      this.game.next(null);
+      return;
     }
     let involved: { playerID: string; winner: boolean }[] = [];
     this.winners.forEach((x) =>
@@ -86,11 +89,16 @@ export class GameComponent {
     this.loosers.forEach((x) =>
       involved.push({ playerID: x.p.id, winner: false }),
     );
-    this.game.next({ cost: this.amount, involved: involved, time: Date.now(), synced: false });
+    this.game.next({
+      cost: this.amount,
+      involved: involved,
+      time: Date.now(),
+      synced: false,
+    });
   }
 
   updateCost() {
-    this.constructGame()
+    this.constructGame();
     if (this.game.value != null) {
       this.winners.forEach(
         (p) => (p.c = this.gameCost(this.game.value!, p.p) ?? 0),
@@ -132,9 +140,8 @@ export class GameComponent {
   addGame() {
     const myGame = this.constructGame();
     if (myGame == null) {
-      return
+      return;
     }
-    this.store.dispatch(validateGame(myGame))
+    this.store.dispatch(validateGame(myGame));
   }
 }
-

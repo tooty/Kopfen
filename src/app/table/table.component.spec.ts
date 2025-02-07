@@ -1,31 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideMockStore,MockStore } from '@ngrx/store/testing';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { TableComponent } from './table.component';
-import {Player, Game} from '../interfaces'
+import { Player, Game } from '../interfaces';
 import { Store } from '@ngrx/store';
 
 describe('TableComponent', () => {
   let component: TableComponent;
   let fixture: ComponentFixture<TableComponent>;
-  let store: MockStore<{ players: Player[], game: Game[] }>
-  const ps: Player[] = [{name: "player", id: "myid", synced: false}]
-  const gs: Game[] = [{
-    time: 1000,
-    cost: 10,
-    synced: false,
-    involved: [{ playerID: "myid", winner: true}]}]
+  let store: MockStore<{ players: Player[]; game: Game[] }>;
+  const ps: Player[] = [{ name: 'player', id: 'myid', synced: false }];
+  const gs: Game[] = [
+    {
+      time: 1000,
+      cost: 10,
+      synced: false,
+      involved: [{ playerID: 'myid', winner: true }],
+    },
+  ];
 
-  const players = {selector: "player", value: ps}
-  const games = {selector: "game" , value: gs}
+  const players = { selector: 'player', value: ps };
+  const games = { selector: 'game', value: gs };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TableComponent],
-      providers: [
-        provideMockStore({selectors: [players, games]}),
-      ]
+      providers: [provideMockStore({ selectors: [players, games] })],
     }).compileComponents();
-    store = TestBed.inject(MockStore)
+    store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(TableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

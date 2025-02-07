@@ -10,7 +10,7 @@ describe('GraphComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GraphComponent],
-      providers: [provideMockStore()]
+      providers: [provideMockStore()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GraphComponent);

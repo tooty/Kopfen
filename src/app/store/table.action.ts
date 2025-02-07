@@ -1,6 +1,15 @@
-import { createAction, props } from '@ngrx/store'
+import { createAction, props } from '@ngrx/store';
 
-export const regenTable = createAction('[Effects] Regenerate Table')
-export const regenTableSum = createAction('[Effects] Regenerate Sum Table',props<{table: number[][]}>())
-export const storeTable = createAction('[Table Effects] Store Table',props<{table: number[][]}>())
-export const storeSumTable = createAction('[Table Effects] Store Sum Table',props<{table: number[][]}>())
+export const regenTable = createAction('[Effects] Regenerate Table');
+export const regenTableSum = createAction(
+  '[Effects] Regenerate Sum Table',
+  props<{ table: number[][] }>(),
+);
+export const storeTable = createAction(
+  '[Table Effects] Store Table',
+  props<{ table: number[][] }>(),
+);
+export const storeSumTable = createAction(
+  '[Table Effects] Store Sum Table',
+  props<{ table: number[][] }>(),
+);

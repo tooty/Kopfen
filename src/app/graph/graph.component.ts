@@ -6,20 +6,20 @@ import { merge, Observable, Subject, switchMap, of, tap } from 'rxjs';
 import { StoreModule, Store } from '@ngrx/store';
 
 @Component({
-    selector: 'app-graph',
-    imports: [NgChartsModule, StoreModule],
-    templateUrl: './graph.component.html',
-    styleUrl: './graph.component.css'
+  selector: 'app-graph',
+  imports: [NgChartsModule, StoreModule],
+  templateUrl: './graph.component.html',
+  styleUrl: './graph.component.css',
 })
 export class GraphComponent {
-  tableSum$: Observable<number[][]>
-  tableSum: number[][] = []
-  tableCost$: Observable<number[][]>
-  tableCost: number[][] = []
-  regenObs = new Subject<void>
+  tableSum$: Observable<number[][]>;
+  tableSum: number[][] = [];
+  tableCost$: Observable<number[][]>;
+  tableCost: number[][] = [];
+  regenObs = new Subject<void>();
 
-  players$: Observable<Player[]>
-  players: Player[] = []
+  players$: Observable<Player[]>;
+  players: Player[] = [];
 
   @Input() isLandscape: boolean = false;
 
@@ -47,28 +47,38 @@ export class GraphComponent {
       },
       legend: {
         position: 'left',
-        display: this.isLandscape
+        display: this.isLandscape,
       },
     },
   };
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   constructor(
-    private store: Store<{ players: Player[], table: number[][], sumTable: number[][] }>,
+    private store: Store<{
+      players: Player[];
+      table: number[][];
+      sumTable: number[][];
+    }>,
   ) {
-    this.tableCost$ = this.store.select('table')
-    this.tableSum$ = this.store.select('sumTable')
-    this.players$ = this.store.select('players')
+    this.tableCost$ = this.store.select('table');
+    this.tableSum$ = this.store.select('sumTable');
+    this.players$ = this.store.select('players');
     merge(
-      this.tableSum$.pipe(tap(x => this.tableSum = x)),
-      this.players$.pipe(tap(x => this.players = x)),
-      this.tableCost$.pipe(tap(x => this.tableCost = x)),
-    ).pipe(switchMap(() => { this.buildData(); return of(null) }))
-      .subscribe()
+      this.tableSum$.pipe(tap((x) => (this.tableSum = x))),
+      this.players$.pipe(tap((x) => (this.players = x))),
+      this.tableCost$.pipe(tap((x) => (this.tableCost = x))),
+    )
+      .pipe(
+        switchMap(() => {
+          this.buildData();
+          return of(null);
+        }),
+      )
+      .subscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes["isLandscape"]) {
+    if (changes['isLandscape']) {
       this.lineChartOptions = {
         maintainAspectRatio: false,
         elements: {
@@ -90,7 +100,7 @@ export class GraphComponent {
           },
           legend: {
             position: 'left',
-            display: this.isLandscape
+            display: this.isLandscape,
           },
         },
       };
@@ -106,7 +116,7 @@ export class GraphComponent {
     let trans: number[][] = [];
     if (t?.length ?? 0 >= 1) {
       trans = t[0].map((col, i) => {
-        return t.map((row) => row[i])
+        return t.map((row) => row[i]);
       });
     }
     return trans;
@@ -121,7 +131,7 @@ export class GraphComponent {
         data: x,
         type: 'line',
         label: this.players[i]?.name.toString(),
-        borderColor: "hsla(" + i * 80 + ", 60%, 70%, 0.7)",
+        borderColor: 'hsla(' + i * 80 + ', 60%, 70%, 0.7)',
         fill: 'origin',
       };
     });
@@ -131,7 +141,7 @@ export class GraphComponent {
         data: x,
         type: 'bar',
         hidden: true,
-        backgroundColor: "hsla(" + i * 80 + ", 60%, 70%, 0.9)",
+        backgroundColor: 'hsla(' + i * 80 + ', 60%, 70%, 0.9)',
         label: '𝚫 ' + this.players[i].name.toString(),
       };
     });

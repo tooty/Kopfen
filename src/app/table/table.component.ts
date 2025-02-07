@@ -9,42 +9,48 @@ import { StoreModule, Store } from '@ngrx/store';
 import { OverscrollDirective } from '../overscroll.directive';
 
 @Component({
-    selector: 'app-table',
-    imports: [OverscrollDirective, StoreModule, HttpClientModule, CommonModule, GraphComponent],
-    templateUrl: './table.component.html',
-    styleUrl: './table.component.css'
+  selector: 'app-table',
+  imports: [
+    OverscrollDirective,
+    StoreModule,
+    HttpClientModule,
+    CommonModule,
+    GraphComponent,
+  ],
+  templateUrl: './table.component.html',
+  styleUrl: './table.component.css',
 })
 export class TableComponent {
-  players$: Observable<Player[]>
-  games$: Observable<Game[]>
-  table$: Observable<number[][]>
-  sum$: Observable<number[][]>
-  loading$ = new Observable<boolean>
+  players$: Observable<Player[]>;
+  games$: Observable<Game[]>;
+  table$: Observable<number[][]>;
+  sum$: Observable<number[][]>;
+  loading$ = new Observable<boolean>();
   isLandscape = false;
   isTablet = false;
 
   fun(ev: any) {
-    this.loading$ = of(true)
-    setTimeout(() => this.loading$ = of(false), 1000)
+    this.loading$ = of(true);
+    setTimeout(() => (this.loading$ = of(false)), 1000);
   }
 
   constructor(
     private store: Store<{
-      table: number[][], sumTable: number[][],
-      players: Player[], game: Game[]
+      table: number[][];
+      sumTable: number[][];
+      players: Player[];
+      game: Game[];
     }>,
   ) {
-    this.table$ = this.store.select('table')
-    this.sum$ = this.store.select('sumTable')
-    this.players$ = this.store.select('players')
-    this.games$ = this.store.select('game')
+    this.table$ = this.store.select('table');
+    this.sum$ = this.store.select('sumTable');
+    this.players$ = this.store.select('players');
+    this.games$ = this.store.select('game');
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   color(i: number): string {
-    return "color:hsla(" + i * 80 + ", 60%, 70%, 1)"
+    return 'color:hsla(' + i * 80 + ', 60%, 70%, 1)';
   }
-
 }

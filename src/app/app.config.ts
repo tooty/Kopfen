@@ -15,9 +15,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: (indexDBService: IndexDBService) => () => indexDBService.initDB(),
+      useFactory: (indexDBService: IndexDBService) => () =>
+        indexDBService.initDB(),
       deps: [IndexDBService],
-      multi: true
+      multi: true,
     },
     provideHttpClient(),
     provideStore(),
@@ -32,6 +33,6 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    provideEffects()
+    provideEffects(),
   ],
 };

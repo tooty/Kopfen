@@ -1,122 +1,161 @@
-import { Injectable } from '@angular/core'
-import { IndexDBService } from '../services/index-db.service'
-import {tap, from, catchError, map, of, withLatestFrom, mergeMap, Observable, concatMap } from 'rxjs'
-import { exhaustMap } from 'rxjs'
-import { createEffect, Actions, ofType } from '@ngrx/effects'
-import { Store, select } from '@ngrx/store'
-import { Game } from '../interfaces'
-import * as GameAction from './game.action'
-import * as PlayerAction from './player.action'
-import * as TableAction  from './table.action'
-import { HttpService } from '../services/http.service'
+import { Injectable } from '@angular/core';
+import { IndexDBService } from '../services/index-db.service';
+import {
+  tap,
+  from,
+  catchError,
+  map,
+  of,
+  withLatestFrom,
+  mergeMap,
+  Observable,
+  concatMap,
+} from 'rxjs';
+import { exhaustMap } from 'rxjs';
+import { createEffect, Actions, ofType } from '@ngrx/effects';
+import { Store, select } from '@ngrx/store';
+import { Game } from '../interfaces';
+import * as GameAction from './game.action';
+import * as PlayerAction from './player.action';
+import * as TableAction from './table.action';
+import { HttpService } from '../services/http.service';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class GameEffects {
-
   constructor(
     private actions$: Actions,
     private indexDbService: IndexDBService,
     private httpService: HttpService,
-    private store: Store<{ game: Game[] }>
-  ) { }
+    private store: Store<{ game: Game[] }>,
+  ) {}
 
-  loadIndexDbGame$ = createEffect(() => this.actions$.pipe(
-    ofType(GameAction.loadIndexDbGame),
-    exhaustMap(() => from(this.indexDbService.readGames()).pipe(
-        concatMap((games) => [
-          GameAction.setGameStorage({ payload: games }),
-          GameAction.httpSyncGameStorage(),
-          TableAction.regenTable(),
-        ]),
-        catchError((e) => of({ type: '[App] Load Game Error', e }))
-    )
-    )
-  ))
+  loadIndexDbGame$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameAction.loadIndexDbGame),
+      exhaustMap(() =>
+        from(this.indexDbService.readGames()).pipe(
+          concatMap((games) => [
+            GameAction.setGameStorage({ payload: games }),
+            GameAction.httpSyncGameStorage(),
+            TableAction.regenTable(),
+          ]),
+          catchError((e) => of({ type: '[App] Load Game Error', e })),
+        ),
+      ),
+    ),
+  );
 
-  setIndexDbGame$ = createEffect(() => this.actions$.pipe(
-    ofType(GameAction.storeIndexDB),
-    exhaustMap((g) => from(this.indexDbService.saveGame(g))
-      .pipe(
-        concatMap(() => [
-          GameAction.storeGame(g),
-          GameAction.httpSyncGameStorage(),
-          TableAction.regenTable()
-        ]),
-        catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
-      )
-    )
-  ))
+  setIndexDbGame$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameAction.storeIndexDB),
+      exhaustMap((g) =>
+        from(this.indexDbService.saveGame(g)).pipe(
+          concatMap(() => [
+            GameAction.storeGame(g),
+            GameAction.httpSyncGameStorage(),
+            TableAction.regenTable(),
+          ]),
+          catchError((e) =>
+            of({ type: '[indexDBService] Save Game Error', e }),
+          ),
+        ),
+      ),
+    ),
+  );
 
-  resetIndexDb$ = createEffect(() => this.actions$.pipe(
-    ofType(GameAction.resetLocalGames),
-    exhaustMap(() => from(this.indexDbService.reset())
-      .pipe(
-        map(() => TableAction.regenTable())
-        , catchError((e) => of({ type: '[indexDBService] Reset IndexDB Error', e }))
-      )
-    )
-  ))
+  resetIndexDb$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameAction.resetLocalGames),
+      exhaustMap(() =>
+        from(this.indexDbService.reset()).pipe(
+          map(() => TableAction.regenTable()),
+          catchError((e) =>
+            of({ type: '[indexDBService] Reset IndexDB Error', e }),
+          ),
+        ),
+      ),
+    ),
+  );
 
-  validateGame$ = createEffect(() => this.actions$.pipe(
-    ofType(GameAction.validateGame),
-    withLatestFrom(this.store.pipe(select('game'))),
-    exhaustMap((newAndCurr) => this.gameIsValid(newAndCurr[0], newAndCurr[1])
-      .pipe(
-        map((g) => GameAction.storeIndexDB(g)),
-        catchError((e) => of({ type: '[Game Effect] Game Not Valid', e }))
-      )
-    )
-  ))
+  validateGame$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameAction.validateGame),
+      withLatestFrom(this.store.pipe(select('game'))),
+      exhaustMap((newAndCurr) =>
+        this.gameIsValid(newAndCurr[0], newAndCurr[1]).pipe(
+          map((g) => GameAction.storeIndexDB(g)),
+          catchError((e) => of({ type: '[Game Effect] Game Not Valid', e })),
+        ),
+      ),
+    ),
+  );
 
   //Take all games that are not synced and push them to the server
-  httpPushGame$ = createEffect(() => this.actions$.pipe(
-    ofType(GameAction.httpSyncGameStorage),
-    withLatestFrom(this.store.pipe(select('game'))),
-    exhaustMap((gs) => this.mergeMapPushGames(gs[1])
-      .pipe(
-        map((g) => GameAction.gameSynced(g)),
-        catchError((e) => of({ type: '[Game Effect] Http Put Failed', e }))
-      )
-    )
-  ))
+  httpPushGame$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameAction.httpSyncGameStorage),
+      withLatestFrom(this.store.pipe(select('game'))),
+      exhaustMap((gs) =>
+        this.mergeMapPushGames(gs[1]).pipe(
+          map((g) => GameAction.gameSynced(g)),
+          catchError((e) => of({ type: '[Game Effect] Http Put Failed', e })),
+        ),
+      ),
+    ),
+  );
 
   mergeMapPushGames(games: Game[]): Observable<Game> {
     //Make push Request for all games and return
-    return from(games.filter(x => x.synced == false)).pipe(
-      mergeMap((g) => this.httpService.putItem(g).pipe(
-        catchError((e) => e), map(() => g)))
-    )
+    return from(games.filter((x) => x.synced == false)).pipe(
+      mergeMap((g) =>
+        this.httpService.putItem(g).pipe(
+          catchError((e) => e),
+          map(() => g),
+        ),
+      ),
+    );
   }
 
-  pullGamesHttp$ = createEffect(() => this.actions$.pipe(
-    ofType(GameAction.pullGamesHttp),
-    exhaustMap((scope) => from(this.httpService.getGames(scope.start, scope.end).pipe(
-        concatMap((games) =>[
-          ...games.map((game) => GameAction.handlePullResponse(game)),
-          TableAction.regenTable()
-        ]),
-        catchError((e) => of({ type: '[Game Effects] Pull Games Error', e })),
-      )
-    )
-    )
-  ))
+  pullGamesHttp$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameAction.pullGamesHttp),
+      exhaustMap((scope) =>
+        from(
+          this.httpService.getGames(scope.start, scope.end).pipe(
+            concatMap((games) => [
+              ...games.map((game) => GameAction.handlePullResponse(game)),
+              TableAction.regenTable(),
+            ]),
+            catchError((e) =>
+              of({ type: '[Game Effects] Pull Games Error', e }),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 
-  handlePullResponse$ = createEffect(() => this.actions$.pipe(
-    ofType(GameAction.handlePullResponse),
-    concatMap((game) => from(this.indexDbService.saveGame(game))
-      .pipe(
-        mergeMap(() => [
-          PlayerAction.newHttpPulledGame({ payload: game.involved.map((x)=>x.playerID) }),
-        ]),
-        catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
-      )
-    )
-  ))
+  handlePullResponse$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(GameAction.handlePullResponse),
+      concatMap((game) =>
+        from(this.indexDbService.saveGame(game)).pipe(
+          mergeMap(() => [
+            PlayerAction.newHttpPulledGame({
+              payload: game.involved.map((x) => x.playerID),
+            }),
+          ]),
+          catchError((e) =>
+            of({ type: '[indexDBService] Save Game Error', e }),
+          ),
+        ),
+      ),
+    ),
+  );
 
   gameIsValid(game: Game, state: Game[]): Observable<Game> {
-    return of(game)
+    return of(game);
   }
 }

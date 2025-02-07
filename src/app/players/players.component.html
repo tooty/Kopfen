@@ -25,7 +25,7 @@
   </form>
   <div
     class="bg-indigo-950 text-sky-300 text-center rounded-full p-1 my-2"
-    *ngFor="let player of players$ | async "
+    *ngFor="let player of players$ | async"
   >
     {{ player.name }}
   </div>
@@ -34,9 +34,12 @@
       (click)="loadGames(datepicker.value)"
       class="text-sky-200 px-3 rounded-tl-md rounded-bl-md bg-indigo-950 hover:bg-indigo-600 focus:outline-none focus:ring focus:border-green-300 justify-center"
     >
-    Spiele Laden seit
+      Spiele Laden seit
     </button>
-    <input #datepicker type="date" class=" w-2/3 text-sky-400 bg-indigo-900 px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+    <input
+      #datepicker
+      type="date"
+      class="w-2/3 text-sky-400 bg-indigo-900 px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+    />
   </div>
 </div>
-

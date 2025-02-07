@@ -1,25 +1,29 @@
-import { HttpClient, HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpEvent,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Game, Player } from '../interfaces';
-import {Observable, catchError, pipe, tap } from 'rxjs';
+import { Observable, catchError, pipe, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class HttpService {
   private url = 'api';
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
-  putItem<T extends Game | Player>(item: Game | Player): Observable<HttpEvent<T>> {
-    const url: string = this.url + ("time" in item ? "/game" : "/player")
-    return this.http
-      .put<HttpEvent<T>>(url, item, this.httpOptions)
+  putItem<T extends Game | Player>(
+    item: Game | Player,
+  ): Observable<HttpEvent<T>> {
+    const url: string = this.url + ('time' in item ? '/game' : '/player');
+    return this.http.put<HttpEvent<T>>(url, item, this.httpOptions);
   }
 
   getPlayer(id: string): Observable<Player> {

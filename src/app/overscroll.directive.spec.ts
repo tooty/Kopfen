@@ -1,7 +1,5 @@
 import { OverscrollDirective } from './overscroll.directive';
 
 describe('OverscrollDirective', () => {
-  it('should create an instance', () => {
-  });
-
+  it('should create an instance', () => {});
 });

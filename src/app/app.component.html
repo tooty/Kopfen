@@ -1,38 +1,44 @@
-<nav *ngIf="!isLandscape" class="flex justify-between text-sky-400 *:px-6 *:py-3"
-  [ngSwitch]="($screen|async)"
+<nav
+  *ngIf="!isLandscape"
+  class="flex justify-between text-sky-400 *:px-6 *:py-3"
+  [ngSwitch]="$screen | async"
 >
   <button
-    (click)=screen.next(1)
+    (click)="screen.next(1)"
     *ngSwitchCase="0"
-    [disabled]="(($playersCount|async)?? 0) <= 3"
+    [disabled]="(($playersCount | async) ?? 0) <= 3"
     class="ml-auto active:text-sky-50 disabled:text-sky-800"
   >
-  Fertig
+    Fertig
   </button>
   <ng-container *ngSwitchCase="1">
-    <button class="active:text-sky-50" (click)="screen.next(0)">
-      Spieler
-    </button>
-    <button
-      class="text-xl  active:text-sky-50"
-      (click)="screen.next(2)"
-    >
+    <button class="active:text-sky-50" (click)="screen.next(0)">Spieler</button>
+    <button class="text-xl active:text-sky-50" (click)="screen.next(2)">
       +
     </button>
   </ng-container>
   <ng-container *ngSwitchCase="2">
-  <button  (click)="screen.next(1)" class="active:text-sky-50">
-    Abbrechen
-  </button>
-  <button [disabled]="game == null" class="disabled:text-sky-800 active:text-sky-50" (click)="dispatchGame()">
-    Hinzufügen
-  </button>
+    <button (click)="screen.next(1)" class="active:text-sky-50">
+      Abbrechen
+    </button>
+    <button
+      [disabled]="game == null"
+      class="disabled:text-sky-800 active:text-sky-50"
+      (click)="dispatchGame()"
+    >
+      Hinzufügen
+    </button>
   </ng-container>
 </nav>
-<div *ngIf="!isLandscape" #display class="h-screen" [ngSwitch]="$screen|async">
-    <app-players *ngSwitchCase="0"></app-players>
-    <app-table *ngSwitchCase="1"></app-table>
-    <app-game ($game)="game=$event" *ngSwitchCase="2"></app-game>
-    <app-graph [isLandscape]=isLandscape *ngSwitchCase="3"></app-graph>
+<div
+  *ngIf="!isLandscape"
+  #display
+  class="h-screen"
+  [ngSwitch]="$screen | async"
+>
+  <app-players *ngSwitchCase="0"></app-players>
+  <app-table *ngSwitchCase="1"></app-table>
+  <app-game ($game)="game = $event" *ngSwitchCase="2"></app-game>
+  <app-graph [isLandscape]="isLandscape" *ngSwitchCase="3"></app-graph>
 </div>
-<app-graph *ngIf=isLandscape [isLandscape]=isLandscape></app-graph>
+<app-graph *ngIf="isLandscape" [isLandscape]="isLandscape"></app-graph>
