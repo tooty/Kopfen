@@ -61,14 +61,15 @@ export class PlayersEffects {
 
   resetIndexDb$ = createEffect(() => this.actions$.pipe(
     ofType(PlayerAction.resetLocal),
-    exhaustMap(() => from(this.indexDbService.reset())
-      .pipe(
-        mergeMap(() => [
-          resetLocalGames(),
-        ])
-        , catchError((e) => of({ type: '[indexDBService] Reset IndexDB Error', e }))
-      )
-    )
+      exhaustMap(() => {
+          from(this.indexDbService.reset()).pipe(
+            map(() => ({ type: '[Players Effect] IndexDb Reset Complete' })),
+            catchError((reason) => of({ type: '[Players Effect] IndexDb Reset Failed', reason}))
+          )
+          return of(resetLocalGames()).pipe(
+            catchError((reason) => of({ type: '[Players Effect] Game Reset Failed', reason }))
+          )
+      })
   ))
 
   validatePlayer$ = createEffect(() => this.actions$.pipe(

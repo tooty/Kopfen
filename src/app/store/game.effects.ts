@@ -6,9 +6,9 @@ import { createEffect, Actions, ofType } from '@ngrx/effects'
 import { Store, select } from '@ngrx/store'
 import { Game } from '../interfaces'
 import * as GameAction from './game.action'
-import * as PlayerActin from './player.action'
+import * as PlayerAction from './player.action'
+import * as TableAction  from './table.action'
 import { HttpService } from '../services/http.service'
-import { regenTable } from './table.action'
 
 @Injectable({
   providedIn: 'root',
@@ -25,15 +25,14 @@ export class GameEffects {
 
   loadIndexDbGame$ = createEffect(() => this.actions$.pipe(
     ofType(GameAction.loadIndexDbGame),
-    exhaustMap(() => from(this.indexDbService.readGames())
-      .pipe(
-        mergeMap((games) => from([
-          GameAction.loadIndexDBGameSuccess({ payload: games }),
-          GameAction.httpSyncGame(),
-          regenTable()
-        ])),
+    exhaustMap(() => from(this.indexDbService.readGames()).pipe(
+        concatMap((games) => [
+          GameAction.setGameStorage({ payload: games }),
+          GameAction.httpSyncGameStorage(),
+          TableAction.regenTable(),
+        ]),
         catchError((e) => of({ type: '[App] Load Game Error', e }))
-      )
+    )
     )
   ))
 
@@ -41,11 +40,11 @@ export class GameEffects {
     ofType(GameAction.storeIndexDB),
     exhaustMap((g) => from(this.indexDbService.saveGame(g))
       .pipe(
-        mergeMap(() => from([
-          GameAction.storeStore(g),
-          GameAction.httpSyncGame(),
-          regenTable()
-        ])),
+        concatMap(() => [
+          GameAction.storeGame(g),
+          GameAction.httpSyncGameStorage(),
+          TableAction.regenTable()
+        ]),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
       )
     )
@@ -55,7 +54,7 @@ export class GameEffects {
     ofType(GameAction.resetLocalGames),
     exhaustMap(() => from(this.indexDbService.reset())
       .pipe(
-        map(() => regenTable())
+        map(() => TableAction.regenTable())
         , catchError((e) => of({ type: '[indexDBService] Reset IndexDB Error', e }))
       )
     )
@@ -72,12 +71,13 @@ export class GameEffects {
     )
   ))
 
-  httpPushGames$ = createEffect(() => this.actions$.pipe(
-    ofType(GameAction.httpSyncGame),
+  //Take all games that are not synced and push them to the server
+  httpPushGame$ = createEffect(() => this.actions$.pipe(
+    ofType(GameAction.httpSyncGameStorage),
     withLatestFrom(this.store.pipe(select('game'))),
-    exhaustMap((ps) => this.mergeMapPushGames(ps[1])
+    exhaustMap((gs) => this.mergeMapPushGames(gs[1])
       .pipe(
-        map((p) => GameAction.gameSynced(p)),
+        map((g) => GameAction.gameSynced(g)),
         catchError((e) => of({ type: '[Game Effect] Http Put Failed', e }))
       )
     )
@@ -93,11 +93,12 @@ export class GameEffects {
 
   pullGamesHttp$ = createEffect(() => this.actions$.pipe(
     ofType(GameAction.pullGamesHttp),
-    exhaustMap((scope) => from(this.httpService.getGames(scope.start, scope.end)
-      .pipe(
-        concatMap((games) => from(games)),
-        map((game) => GameAction.handlePullResponse(game)),
-        catchError((e) => of({ type: '[Game Effects] Pull Games Error', e }))
+    exhaustMap((scope) => from(this.httpService.getGames(scope.start, scope.end).pipe(
+        concatMap((games) =>[
+          ...games.map((game) => GameAction.handlePullResponse(game)),
+          TableAction.regenTable()
+        ]),
+        catchError((e) => of({ type: '[Game Effects] Pull Games Error', e })),
       )
     )
     )
@@ -107,20 +108,15 @@ export class GameEffects {
     ofType(GameAction.handlePullResponse),
     concatMap((game) => from(this.indexDbService.saveGame(game))
       .pipe(
-        mergeMap(() => from([
-          PlayerActin.newHttpPulledGame({ payload: game.involved.map((x)=>x.playerID) }),
-          GameAction.storeStore(game),
-          regenTable()
-        ])),
+        mergeMap(() => [
+          PlayerAction.newHttpPulledGame({ payload: game.involved.map((x)=>x.playerID) }),
+        ]),
         catchError((e) => of({ type: '[indexDBService] Save Game Error', e }))
       )
     )
   ))
 
-
-
   gameIsValid(game: Game, state: Game[]): Observable<Game> {
     return of(game)
   }
-
 }

@@ -6,10 +6,9 @@ export const initialState: ReadonlyArray<Player> = []
 
 export const playerReducer = createReducer(
   initialState,
-
   on(pa.storePlayer, (state, p) => [...state, p]),
   on(pa.resetLocal, () => initialState),
-  on(pa.addPlayersStore, (_,p) => p.payload),
+  on(pa.addPlayersStore, (state,p) => [...state, ...p.payload]),
   on(pa.replacePlayer, (state, p) => {
     const newState = state.filter(x=>x.name != p.name);
     return [...newState, p]

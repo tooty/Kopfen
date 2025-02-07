@@ -7,9 +7,9 @@ export const initialState: ReadonlyArray<Game> = []
 export const gameReducer = createReducer(
   initialState,
 
-  on(ga.storeStore, (state, g) => [...state, g]),
+  on(ga.storeGame, (state, g) => [...state, g]),
   on(ga.resetLocalGames, () => initialState),
-  on(ga.loadIndexDBGameSuccess, (_,p) => p.payload),
+  on(ga.setGameStorage, (_,p) => p.payload),
   on(ga.gameSynced, (state,p) => {
     let copy = {...p}
     copy.synced = !copy.synced

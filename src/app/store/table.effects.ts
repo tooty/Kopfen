@@ -16,49 +16,49 @@ export class TableEffects {
     private store: Store<{ game: Game[], players: Player[] }>
   ) { }
 
-  regenTabel$ = createEffect(() => this.actions$.pipe(
+  regenTable$ = createEffect(() => this.actions$.pipe(
     ofType(regenTable),
     withLatestFrom(this.store.pipe(select('game'))),
     withLatestFrom(this.store.pipe(select('players'))),
-    exhaustMap((data) => this.genTabel(data[0][1], data[1])
+    exhaustMap((data) => this.genTable(data[0][1], data[1])
       .pipe(
         mergeMap((t) => [
           regenTableSum({ table: t }),
           storeTable({ table: t })
         ]),
-        catchError((e) => of({ type: '[Table Effects] Generting Table', e }))
+        catchError((e) => of({ type: '[Table Effects] Generating Table', e }))
       )
     )))
 
-  regenSumTabel$ = createEffect(() => this.actions$.pipe(
+  regenSumTable$ = createEffect(() => this.actions$.pipe(
     ofType(regenTableSum),
     exhaustMap((data) => this.genSum(data.table)
       .pipe(
         map((t) => storeSumTable({ table: t }))
-        , catchError((e) => of({ type: '[Table Effects] Generting Sum Table', e }))
+        , catchError((e) => of({ type: '[Table Effects] Generating Sum Table', e }))
       )
     )))
 
-  genTabel(games: Game[], players: Player[]): Observable<number[][]> {
+  genTable(games: Game[], players: Player[]): Observable<number[][]> {
     let table: number[][] = [];
-    games.sort((a,b)=>a.time - b.time)
-    for (let i = 0; i < games.length; i++) {
-      table[i] = players.map((p) => this.gameCost(games[i], p)!);
+    let games_copy = [...games]
+    games_copy.sort((a,b)=>a.time - b.time)
+    for (let i = 0; i < games_copy.length; i++) {
+      table[i] = players.map((p) => this.gameCost(games_copy[i], p)!);
     }
     return of(table)
   }
 
   genSum(costTable: number[][]): Observable<number[][]> {
     let table: number[][] = [];
-    let prvious: number[];
+    let previous: number[];
     table = costTable.map((x, index: number) => {
       if (index == 0) {
-        prvious = x;
-        return prvious;
+        previous = x;
+        return previous;
       }
-      //vector prvious, x)
-      prvious = prvious.map((y, j) => y + x[j]);
-      return prvious;
+      previous = previous.map((y, j) => y + x[j]);
+      return previous;
     });
     return of(table)
   }
@@ -72,12 +72,12 @@ export class TableEffects {
       }
     });
 
-    const serchedPlayer = game.involved.find((x) => x.playerID == player.id);
-    if (serchedPlayer == undefined) {
+    const searchedPlayer = game.involved.find((x) => x.playerID == player.id);
+    if (searchedPlayer == undefined) {
       return null;
     }
 
-    if (serchedPlayer.winner) {
+    if (searchedPlayer.winner) {
       if (winnerCount == 1) {
         return game.cost * 3;
       }

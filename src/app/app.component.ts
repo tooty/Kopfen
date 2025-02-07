@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable, of, skip, take } from 'rxjs';
 import { GameComponent } from './game/game.component';
 import { GraphComponent } from './graph/graph.component';
 import { TableComponent } from './table/table.component';
+import { WebSocketService } from './services/web-socket.service';
 
 @Component({
     selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent {
   $screen: Observable<Screen>
   game: Game | null = null
   isLandscape = false;
+  socketService = new WebSocketService();
 
   @HostListener("window:orientationchange", ['$event'])
   onOrientatinoChange(event: Event) {
@@ -36,6 +38,11 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    this.socketService.socket$.subscribe({
+      next: () => {
+        this.store.dispatch(pullGamesHttp({ start: Date.now() - 1000 * 60 * 6 * 60, end: Date.now() }))
+      },
+    });
     this.store.dispatch(loadIndexDbPlayers())
     this.store.dispatch(loadIndexDbGame())
     this.store.dispatch(pullGamesHttp({ start: Date.now() - 1000 * 60 * 6 * 60, end: Date.now() }))

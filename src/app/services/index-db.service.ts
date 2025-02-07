@@ -11,17 +11,35 @@ export class IndexDBService {
 
   constructor() { }
 
-  async reset(): Promise<boolean> {
-    return new Promise<boolean>((res,rej) => {
-      this.db?.close()
-      let delet = window.indexedDB.deleteDatabase('appState');
-      delet.onerror = (ev) => { throw Error(JSON.stringify(ev)) };
-      delet.onsuccess = () => {
-        console.log("DeleteIndexDb")
-        this.initDB().then(() => res(true)).catch((e) => rej(e))
-      };
-    })
+async reset(): Promise<boolean> {
+  if (!this.db) {
+    throw new Error('No IndexedDB instance available');
   }
+
+  this.db.close();
+
+  return new Promise((resolve, reject) => {
+    const req = window.indexedDB.deleteDatabase('appState');
+
+    req.onerror = (ev) => {
+      reject(`IndexedDB deletion failed: ${ev.target}`);
+    };
+
+    req.onsuccess = async () => {
+      console.log('Initiaalizing IndexedDB database');
+      try {
+        await this.initDB();
+        resolve(true);
+      } catch (initError) {
+        reject(`IndexedDB initialization failed: ${initError}`);
+      }
+    };
+
+    req.onblocked = () => {
+      reject(new Error('IndexedDB deletion was blocked by another connection.'));
+    };
+  });
+}
 
   async saveGame(newGame: Game): Promise<boolean> {
     return new Promise((res, rej) => {
