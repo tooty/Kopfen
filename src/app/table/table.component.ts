@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { HostListener, Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Game, Player } from '../interfaces';
 import { GraphComponent } from '../graph/graph.component';
-import Hammer from 'hammerjs';
-import { HttpClientModule } from '@angular/common/http';
-import { BehaviorSubject, skip, of, Observable } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { StoreModule, Store } from '@ngrx/store';
 import { OverscrollDirective } from '../overscroll.directive';
 
@@ -13,7 +11,6 @@ import { OverscrollDirective } from '../overscroll.directive';
   imports: [
     OverscrollDirective,
     StoreModule,
-    HttpClientModule,
     CommonModule,
     GraphComponent,
   ],
@@ -48,7 +45,7 @@ export class TableComponent {
     this.games$ = this.store.select('game');
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   color(i: number): string {
     return 'color:hsla(' + i * 80 + ', 60%, 70%, 1)';

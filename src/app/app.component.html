@@ -1,44 +1,61 @@
-<nav
+<mat-toolbar
   *ngIf="!isLandscape"
-  class="flex justify-between text-sky-400 *:px-6 *:py-3"
   [ngSwitch]="$screen | async"
+  color="primary"
+  class="justify-between toolbar"
 >
+  <button class="toolbar-btn toolbar-btn-primary" (click)="menuToggle()" *ngSwitchCase="1">
+    <mat-icon>menu</mat-icon>
+  </button>
   <button
     (click)="screen.next(1)"
     *ngSwitchCase="0"
     [disabled]="(($playersCount | async) ?? 0) <= 3"
-    class="ml-auto active:text-sky-50 disabled:text-sky-800"
+    class="ml-auto active:text-sky-50 toolbar-btn toolbar-btn-primary"
   >
     Fertig
   </button>
-  <ng-container *ngSwitchCase="1">
-    <button class="active:text-sky-50" (click)="screen.next(0)">Spieler</button>
-    <button class="text-xl active:text-sky-50" (click)="screen.next(2)">
-      +
-    </button>
-  </ng-container>
   <ng-container *ngSwitchCase="2">
-    <button (click)="screen.next(1)" class="active:text-sky-50">
+    <button (click)="screen.next(1)" class="active:text-sky-50 text-sky-400 toolbar-btn">
       Abbrechen
     </button>
     <button
       [disabled]="game == null"
-      class="disabled:text-sky-800 active:text-sky-50"
+      class="active:text-sky-50 text-display-5 toolbar-btn"
       (click)="dispatchGame()"
     >
       Hinzufügen
     </button>
   </ng-container>
-</nav>
-<div
+  <ng-container *ngSwitchCase="4">
+    <button (click)="screen.next(1)" class="active:text-sky-50 justify-left toolbar-btn toolbar-btn-primary">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </ng-container>
+  <ng-container *ngSwitchCase="1">
+    <button *ngIf="!($menu | async)" class="text-xl active:text-sky-50 text-sky-400 toolbar-btn" (click)="screen.next(2)">
+      +
+    </button>
+  </ng-container>
+  <div *ngIf="$menu | async">
+    <mat-toolbar-row>
+      <button class="active:text-sky-50 text-sky-400 toolbar-btn" (click)="screen.next(0)">Spieler</button>
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <button class="active:text-sky-50 text-sky-400 toolbar-btn" (click)="screen.next(4)">Camera</button>
+    </mat-toolbar-row>
+  </div>
+</mat-toolbar>
+<main
   *ngIf="!isLandscape"
   #display
-  class="h-screen"
+  class="h-full"
   [ngSwitch]="$screen | async"
 >
   <app-players *ngSwitchCase="0"></app-players>
   <app-table *ngSwitchCase="1"></app-table>
   <app-game ($game)="game = $event" *ngSwitchCase="2"></app-game>
   <app-graph [isLandscape]="isLandscape" *ngSwitchCase="3"></app-graph>
-</div>
+  <app-vision *ngSwitchCase="4"></app-vision>
+</main>
 <app-graph *ngIf="isLandscape" [isLandscape]="isLandscape"></app-graph>

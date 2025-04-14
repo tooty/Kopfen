@@ -42,4 +42,5 @@ export class PlayersComponent {
   reset() {
     this.store.dispatch(resetLocal());
   }
+
 }

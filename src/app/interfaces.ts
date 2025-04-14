@@ -17,4 +17,5 @@ export enum Screen {
   table, //1
   game, //2
   graph, //3
+  vision, //4
 }

@@ -1,0 +1,18 @@
+.toolbar-btn {
+  min-width: 40px;
+  min-height: 36px;
+  margin: 0 4px;
+}
+
+.toolbar-btn-primary {
+  color: var(--color-sky-400);
+  font-weight: 600;
+}
+
+.toolbar-btn-secondary {
+  color: var(--color-sky-600);
+}
+
+.toolbar-btn:disabled {
+  color: var(--color-sky-800);
+}

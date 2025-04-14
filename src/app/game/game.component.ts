@@ -119,12 +119,12 @@ export class GameComponent {
       }
     });
 
-    const serchedPlayer = game.involved.find((x) => x.playerID == player.id);
-    if (serchedPlayer == undefined) {
+    const searchedPlayer = game.involved.find((x) => x.playerID == player.id);
+    if (searchedPlayer == undefined) {
       return null;
     }
 
-    if (serchedPlayer.winner) {
+    if (searchedPlayer.winner) {
       if (winnerCount == 1) {
         return game.cost * 3;
       }
@@ -143,5 +143,9 @@ export class GameComponent {
       return;
     }
     this.store.dispatch(validateGame(myGame));
+  }
+
+  resetScroll(){
+    window.scrollTo(0,0)
   }
 }

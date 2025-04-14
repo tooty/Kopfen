@@ -1,8 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+.mat-primary {
+  background-color: var(--primary-color) !important;
+}
+
+
 /* You can add global styles to this file, and also import other style files */
-body,
+body {
+}
+
 html {
   width: 100vw;
   height: 100vh;
@@ -18,3 +24,6 @@ html {
   -ms-user-select: none;
   user-select: none;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
