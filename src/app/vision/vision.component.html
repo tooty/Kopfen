@@ -1,0 +1,12 @@
+<div class="flex flex-col items-center justify-center min-h-screen space-y-4">
+  <canvas (click)="applyModel()" #canvasElement class="w-full max-w-lg"></canvas>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 justify-enter">
+    <button
+      *ngFor="let dev of videoDevices; let i = index"
+      (click)="changeInput(dev)"
+      class="text-sky-300 border-2 border-sky-300 rounded p-2"
+      [hidden]="i >= 6">
+      {{ dev.label }}
+    </button>
+  </div>
+</div>
