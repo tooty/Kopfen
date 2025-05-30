@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1748610437744,
+  "timestamp": 1748611978559,
   "index": "/Kopfen/index.html",
   "assetGroups": [
     {
@@ -12,7 +12,7 @@
       },
       "urls": [
         "/Kopfen/index.html",
-        "/Kopfen/main-CMAKMOLJ.js",
+        "/Kopfen/main-UDYRZ6CW.js",
         "/Kopfen/manifest.webmanifest",
         "/Kopfen/polyfills-B6TNHZQ6.js",
         "/Kopfen/styles-Y7DNGCB5.css",
@@ -100,7 +100,7 @@
     "/Kopfen/assets/icons/icon-72.png": "52d55a9a4e45e501a32de91e2ea5df6b032c33f2",
     "/Kopfen/assets/icons/icon-96.png": "b669e0cf849eef0524f04e14c4b5d686051a422b",
     "/Kopfen/assets/spritesheet.png": "bfc953f5e99316510627ac80029c632e857ace30",
-    "/Kopfen/index.html": "4fa9c1853622f2f7b0d146c8e16e4c8f66cbd41c",
+    "/Kopfen/index.html": "a2986a37ca57ffdaa28b4fbacca42f49b87e37d6",
     "/Kopfen/lazy/group1-shard10of22.bin": "8701af2216c4b55a328b4fbcf7db58b9599d5223",
     "/Kopfen/lazy/group1-shard11of22.bin": "03d3c1ce50a939bd31c451dd7a0eaf2f69cc2ca4",
     "/Kopfen/lazy/group1-shard12of22.bin": "4d8ecce5be2ac53c6ddc02831ba2b937eb461c1a",
@@ -126,7 +126,7 @@
     "/Kopfen/lazy/metadata.yaml": "83d18d2ac2a7f83cbce779c17a261d1cc06ecf5f",
     "/Kopfen/lazy/model.json": "8464ab4bc918ae98a1cb12232f24776d01cdfeda",
     "/Kopfen/lazy/tfjs-worker.worker.ts": "353b28f17485fe942f2a683ad1e6d98132fd601d",
-    "/Kopfen/main-CMAKMOLJ.js": "72b9b10602416901d38ec7b160631caa175e47b5",
+    "/Kopfen/main-UDYRZ6CW.js": "e85bbc05d818d47e8d359755fd709ed0a46561ed",
     "/Kopfen/manifest.webmanifest": "feea61ca9cdc3a44c8c57db0ec3ff63e8cdfbe1b",
     "/Kopfen/polyfills-B6TNHZQ6.js": "bf76ac291d7f51c1139b7edcf86b359a30c08c64",
     "/Kopfen/styles-Y7DNGCB5.css": "32a5d870d4e2e0b8df50818764e4a377434e47b4",
