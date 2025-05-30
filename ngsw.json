@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1748607712408,
+  "timestamp": 1748607913828,
   "index": "/Kopfen/index.html",
   "assetGroups": [
     {
@@ -100,7 +100,7 @@
     "/Kopfen/assets/icons/icon-72.png": "2b97807c42cdec8667a5b386b0bf5f0096d6838f",
     "/Kopfen/assets/icons/icon-96.png": "0920fb3c4f91c7dfc095c1d8ddcfc1813d57961d",
     "/Kopfen/assets/spritesheet.png": "bfc953f5e99316510627ac80029c632e857ace30",
-    "/Kopfen/index.html": "fa31ff7dff8dde0ac8ca40ec90b5efd7da41bb58",
+    "/Kopfen/index.html": "30931ed57020f7dc3648214c1e8bde55133e4e2c",
     "/Kopfen/lazy/group1-shard10of22.bin": "8701af2216c4b55a328b4fbcf7db58b9599d5223",
     "/Kopfen/lazy/group1-shard11of22.bin": "03d3c1ce50a939bd31c451dd7a0eaf2f69cc2ca4",
     "/Kopfen/lazy/group1-shard12of22.bin": "4d8ecce5be2ac53c6ddc02831ba2b937eb461c1a",
