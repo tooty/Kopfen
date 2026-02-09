@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1770641160972,
+  "timestamp": 1770642485028,
   "index": "/Kopfen/index.html",
   "assetGroups": [
     {
@@ -15,6 +15,7 @@
         "/Kopfen/chunk-3RN3RD6V.js",
         "/Kopfen/chunk-4L4GWR27.js",
         "/Kopfen/chunk-4X7HDCHN.js",
+        "/Kopfen/chunk-5OUXBGYK.js",
         "/Kopfen/chunk-5TI4WG3X.js",
         "/Kopfen/chunk-6CTIGGHU.js",
         "/Kopfen/chunk-73XQIUFX.js",
@@ -28,7 +29,6 @@
         "/Kopfen/chunk-HVP7MP6J.js",
         "/Kopfen/chunk-MUC5K2ER.js",
         "/Kopfen/chunk-OB375LJ2.js",
-        "/Kopfen/chunk-OZG6Y3DE.js",
         "/Kopfen/chunk-PB6QBKXP.js",
         "/Kopfen/chunk-PXBZJ2UP.js",
         "/Kopfen/chunk-TS422EEK.js",
@@ -38,7 +38,7 @@
         "/Kopfen/chunk-VTCE4HIV.js",
         "/Kopfen/chunk-WAPHCLMZ.js",
         "/Kopfen/index.html",
-        "/Kopfen/main-6P7D53WD.js",
+        "/Kopfen/main-7APNJPIJ.js",
         "/Kopfen/manifest.webmanifest",
         "/Kopfen/polyfills-5CFQRCPP.js",
         "/Kopfen/styles-236ZWSYF.css"
@@ -79,6 +79,7 @@
     "/Kopfen/chunk-3RN3RD6V.js": "17ad7b103e9fc393c8ee04cfe70e311ed7a92c0d",
     "/Kopfen/chunk-4L4GWR27.js": "383020c3f6e7a57770f13b9b0aa3331efa4bbe9f",
     "/Kopfen/chunk-4X7HDCHN.js": "2dd5fd953108facb5f00a911feba911e33f090c4",
+    "/Kopfen/chunk-5OUXBGYK.js": "ad59bba17dd244159e896a6a34ba4c61a57c080f",
     "/Kopfen/chunk-5TI4WG3X.js": "8da1c996b72670e3502b14c920ebe54c46cd84f7",
     "/Kopfen/chunk-6CTIGGHU.js": "b59cf56807dc405326546ddaed2382b46a3c8849",
     "/Kopfen/chunk-73XQIUFX.js": "7a17d056903543113821f20ab1a9c6526cbdca8a",
@@ -92,7 +93,6 @@
     "/Kopfen/chunk-HVP7MP6J.js": "bf49ec60e341a7461705a4b6085d3958825ccab7",
     "/Kopfen/chunk-MUC5K2ER.js": "8032b7ff3c0fed7fc71f640ced69ec3d8f5aefe5",
     "/Kopfen/chunk-OB375LJ2.js": "29bc93076fbefd8a4bff859b8c62793a7ec6773c",
-    "/Kopfen/chunk-OZG6Y3DE.js": "d1934854721ab3fb8c573648c8a5ea21e5353961",
     "/Kopfen/chunk-PB6QBKXP.js": "8726fa1b32e6e91e9dd5d2ea9aa2c9755b89708f",
     "/Kopfen/chunk-PXBZJ2UP.js": "c9e43862af6bf5102b5b77979158c2b62dcc877c",
     "/Kopfen/chunk-TS422EEK.js": "475c7e13c1733c27c699df87367fd82965637de5",
@@ -101,8 +101,8 @@
     "/Kopfen/chunk-UTYQKFAJ.js": "6e60dd0c314644c10d7c4a827b61660330020a7c",
     "/Kopfen/chunk-VTCE4HIV.js": "8cb46c8063a43192560abbb39a8ec8718f9a50a9",
     "/Kopfen/chunk-WAPHCLMZ.js": "9be564254a6c2e596692b2399734e89ffd0f0bf6",
-    "/Kopfen/index.html": "ab96ddc59e464b5ee601546f9bd7d2b20a196cb2",
-    "/Kopfen/main-6P7D53WD.js": "87acf977caa48513d0b5561f18a35bfadfcf2938",
+    "/Kopfen/index.html": "c30156064a4e6fde646a299b95468a9bd1dca741",
+    "/Kopfen/main-7APNJPIJ.js": "2f0f7bbeb7f2889322eb9aed86acff1fe4e941a2",
     "/Kopfen/manifest.webmanifest": "e197bdad382bbbf0f8fdc532794eef9970e524de",
     "/Kopfen/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
     "/Kopfen/styles-236ZWSYF.css": "402770d26518be83bc8d2926733ab332b695a035"
