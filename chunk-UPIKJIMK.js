@@ -1,0 +1,1 @@
+import{Hc as e,Ic as t}from"./chunk-TS422EEK.js";var a=e("[Game Effect] Store Game",t()),m=e("[Player Effect] ResetLocalGames"),r=e("[Game Component] add new Game",t()),s=e("[Game Component] Validate Game",t),n=e("[App Component] letztes l\xF6schen"),p=e("[Url] Hydrate Games",t());export{a,m as b,r as c,n as d,p as e};
